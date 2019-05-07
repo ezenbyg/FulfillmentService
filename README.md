@@ -72,4 +72,9 @@ Amazon Fulfilment Service와 비슷하게 창고 시스템을 개발하는 프�
     - 형상관리를 위해 Github의 Feature Branch Workflow를 이용
     - Oragnization, Project 생성
     - View 구현
-	
+    
+- __2019-05-08(수)__
+
+    - 송장, 청구, 지급 Model 구현
+    - 개발과 동시에 프로그램 설계 및 기능을 Wiki에 작성
+    - View 구현
