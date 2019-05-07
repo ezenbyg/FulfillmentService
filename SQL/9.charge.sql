@@ -3,6 +3,8 @@ CREATE TABLE charge (
 	gAdminId int(5) unsigned NOT NULL,
   	gInvoiceId int(5) unsigned NOT NULL,
 	gProductName varchar(30) NOT NULL DEFAULT "",
+	gQuantity int(5) unsigned NOT NULL,
+	gPrice int(5) unsigned NOT NULL,
 	gDate datetime NOT NULL DEFAULT current_timestamp,
   	PRIMARY KEY (gId),
 	FOREIGN KEY (gAdminId) REFERENCES admins(aId)

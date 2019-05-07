@@ -14,7 +14,7 @@
 </style>
 <body>
 	<%@ include file="common/_top.jspf" %> 
-	<%@ include file="common/_nav.jspf" %> 
+	<%@ include file="common/_main_nav.jspf" %> 
 	<div class="container">
 		<div class="row" style="margin-top: 90px">
 			<div class="col-md-1"></div>

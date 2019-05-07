@@ -18,7 +18,7 @@ label {
 <body>
 	<%@ include file="../common/_top.jspf"%>
 	<%@ include file="../common/_purchse_nav.jspf"%>
-	<%@ include file="../adminMain/purchaseMain.jsp"%>
+	<%@ include file="../adminMain/supplierMain.jsp"%>
 	<%@ include file="../common/_bottom.jspf"%>
 	<!-- ==================================================================== -->
 	<script
