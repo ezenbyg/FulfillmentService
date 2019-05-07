@@ -1,10 +1,10 @@
 CREATE TABLE customers (
-  	c_id int(4) unsigned NOT NULL AUTO_INCREMENT,
-	c_userId varchar(20) NOT NULL DEFAULT "",
- 	c_name varchar(20) NOT NULL DEFAULT "",
-  	c_password varchar(20) NOT NULL DEFAULT "",
-	PRIMARY KEY(c_id),
-	UNIQUE KEY(c_userId)
+  	cId int(4) unsigned NOT NULL AUTO_INCREMENT,
+	cUserId varchar(20) NOT NULL DEFAULT "",
+ 	cName varchar(20) NOT NULL DEFAULT "",
+  	cPassword varchar(20) NOT NULL DEFAULT "",
+	PRIMARY KEY(cId),
+	UNIQUE KEY(cUserId)
 ) AUTO_INCREMENT=1001 DEFAULT CHARSET=utf8;
 
 desc customers;

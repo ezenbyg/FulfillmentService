@@ -1,7 +1,8 @@
 ﻿CREATE TABLE admins (
-  	a_id int(5) unsigned NOT NULL,
-	a_userId varchar(20) NOT NULL DEFAULT ””,
- 	a_name varchar(20) NOT NULL DEFAULT ””,
-  	a_password varchar(20) NOT NULL DEFAULT “”,
-  	PRIMARY KEY (a_id)
+  	aId int(5) unsigned NOT NULL,
+	aUserId varchar(20) NOT NULL DEFAULT "",
+ 	aName varchar(20) NOT NULL DEFAULT "",
+  	aPassword varchar(20) NOT NULL DEFAULT "",
+  	PRIMARY KEY (aId),
+	UNIQUE KEY(aUserId)
 )  DEFAULT CHARSET=utf8;

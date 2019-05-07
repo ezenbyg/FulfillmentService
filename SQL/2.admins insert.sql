@@ -1,4 +1,4 @@
-insert into admins (a_id, a_name, a_userId, a_password)
+insert into admins (aId, aName, aUserId, aPassword)
 values (10001, 'EZEN', 'ezen', '10001'),
 (20001, 'JHºÓ«Œ∏Ù', 'jh', '20001'),(20002, 'SWºÓ«Œ∏Ù', 'sw', '20002'), 
 (20003, 'GJºÓ«Œ∏Ù', 'gj', '20003'),(30001, 'π´Ω≈ªÁ', 'musinsa', '30001'),

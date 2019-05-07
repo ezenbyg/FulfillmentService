@@ -1,4 +1,4 @@
-﻿INSERT INTO storage (p_name,p_imgName,p_price,p_quantity,p_adminId)
+﻿INSERT INTO storage (pName,pImgName,pPrice,pQuantity,pAdminId)
 	values ('기능성티','../img/의류/기능성티.PNG',49000,20,30001),
 	  ('fila반팔티', '../img/의류/fila반팔티.PNG',32000,20,30001),
 	  ('sculptor반팔티','../img/의류/sculptor반팔티.PNG',35100,20,30001),
@@ -54,7 +54,7 @@
 	  ('클라라9자장롱(화이트)','../img/가구/클라라9자장롱(화이트).PNG',345000,20,30005),
 	  ('헬모스원목퀸침대','../img/가구/헬모스원목퀸침대.PNG',615000,20,30005);
 	  
-select * from product_storage;
+select * from storage;
 
 
 

@@ -61,7 +61,7 @@ public class CustomerDAO {
 		LOG.trace("addCustomer(): " + cDto.toString());
 		BCrypt bc = new BCrypt();
 		conn = DBManager.getConnection();
-		String sql = "insert into customers(c_userId, c_name, c_password) values(?, ?, ?)";
+		String sql = "insert into customers(cUserId, cName, cPassword) values(?, ?, ?)";
 		try {
 			pstmt = conn.prepareStatement(sql);
 			pstmt.setString(1, cDto.getcUserId());
@@ -85,7 +85,7 @@ public class CustomerDAO {
 	public String getLastId() {
 		String cUserId = null;
 		conn = DBManager.getConnection();
-		String sql = "select c_userId from customers order by c_userId desc limit 1;";
+		String sql = "select c_userId from customers order by cUserId desc limit 1;";
 		try {
 			pstmt = conn.prepareStatement(sql);
 			rs = pstmt.executeQuery();
@@ -111,7 +111,7 @@ public class CustomerDAO {
 	public CustomerDTO getOneCustomer(String cUserId) {
 		CustomerDTO cDto = new CustomerDTO();
 		conn = DBManager.getConnection();
-		String sql = "select * from customers where c_userId=?;";
+		String sql = "select * from customers where cUserId=?;";
 		try {
 			pstmt = conn.prepareStatement(sql);
 			pstmt.setString(1, cUserId);

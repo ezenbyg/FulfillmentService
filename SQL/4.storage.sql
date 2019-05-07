@@ -1,12 +1,12 @@
   CREATE TABLE storage (
-  	 p_id int(5) unsigned NOT NULL AUTO_INCREMENT,
- 	 p_name varchar(50) NOT NULL DEFAULT "",
-  	 p_imgName varchar(100) NOT NULL DEFAULT "",
-	 p_price int(5) unsigned NOT NULL,
-	 p_quantity int(255) unsigned NOT NULL,
-	 p_adminId int(5) unsigned NOT NULL,
-  	PRIMARY KEY (p_id),
-  	FOREIGN KEY (p_adminId) REFERENCES admins(p_id)
+  	 pId int(5) unsigned NOT NULL AUTO_INCREMENT,
+ 	 pName varchar(50) NOT NULL DEFAULT "",
+  	 pImgName varchar(100) NOT NULL DEFAULT "",
+	 pPrice int(5) unsigned NOT NULL,
+	 pQuantity int(255) unsigned NOT NULL,
+	 pAdminId int(5) unsigned NOT NULL,
+  	PRIMARY KEY (pId),
+  	FOREIGN KEY (pAdminId) REFERENCES admins(aId)
   ) AUTO_INCREMENT=50001 DEFAULT CHARSET=utf8;
 
-desc product_storage;
+desc storage;

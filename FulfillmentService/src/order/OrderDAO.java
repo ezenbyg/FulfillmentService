@@ -18,7 +18,7 @@ public class OrderDAO {
 	public void orderProducts(OrderDTO oDto) { // 발주(창고 -> 구매처)
 		LOG.trace("orderProducts(): " + oDto.toString());
 		conn = DBManager.getConnection();
-		String sql = "insert into p_order(o_adminId, o_productId, o_quantity, o_price, o_totalPrice) values(?, ?, ?, ?, ?)";
+		String sql = "insert into p_order(oAdminId, oProductId, oQuantity, oPrice, oTotalPrice) values(?, ?, ?, ?, ?)";
 		try {
 			pstmt = conn.prepareStatement(sql);
 			pstmt.setInt(1, oDto.getoAdminId());

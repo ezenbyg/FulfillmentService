@@ -62,7 +62,7 @@ public class AdminDAO {
 	public String getLastId() {
 		String aUserId = null;
 		conn = DBManager.getConnection();
-		String sql = "select a_userId from admins order by a_userId desc limit 1;";
+		String sql = "select a_userId from admins order by aUserId desc limit 1;";
 		try {
 			pstmt = conn.prepareStatement(sql);
 			rs = pstmt.executeQuery();
@@ -88,7 +88,7 @@ public class AdminDAO {
 	public AdminDTO getOneAdmin(String aUserId) {
 		AdminDTO aDto = new AdminDTO();
 		conn = DBManager.getConnection();
-		String sql = "select * from admins where a_userId=?;";
+		String sql = "select * from admins where aUserId=?;";
 		try {
 			pstmt = conn.prepareStatement(sql);
 			pstmt.setString(1, aUserId);

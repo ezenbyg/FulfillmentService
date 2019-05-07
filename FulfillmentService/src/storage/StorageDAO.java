@@ -25,7 +25,7 @@ public class StorageDAO {
 	public ArrayList<StorageDTO> getProducts(int category) { // 카테고리는 각 권리자 아이디로 초기화 시켜준다. 
 		ArrayList<StorageDTO> productList = new ArrayList<StorageDTO>();
 		conn = DBManager.getConnection();
-		String sql = "select  *  from product_storage where p_adminId= ?;";
+		String sql = "select  *  from storage where pAdminId= ?;";
 		try {
 			pstmt = conn.prepareStatement(sql);
 			pstmt.setInt(1, category);

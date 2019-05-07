@@ -1,4 +1,4 @@
-﻿INSERT INTO supplier (o_adminId,o_productId,o_productName)
+﻿INSERT INTO supplier (sAdminId,sProductId,sProductName)
 	values (30001, 50001,'기능성티'), (30001, 50002,'fila반팔티'),
 		  	 (30001, 50003,'sculptor반팔티'), (30001,50004,'엔더슨벨후드'),
 			 (30001, 50005,'볼트로우신발'), (30001,50006,'사이드홀로퍼'),
