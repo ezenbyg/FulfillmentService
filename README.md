@@ -65,4 +65,11 @@ Amazon Fulfilment Service와 비슷하게 창고 시스템을 개발하는 프�
     - 프로젝트 계획발표 1차 : 업무분장, DB설계, 화면초안
     - Controller, Model 구현
     - View 구현
+
+- __2019-05-07(화)__
+
+    - 창고관리자 및 상품목록 기능 구현
+    - 형상관리를 위해 Github의 Feature Branch Workflow를 이용
+    - Oragnization, Project 생성
+    - View 구현
 	
