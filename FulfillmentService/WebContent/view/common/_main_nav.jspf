@@ -1,0 +1,55 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+	pageEncoding="UTF-8"%>
+
+<link
+	href="//netdna.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css"
+	rel="stylesheet" id="bootstrap-css">
+<script
+	src="//netdna.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+<script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
+
+<style>
+.navbar-fixed-left {
+	width: 13%;
+	position: fixed;
+	border-radius: 0;
+	height: 100%;
+	margin-top: 50px;
+}
+
+.navbar-fixed-left .navbar-nav>li {
+	float: none; /* Cancel default li float: left */
+	width: 180px;
+}
+
+.navbar-fixed-left+.container {
+	padding-left: 160px;
+}
+
+/* On using dropdown menu (To right shift popuped) */
+.navbar-fixed-left .navbar-nav>li>.dropdown-menu {
+	margin-top: 10px;
+	margin-left: 150px;
+}
+
+li {
+	font-size: 17px;
+	text-align: center;
+}
+</style>
+<div class="navbar navbar-inverse navbar-fixed-left">
+	<ul class="nav navbar-nav">
+		<li class="dropdown"><a href="#" class="dropdown-toggle"
+			data-toggle="dropdown" role="button" aria-expanded="false"> 상품
+				매장&nbsp;<i class="glyphicon glyphicon-qrcode"></i><span
+				class="caret"></span>
+		</a>
+			<ul class="dropdown-menu" role="menu">
+				<li><a href="/FulfillmentService/view/main/clothing.jsp">의류</a></li>
+				<li><a href="/FulfillmentService/view/main/food.jsp">식품</a></li>
+				<li><a href="/FulfillmentService/view/main/homeAppliances.jsp">가전</a></li>
+				<li><a href="/FulfillmentService/view/main/sports.jsp">스포츠</a></li>
+				<li><a href="/FulfillmentService/view/main/furniture.jsp">가구</a></li>
+			</ul></li>
+	</ul>
+</div>

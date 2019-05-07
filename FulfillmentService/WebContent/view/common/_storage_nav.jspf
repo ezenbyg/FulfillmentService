@@ -1,0 +1,76 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+	pageEncoding="UTF-8"%>
+
+<link
+	href="//netdna.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css"
+	rel="stylesheet" id="bootstrap-css">
+<script
+	src="//netdna.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+<script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
+
+<style>
+.navbar-fixed-left {
+	width: 13%;
+	position: fixed;
+	border-radius: 0;
+	height: 100%;
+	margin-top: 50px;
+}
+
+.navbar-fixed-left .navbar-nav>li {
+	float: none; /* Cancel default li float: left */
+	width: 180px;
+}
+
+.navbar-fixed-left+.container {
+	padding-left: 160px;
+}
+
+/* On using dropdown menu (To right shift popuped) */
+.navbar-fixed-left .navbar-nav>li>.dropdown-menu {
+	margin-top: 10px;
+	margin-left: 150px;
+}
+
+li {
+	font-size: 17px;
+	text-align: center;
+}
+</style>
+<div class="navbar navbar-inverse navbar-fixed-left">
+	<ul class="nav navbar-nav">
+	<br>
+		<li class="dropdown"><a href="#" class="dropdown-toggle"
+			data-toggle="dropdown" role="button" aria-expanded="false">
+				조회&nbsp; <i class="glyphicon glyphicon-search"></i>&nbsp; <span
+				class="caret"></span>
+		</a>
+			<ul class="dropdown-menu" role="menu">
+				<li><a href="../storage/billingPaymentHistory.jsp">청구/지급 조회</a></li>
+				<li><a href="../storage/salesHistory.jsp">판매 내역 조회</a></li>
+				<li><a href="../storage/salesProfit.jsp">매출 이익 조회</a></li>
+				<li><a href="../storage/storageOrderHistory.jsp">발주 내역 조회</a></li>
+				<li><a href="../storage/storageTransportHistory.jsp">운송 내역
+						조회</a></li>
+			</ul>
+		<li class="dropdown"><a href="#" class="dropdown-toggle"
+			data-toggle="dropdown" role="button" aria-expanded="false">청구/지급&nbsp;
+				<i class="glyphicon glyphicon-retweet"></i>&nbsp;<span class="caret"></span>
+		</a>
+			<ul class="dropdown-menu" role="menu">
+				<li><a href="../storage/billingPaymentHistory.jsp">대금 청구</a></li>
+				<li><a href="../storage/payment.jsp">대금 지급</a></li>
+			</ul>
+		<li class="dropdown"><a href="#" class="dropdown-toggle"
+			data-toggle="dropdown" role="button" aria-expanded="false">
+				발주/출고&nbsp;<i class="glyphicon glyphicon-sort"></i>&nbsp;<span
+				class="caret"></span>
+		</a>
+			<ul class="dropdown-menu" role="menu">
+				<li><a href="../storage/order.jsp">발주</a></li>
+				<li><a href="../storage/shipping.jsp">출고</a></li>
+			</ul>
+		<li><a href="../storage/stocktaking.jsp">재고조사&nbsp;<i
+				class="glyphicon glyphicon-open-file"></i></a>
+	</ul>
+</div>
