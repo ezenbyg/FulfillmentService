@@ -1,4 +1,4 @@
-﻿INSERT INTO office_purchasing (o_adminId,o_productId,o_productName)
+﻿INSERT INTO supplier (o_adminId,o_productId,o_productName)
 	values (30001, 50001,'기능성티'), (30001, 50002,'fila반팔티'),
 		  	 (30001, 50003,'sculptor반팔티'), (30001,50004,'엔더슨벨후드'),
 			 (30001, 50005,'볼트로우신발'), (30001,50006,'사이드홀로퍼'),
@@ -34,4 +34,4 @@
 			 (30005, 50049,'클라라9자장롱(화이트)'), 
 			 (30005, 50050,'헬모스원목퀸침대');
 
-select * from office_purchasing;
+select * from supplier;

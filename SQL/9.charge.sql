@@ -3,7 +3,7 @@ CREATE TABLE charge (
 	charge_adminId int(5) unsigned NOT NULL,
   	charge_invoiceId int(5) unsigned NOT NULL,
 	charge_productName varchar(30) NOT NULL DEFAULT "",
-	charge_date datetime,
+	charge_date datetime NOT NULL DEFAULT current_timestamp,
   	PRIMARY KEY (charge_id),
 	FOREIGN KEY (charge_adminId) REFERENCES admins(a_id)
 ) AUTO_INCREMENT=10000001 DEFAULT CHARSET=utf8;

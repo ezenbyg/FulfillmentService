@@ -1,4 +1,4 @@
-CREATE TABLE office_purchasing (
+CREATE TABLE supplier (
   	o_adminId int(5) unsigned NOT NULL,
   	o_productId int(5) unsigned NOT NULL,
  	o_productName varchar(50) NOT NULL,
@@ -7,4 +7,4 @@ CREATE TABLE office_purchasing (
   	FOREIGN KEY (o_productId) REFERENCES product_storage(p_id)
   ) DEFAULT CHARSET=utf8;
   
-desc office_purchasing;
+desc supplier;

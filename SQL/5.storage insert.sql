@@ -1,4 +1,4 @@
-﻿INSERT INTO product_storage (p_name,p_imgName,p_price,p_quantity,p_adminId)
+﻿INSERT INTO storage (p_name,p_imgName,p_price,p_quantity,p_adminId)
 	values ('기능성티','../img/의류/기능성티.PNG',49000,20,30001),
 	  ('fila반팔티', '../img/의류/fila반팔티.PNG',32000,20,30001),
 	  ('sculptor반팔티','../img/의류/sculptor반팔티.PNG',35100,20,30001),
