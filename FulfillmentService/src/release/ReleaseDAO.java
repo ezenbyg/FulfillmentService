@@ -88,13 +88,13 @@ public class ReleaseDAO {
 		}
 	}
 	
-	public ReleaseDTO getOneReleaseList(String rTransportId) { // 운송 번호에 해당하는 배송비 등 조회
+	public ReleaseDTO getOneReleaseList(int rTransportId) { // 운송 번호에 해당하는 배송비 등 조회
 		ReleaseDTO rDto = new ReleaseDTO();
 		conn = DBManager.getConnection();
 		String sql = "select * from p_release where rTransportId=?;";
 		try {
 			pstmt = conn.prepareStatement(sql);
-			pstmt.setString(1, rTransportId);
+			pstmt.setInt(1, rTransportId);
 			rs = pstmt.executeQuery();
 			while(rs.next()) {
 				rDto.setrId(rs.getInt(1));

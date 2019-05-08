@@ -78,13 +78,13 @@ public class ChargeDAO { // 송장에서 얻은 정보에 가격을 포함해서
 		}
 	}
 	
-	public ChargeDTO getOneChargeList(String gInvoiceId) { // 송장 번호 하나에 해당하는 컬럼 값 출력
+	public ChargeDTO getOneChargeList(int gInvoiceId) { // 송장 번호 하나에 해당하는 컬럼 값 출력
 		ChargeDTO gDto = new ChargeDTO();
 		conn = DBManager.getConnection();
 		String sql = "select * from charge where gInvoiceId=?;";
 		try {
 			pstmt = conn.prepareStatement(sql);
-			pstmt.setString(1, gInvoiceId);
+			pstmt.setInt(1, gInvoiceId);
 			rs = pstmt.executeQuery();
 			while(rs.next()) {
 				gDto.setgAdminId(rs.getInt(1));
