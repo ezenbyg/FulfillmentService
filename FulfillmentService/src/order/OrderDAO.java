@@ -43,7 +43,7 @@ public class OrderDAO {
 	public ArrayList<OrderDTO> getAllOrderLists() {
 		ArrayList<OrderDTO> oList = new ArrayList<OrderDTO>();
 		conn = DBManager.getConnection();
-		String sql = "select * from orders;";
+		String sql = "select * from p_order;";
 		try {
 			pstmt = conn.prepareStatement(sql);
 			rs = pstmt.executeQuery();

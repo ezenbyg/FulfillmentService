@@ -9,6 +9,7 @@ CREATE TABLE p_release (
 	rProductName varchar(100) NOT NULL DEFAULT "",
 	rQuantity int(10) unsigned NOT NULL,
 	rDate datetime NOT NULL DEFAULT current_timestamp,
+	rPrice int(10) unsigned,
 	rState varchar(10) DEFAULT "√‚∞Ì",
   	PRIMARY KEY (rId),
 	FOREIGN KEY (rTransportId) REFERENCES admins(aId),
