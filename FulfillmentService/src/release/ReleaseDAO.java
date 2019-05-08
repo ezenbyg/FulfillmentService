@@ -125,4 +125,29 @@ public class ReleaseDAO {
 		}
 		return rDto;
 	}
+	
+	public void updateReleaseState(ReleaseDTO rDto) {
+		LOG.debug("");
+		PreparedStatement pStmt = null;
+		conn = DBManager.getConnection();
+		String sql = "update p_release set rState=? where rTransportId=?;";
+		pStmt = null;
+		try {
+			pStmt = conn.prepareStatement(sql);
+			pStmt.setString(1, rDto.getrState());
+			pStmt.setInt(2, rDto.getrTransportId());
+			pStmt.executeUpdate();
+			LOG.trace(sql);
+		} catch (SQLException e) {
+			e.printStackTrace();
+			LOG.info("updateReleaseState() Error Code : {}", e.getErrorCode());
+		} finally {
+			try {
+				pstmt.close();
+				conn.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+	}
 }

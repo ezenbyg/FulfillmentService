@@ -37,7 +37,7 @@ public class ChargeDAO { // 송장에서 얻은 정보에 가격을 포함해서
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
-			LOG.info("getAllChargeList(): Error Code : {}", e.getErrorCode());
+			LOG.info("getAllChargeLists(): Error Code : {}", e.getErrorCode());
 			return null;
 		} finally {
 			try {
