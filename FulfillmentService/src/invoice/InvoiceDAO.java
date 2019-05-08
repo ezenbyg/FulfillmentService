@@ -6,7 +6,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
-import org.mindrot.jbcrypt.BCrypt;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -82,5 +81,40 @@ public class InvoiceDAO {
 				e.printStackTrace();
 			}
 		}
+	}
+	
+	public InvoiceDTO getOneInvoice(String vId) { // 송장 번호에 해당하는 컬럼값 얻어오기
+		InvoiceDTO vDto = new InvoiceDTO();
+		conn = DBManager.getConnection();
+		String sql = "select * from invoice where vId=?;";
+		try {
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setString(1, vId);
+			rs = pstmt.executeQuery();
+			while(rs.next()) {
+				vDto.setvId(rs.getInt(1));
+				vDto.setvName(rs.getString(2));
+				vDto.setvTel(rs.getString(3));
+				vDto.setvAddress(rs.getString(4));
+				vDto.setvProductId(rs.getInt(5));
+				vDto.setvProductName(rs.getString(6));
+				vDto.setvQuantity(rs.getInt(7));
+				vDto.setvDate(rs.getString(8));
+				vDto.setvAdminId(rs.getInt(9));
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+			LOG.info("getOneInvoice (): Error Code : {}", e.getErrorCode());
+			return null;
+		} finally {
+			try {
+				pstmt.close();
+				conn.close();
+				rs.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+		return vDto;
 	}
 }

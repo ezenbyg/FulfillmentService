@@ -1,15 +1,16 @@
 package charge;
 
 public class ChargeDTO {
-	private int gAdiminId;
+	private int gId;
+	private int gAdminId;
 	private int gInvoiceId;
 	private String gProductName;
-	private String gDate;
 	private int gQuantity;
 	private int gPrice;
+	private String gDate;
 	
-	public ChargeDTO(int gAdiminId, int gInvoiceId, String gProductName, int gQuantity,int gPrice, String gDate) {
-		this.gAdiminId = gAdiminId;
+	public ChargeDTO(int gAdminId, int gInvoiceId, String gProductName, int gQuantity,int gPrice, String gDate) {
+		this.gAdminId = gAdminId;
 		this.gInvoiceId = gInvoiceId;
 		this.gProductName = gProductName;
 		this.gQuantity = gQuantity;
@@ -17,15 +18,27 @@ public class ChargeDTO {
 		this.gDate = gDate;
 	}
 	
-	public ChargeDTO(int gInvoiceId, String gProductName, int gQuantity,int gPrice, String gDate) {
+	public ChargeDTO(int gId, int gAdminId, int gInvoiceId, String gProductName, int gQuantity, int gPrice, String gDate) {
+		super();
+		this.gId = gId;
+		this.gAdminId = gAdminId;
 		this.gInvoiceId = gInvoiceId;
 		this.gProductName = gProductName;
 		this.gQuantity = gQuantity;
 		this.gPrice = gPrice;
 		this.gDate = gDate;
 	}
-	
+
 	public ChargeDTO() {}
+	
+	public int getgId() {
+		return gId;
+	}
+
+	public void setgId(int gId) {
+		this.gId = gId;
+	}
+
 	public int getgQuantity() {
 		return gQuantity;
 	}
@@ -42,11 +55,11 @@ public class ChargeDTO {
 		this.gPrice = gPrice;
 	}
 
-	public int getgAdiminId() {
-		return gAdiminId;
+	public int getgAdminId() {
+		return gAdminId;
 	}
-	public void setgAdiminId(int gAdiminId) {
-		this.gAdiminId = gAdiminId;
+	public void setgAdminId(int gAdminId) {
+		this.gAdminId = gAdminId;
 	}
 	public int getgInvoiceId() {
 		return gInvoiceId;
@@ -69,7 +82,7 @@ public class ChargeDTO {
 
 	@Override
 	public String toString() {
-		return "ChargeDTO [gAdiminId=" + gAdiminId + ", gInvoiceId=" + gInvoiceId + ", gProductName=" + gProductName
+		return "ChargeDTO [gAdminId=" + gAdminId + ", gInvoiceId=" + gInvoiceId + ", gProductName=" + gProductName
 				+ ", gDate=" + gDate + ", gQuantity=" + gQuantity + ", gPrice=" + gPrice + "]";
 	}
 	

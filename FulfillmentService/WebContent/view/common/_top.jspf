@@ -18,11 +18,11 @@
 					<%
 									if (session.getAttribute("sessionCustomerId") != null) {
 								%>
-					${sessionCustomerName} 고객님 환영합니다.&nbsp;&nbsp; <a href="#">로그아웃</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+					${sessionCustomerName} ${sessionAdminName}고객님 환영합니다.&nbsp;&nbsp; <a href="#">로그아웃</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 					<%
 									} else {
 								%>
-					<a href="/FulfillmentService/view/loginForm.jsp">로그인</a>&nbsp;&nbsp; <a href="/FulfillmentService/view/LoginRegister.jsp">회원가입</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+					<a href="/FulfillmentService/view/loginForm.jsp">로그인</a>&nbsp;&nbsp; <a href="/FulfillmentService/view/registerCustomerForm.jsp">회원가입</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 					<%
 									}
 								%>

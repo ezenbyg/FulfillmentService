@@ -26,6 +26,19 @@ public class InvoiceDTO {
 		this.vDate = vDate;
 		this.vAdminId = vAdminId;
 	}
+	
+	public InvoiceDTO(String vName, String vTel, String vAddress, int vProductId, String vProductName, int vQuantity,
+			String vDate, int vAdminId) {
+		super();
+		this.vName = vName;
+		this.vTel = vTel;
+		this.vAddress = vAddress;
+		this.vProductId = vProductId;
+		this.vProductName = vProductName;
+		this.vQuantity = vQuantity;
+		this.vDate = vDate;
+		this.vAdminId = vAdminId;
+	}
 
 	public int getvId() {
 		return vId;
