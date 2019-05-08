@@ -29,19 +29,18 @@ public class ChargeProc extends HttpServlet {
 	protected void doAction(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		String action = request.getParameter("action");
 		ArrayList<ChargeDTO> chargeList;
-		ChargeDAO gDao=null;
+		ChargeDAO gDao = null;
 		RequestDispatcher rd = null;
-		String url=null;
+		String url = null;
 		
 		switch(action) {
 			case "charge" : //청구리스트 set하고  페이지로 넘김
-				chargeList=gDao.getAllChargeLists();
+				chargeList = gDao.getAllChargeLists();
 				request.setAttribute("chargeList", chargeList);
 				url = "/FulfillmentService/WebContent/view/index.jsp"; // 수정  창고관리자 페이지로 이동
 				request.setAttribute("url", url);
 				rd = request.getRequestDispatcher("alertMsg.jsp");
 				rd.forward(request, response);
-		
 		}
 	}
 }
