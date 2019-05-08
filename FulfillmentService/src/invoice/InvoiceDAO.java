@@ -83,13 +83,13 @@ public class InvoiceDAO {
 		}
 	}
 	
-	public InvoiceDTO getOneInvoice(String vId) { // 송장 번호에 해당하는 컬럼값 얻어오기
+	public InvoiceDTO getOneInvoice(int vId) { // 송장 번호에 해당하는 컬럼값 얻어오기
 		InvoiceDTO vDto = new InvoiceDTO();
 		conn = DBManager.getConnection();
 		String sql = "select * from invoice where vId=?;";
 		try {
 			pstmt = conn.prepareStatement(sql);
-			pstmt.setString(1, vId);
+			pstmt.setInt(1, vId);
 			rs = pstmt.executeQuery();
 			while(rs.next()) {
 				vDto.setvId(rs.getInt(1));

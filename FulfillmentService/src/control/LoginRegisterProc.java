@@ -47,7 +47,6 @@ public class LoginRegisterProc extends HttpServlet {
 		CustomerDTO customer = null;
 		String cName = null;
 		String cPassword = null;
-		String aName = null;
 		String aPassword = null;
 		String url = null;
 		String message = null;
@@ -95,7 +94,7 @@ public class LoginRegisterProc extends HttpServlet {
 			}
 			break;
 			
-		case "adminsLogin" : // 고객 로그인
+		case "adminsLogin" : // 관리자 로그인
 			if (!request.getParameter("aUserId").equals("")) {
 				aUserId = request.getParameter("aUserId");
 			}
