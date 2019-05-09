@@ -54,7 +54,7 @@ public class StorageDAO {
 		return storageList;
 	}
 
-	//상품 하나 검색
+	// 상품 ID로 하나 검색
 	public StorageDTO getOneProductList(int pId) {
 		StorageDTO pDto = new StorageDTO();
 		conn = DBManager.getConnection();
@@ -86,8 +86,41 @@ public class StorageDAO {
 		}
 		return pDto;
 	}
+	
+	// 상품 이름으로 하나 검색
+	public StorageDTO getOneProductByName(String pName) {
+		StorageDTO pDto = new StorageDTO();
+		conn = DBManager.getConnection();
+		String sql = "select * from storage where pName=?;";
+		try {
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setString(1, pName);
+			rs = pstmt.executeQuery();
+			while (rs.next()) {
+				pDto.setpId(rs.getInt(1));
+				pDto.setpName(rs.getString(2));
+				pDto.setpImgName(rs.getString(3));
+				pDto.setpPrice(rs.getInt(4));
+				pDto.setpQuantity(rs.getInt(5));
+				pDto.setpAdminId(rs.getInt(6));
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+			LOG.info("getOneProductByName(): Error Code : {}", e.getErrorCode());
+			return null;
+		} finally {
+			try {
+				pstmt.close();
+				conn.close();
+				rs.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+		return pDto;
+	}
 
-	//상품 등록
+	// 재고 수량 변경
 	public void updateStorage(int pQuantity, int pId) {
 		LOG.debug("");
 		conn = DBManager.getConnection();

@@ -17,7 +17,7 @@ public class ReleaseDTO {
 	public ReleaseDTO() {}
 
 	public ReleaseDTO(int rTransportId, int rShoppingId, int rInvoiceId, String rName, String rTel, String rAddress,
-			String rProductName, int rQuantity, String rDate, int rPrice, String rState) {
+			String rProductName, int rQuantity, String rDate, int rPrice) {
 		super();
 		this.rTransportId = rTransportId;
 		this.rShoppingId = rShoppingId;
@@ -29,7 +29,6 @@ public class ReleaseDTO {
 		this.rQuantity = rQuantity;
 		this.rDate = rDate;
 		this.rPrice = rPrice;
-		this.rState = rState;
 	}
 	
 

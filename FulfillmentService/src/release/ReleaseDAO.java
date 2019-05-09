@@ -13,6 +13,10 @@ import util.DBManager;
 
 public class ReleaseDAO {
 	private static final Logger LOG = LoggerFactory.getLogger(ReleaseDAO.class);
+	public static final int 출고 = 1;
+	public static final int 배송전 = 2;
+	public static final int 배송중 = 3;
+	public static final int 배송완료 = 4;
 	Connection conn;
 	PreparedStatement pstmt;
 	ResultSet rs;
@@ -88,13 +92,13 @@ public class ReleaseDAO {
 		}
 	}
 	
-	public ReleaseDTO getOneReleaseList(int rTransportId) { // 운송 번호에 해당하는 배송비 등 조회
+	public ReleaseDTO getOneReleaseList(int rInvoiceId) { // 운송 번호에 해당하는 배송비 등 조회
 		ReleaseDTO rDto = new ReleaseDTO();
 		conn = DBManager.getConnection();
-		String sql = "select * from p_release where rTransportId=?;";
+		String sql = "select * from p_release where rInvoiceID=?;";
 		try {
 			pstmt = conn.prepareStatement(sql);
-			pstmt.setInt(1, rTransportId);
+			pstmt.setInt(1, rInvoiceId);
 			rs = pstmt.executeQuery();
 			while(rs.next()) {
 				rDto.setrId(rs.getInt(1));
@@ -126,16 +130,16 @@ public class ReleaseDAO {
 		return rDto;
 	}
 	
-	public void updateReleaseState(ReleaseDTO rDto) {
+	public void updateReleaseState(String rState, int rInvoiceId) {
 		LOG.debug("");
 		PreparedStatement pStmt = null;
 		conn = DBManager.getConnection();
-		String sql = "update p_release set rState=? where rTransportId=?;";
+		String sql = "update p_release set rState=? where rInvoiceId=?;";
 		pStmt = null;
 		try {
 			pStmt = conn.prepareStatement(sql);
-			pStmt.setString(1, rDto.getrState());
-			pStmt.setInt(2, rDto.getrTransportId());
+			pStmt.setString(1, rState);
+			pStmt.setInt(2, rInvoiceId);
 			pStmt.executeUpdate();
 			LOG.trace(sql);
 		} catch (SQLException e) {
