@@ -36,6 +36,7 @@ public class InvoiceDAO {
 				vDto.setvQuantity(rs.getInt(7));
 				vDto.setvDate(rs.getString(8));
 				vDto.setvAdminId(rs.getInt(9));
+				vDto.setvState(rs.getString(10));
 				vList.add(vDto);
 			}
 		} catch (SQLException e) {
@@ -101,6 +102,7 @@ public class InvoiceDAO {
 				vDto.setvQuantity(rs.getInt(7));
 				vDto.setvDate(rs.getString(8));
 				vDto.setvAdminId(rs.getInt(9));
+				vDto.setvState(rs.getString(10));
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
