@@ -16,6 +16,14 @@ Amazon Fulfilment Service와 비슷하게 창고 시스템을 개발하는 프�
 
 	Eclipse, HeidiSQL, Tomcat, BootStrap
 
+### 형상관리
+
+	GitHub
+
+### 협업방식
+
+	Feature Branch Workflow 
+
 ### 구현 내용
 
 - __Content__
