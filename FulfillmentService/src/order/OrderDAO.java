@@ -159,11 +159,11 @@ public class OrderDAO {
 		try {
 			pstmt = conn.prepareStatement(sql);
 			LOG.trace(sql);
-			if (page != 0) {
+			if (page == 0) {
+				pstmt.setInt(1, oAdminId);
+			} else if(page != 0) {
 				pstmt.setInt(1, oAdminId);
 				pstmt.setInt(2, offset);
-			} else if(page == 0) {
-				pstmt.setInt(1, oAdminId);
 			}
 			ResultSet rs = pstmt.executeQuery();
 			while (rs.next()) {	

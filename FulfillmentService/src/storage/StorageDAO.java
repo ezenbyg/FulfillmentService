@@ -21,29 +21,27 @@ public class StorageDAO {
 	PreparedStatement pstmt;
 	ResultSet rs;
 	private static final Logger LOG = LoggerFactory.getLogger(StorageDAO.class);
-	
-	public ArrayList<StorageDTO> getProducts(int category) { // 카테고리는 각 권리자 아이디로 초기화 시켜준다. 
-		ArrayList<StorageDTO> productList = new ArrayList<StorageDTO>();
+
+	// 전체 상품 조회 (재고조사)
+	public ArrayList<StorageDTO> getAllProducts() {
+		String sql = "select pId, pName, pQuantity from storage;";
+		ArrayList<StorageDTO> storageList = new ArrayList<StorageDTO>();
 		conn = DBManager.getConnection();
-		String sql = "select  *  from storage where pAdminId= ?;";
 		try {
 			pstmt = conn.prepareStatement(sql);
-			pstmt.setInt(1, category);
-			rs = pstmt.executeQuery();
-			while (rs.next()) { // 쿼리문 넣고, 읽어드리기
+			ResultSet rs = pstmt.executeQuery();
+
+			while (rs.next()) {
 				StorageDTO pDto = new StorageDTO();
 				pDto.setpId(rs.getInt(1));
 				pDto.setpName(rs.getString(2));
-				pDto.setpImgName(rs.getString(3));
-				pDto.setpPrice(rs.getInt(4));
-				pDto.setpQuantity(rs.getInt(5));
-				pDto.setpAdminId(rs.getInt(6));
+				pDto.setpQuantity(rs.getInt(3));
 				LOG.trace(pDto.toString());
-				productList.add(pDto);
+				storageList.add(pDto);
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
-			LOG.info("getProducts(): Error Code : {}", e.getErrorCode());
+			LOG.info("getAllProducts(): Error Code : {}", e.getErrorCode());
 		} finally {
 			try {
 				pstmt.close();
@@ -53,10 +51,11 @@ public class StorageDAO {
 				e.printStackTrace();
 			}
 		}
-		return productList;
+		return storageList;
 	}
-	
-	public StorageDTO getOneProductList(int pId) { 
+
+	//상품 하나 검색
+	public StorageDTO getOneProductList(int pId) {
 		StorageDTO pDto = new StorageDTO();
 		conn = DBManager.getConnection();
 		String sql = "select * from storage where pId=?;";
@@ -64,7 +63,7 @@ public class StorageDAO {
 			pstmt = conn.prepareStatement(sql);
 			pstmt.setInt(1, pId);
 			rs = pstmt.executeQuery();
-			while(rs.next()) {
+			while (rs.next()) {
 				pDto.setpId(rs.getInt(1));
 				pDto.setpName(rs.getString(2));
 				pDto.setpImgName(rs.getString(3));
@@ -87,18 +86,17 @@ public class StorageDAO {
 		}
 		return pDto;
 	}
-	
+
+	//상품 등록
 	public void updateStorage(int pQuantity, int pId) {
 		LOG.debug("");
-		PreparedStatement pStmt = null;
 		conn = DBManager.getConnection();
 		String sql = "update storage set pQuantity=? where pId=?;";
-		pStmt = null;
 		try {
-			pStmt = conn.prepareStatement(sql);
-			pStmt.setInt(1, pQuantity);
-			pStmt.setInt(2, pId);
-			pStmt.executeUpdate();
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setInt(1, pQuantity);
+			pstmt.setInt(2, pId);
+			pstmt.executeUpdate();
 			LOG.trace(sql);
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -112,4 +110,113 @@ public class StorageDAO {
 			}
 		}
 	}
+
+	// 항목별 상품 조회
+	public ArrayList<StorageDTO> getTitleProducts(int category, int page) {
+		int offset = 0;
+		String sql = null;
+		ArrayList<StorageDTO> productList = new ArrayList<StorageDTO>();
+		conn = DBManager.getConnection();
+
+		if (page == 0) {
+			sql = "select * from storage where pAdminId=?;";
+		} else {
+			sql = "select * from storage where pAdminId=? limit ?, 10;"; // ? 시작점, 10은 가져올 갯수
+			offset = (page - 1) * 10;
+		}
+		try {
+			if (page == 0) {
+				pstmt.setInt(1, category);
+			} else if (page != 0) {
+				pstmt.setInt(1, category);
+				pstmt.setInt(2, offset);
+			}
+
+			pstmt = conn.prepareStatement(sql);
+			rs = pstmt.executeQuery();
+
+			while (rs.next()) { // 쿼리문 넣고, 읽어드리기
+				StorageDTO pDto = new StorageDTO();
+				pDto.setpId(rs.getInt(1));
+				pDto.setpName(rs.getString(2));
+				pDto.setpImgName(rs.getString(3));
+				pDto.setpPrice(rs.getInt(4));
+				pDto.setpQuantity(rs.getInt(5));
+				pDto.setpAdminId(rs.getInt(6));
+				LOG.trace(pDto.toString());
+				productList.add(pDto);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+			LOG.info("getAllProducts(): Error Code : {}", e.getErrorCode());
+		} finally {
+			try {
+				pstmt.close();
+				conn.close();
+				rs.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+		return productList;
+	}
+
+	public int getCount() {
+		String sql = "select count(*) from storage;";
+		conn = DBManager.getConnection();
+		int count = 0;
+		try {
+			pstmt = conn.prepareStatement(sql);
+			ResultSet rs = pstmt.executeQuery();
+			while (rs.next()) {
+				count = rs.getInt(1);
+			}
+			rs.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+			LOG.info("getCount(): Error Code : {}", e.getErrorCode());
+		} finally {
+			try {
+				pstmt.close();
+				conn.close();
+				rs.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+		return count;
+	}
+	
+	// 재고 검색, 일부 단어 검색 시 여러개 검색될 우려에 리턴값 ArrayList으로 줌
+	public ArrayList<StorageDTO> getSearchProduct(String word) {
+		ArrayList<StorageDTO> stockList = new ArrayList<StorageDTO>();
+		conn = DBManager.getConnection();
+		String sql = "select pId, pName, pQuantity from storage where pName like '%?%';";
+		try {
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setString(1, word);
+			rs = pstmt.executeQuery();
+			while (rs.next()) {
+				StorageDTO pDto = new StorageDTO();
+				pDto.setpId(rs.getInt(1));
+				pDto.setpName(rs.getString(2));
+				pDto.setpQuantity(rs.getInt(3));
+				LOG.trace(pDto.toString());
+				stockList.add(pDto);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+			LOG.info("getSearchProduct(): Error Code : {}", e.getErrorCode());
+		} finally {
+			try {
+				pstmt.close();
+				conn.close();
+				rs.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+		return stockList;
+	}
+
 }
