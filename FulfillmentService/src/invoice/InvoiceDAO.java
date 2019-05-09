@@ -119,4 +119,29 @@ public class InvoiceDAO {
 		}
 		return vDto;
 	}
+	
+	public void updateInvoiceState(String vState, int vId) {
+		LOG.debug("");
+		PreparedStatement pStmt = null;
+		conn = DBManager.getConnection();
+		String sql = "update invoice set vState=? where vId=?;";
+		pStmt = null;
+		try {
+			pStmt = conn.prepareStatement(sql);
+			pStmt.setString(1, vState);
+			pStmt.setInt(2, vId);
+			pStmt.executeUpdate();
+			LOG.trace(sql);
+		} catch (SQLException e) {
+			e.printStackTrace();
+			LOG.info("updateInvoiceState() Error Code : {}", e.getErrorCode());
+		} finally {
+			try {
+				pstmt.close();
+				conn.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+	}
 }

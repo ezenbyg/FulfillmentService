@@ -86,28 +86,28 @@ public class ProductProc extends HttpServlet {
 			
 		case "category" :
 			category = Integer.parseInt(request.getParameter("category")); // 목록에서 category 제공할 것
-			String Title = null;
+			String title = null;
 			
 			switch (category) {
-			case StorageDAO.MUSINSA:
-				Title = "무신사 Store";
+			case StorageDAO.MUSINSA :
+				title = "무신사 Store";
 				break;
-			case StorageDAO.WHAGUWHAGU:
-				Title = "와구와구 Store";
+			case StorageDAO.WHAGUWHAGU :
+				title = "와구와구 Store";
 				break;
-			case StorageDAO.HIMART:
-				Title = "하이마트 Store";
+			case StorageDAO.HIMART :
+				title = "하이마트 Store";
 				break;
-			case StorageDAO.UNDERARMOUR:
-				Title = "언더아머 Store";
+			case StorageDAO.UNDERARMOUR :
+				title = "언더아머 Store";
 				break;
-			case StorageDAO.IKEA:
-				Title = "이케아 Store";
-				rd = request.getRequestDispatcher("/control/productServlet?action=productList&page=1");
-				rd.forward(request, response);
+			case StorageDAO.IKEA :
+				title = "이케아 Store";
 				break;
 			}
-			request.setAttribute("Title", Title);
+			request.setAttribute("title", title);
+			rd = request.getRequestDispatcher("/control/productServlet?action=productList&page=1");
+			rd.forward(request, response);
 			
 		case "stockList" :
 			if (!request.getParameter("page").equals("")) {

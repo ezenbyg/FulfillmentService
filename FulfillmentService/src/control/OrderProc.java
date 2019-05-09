@@ -1,6 +1,7 @@
 package control;
 
 import java.io.IOException;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -48,6 +49,11 @@ public class OrderProc extends HttpServlet {
 		RequestDispatcher rd = null;
 		int curPage = 1;
 		
+		Date releaseDate = null;
+		Date orderDate = null;
+		long diff = 0;
+		long sec = 0;
+		
 		OrderDAO oDao = null;
 		OrderDTO order = null;
 		int oId = 0;
@@ -56,6 +62,7 @@ public class OrderProc extends HttpServlet {
 		int oQuantity = 0;
 		int oPrice = 0;
 		int oTotalPrice = 0;
+		String oDate = null;
 		List<OrderDTO> oList = null;
 		String url = null;
 		String message = null;
@@ -104,6 +111,17 @@ public class OrderProc extends HttpServlet {
 			oPrice = Integer.parseInt(request.getParameter("oPrice"));
 			oTotalPrice = Integer.parseInt(request.getParameter("oTotalPrice"));
 			
+			// 발주 가능 : (재고수량 <= 10) || (배송물품수량 > 재고수량)
+			if(oQuantity > 10) {
+				message = "재고수량이 10개를 초과합니다!!";
+				request.setAttribute("message", message);
+				url = "XXX.jsp";
+				request.setAttribute("url", url);
+				rd = request.getRequestDispatcher("alertMsg.jsp");
+				rd.forward(request, response);
+				break;
+			}
+			
 			SimpleDateFormat format = new SimpleDateFormat ("yyyy-MM-dd HH:mm:ss");
 			Date time = new Date();
 			String orderTime = format.format(time);
@@ -121,10 +139,36 @@ public class OrderProc extends HttpServlet {
 			rd.forward(request, response);
 			break;
 			
-		case "release" : // 구매처에서 발주내역 조회하고 출고 버튼 클릭 시  
+		case "release" : // 구매처에서 납품
 			oId = Integer.parseInt(request.getParameter("oId"));
 			oProductId = Integer.parseInt(request.getParameter("oProductId"));
 			oQuantity = Integer.parseInt(request.getParameter("oQuantity"));
+			oDate = request.getParameter("oDate");
+			
+			SimpleDateFormat format1 = new SimpleDateFormat ("yyyy-MM-dd HH:mm:ss");
+			Date time1 = new Date();
+			String releaseTime = format1.format(time1);
+			
+			try {
+				releaseDate = format1.parse(releaseTime);
+				orderDate = format1.parse(oDate);
+				diff = releaseDate.getTime() - orderDate.getTime();
+				sec = diff / 1000;
+			} catch (ParseException e) {
+				LOG.trace(e.getMessage());
+				e.printStackTrace();
+			}
+			
+			// 납품은 발주 다음날 오전 10시에 처리 가능 (테스트를 위해 발주 하고 2분지난 시점에서 납품 가능)
+			if(sec < 120) {
+				message = "발주 가능한 시간이 아닙니다!!";
+				request.setAttribute("message", message);
+				url = "XXX.jsp";
+				request.setAttribute("url", url);
+				rd = request.getRequestDispatcher("alertMsg.jsp");
+				rd.forward(request, response);
+				break;
+			}
 			
 			// 상품 재고 Update
 			StorageDAO pDao = new StorageDAO();
