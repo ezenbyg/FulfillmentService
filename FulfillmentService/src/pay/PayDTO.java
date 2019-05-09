@@ -2,14 +2,17 @@ package pay;
 
 public class PayDTO {
 	private int yId;
-	private int yBankId;
+	private String yBankId;
 	private int yAdminId;
 	private int yPrice;
 	private String yDate;
 	private String yState;
+	private int rTransportId;
+	private String rDate;
+	private String bId;
+	private int bBalance;
 	
-	
-	public PayDTO(int yId, int yBankId, int yAdminId, int yPrice, String yDate, String yState) {
+	public PayDTO(int yId, String yBankId, int yAdminId, int yPrice, String yDate, String yState) {
 		super();
 		this.yId = yId;
 		this.yBankId = yBankId;
@@ -19,7 +22,7 @@ public class PayDTO {
 		this.yState = yState;
 	}
 	
-	public PayDTO(int yBankId, int yAdminId, int yPrice, String yDate, String yState) {
+	public PayDTO(String yBankId, int yAdminId, int yPrice, String yDate, String yState) {
 		this.yBankId = yBankId;
 		this.yAdminId = yAdminId;
 		this.yPrice = yPrice;
@@ -27,7 +30,29 @@ public class PayDTO {
 		this.yState = yState;
 	}
 	
+	public PayDTO(int rTransportId, String rDate, String yState) {
+		this.rTransportId = rTransportId;
+		this.rDate = rDate;
+		this.yState = yState;
+	}
+	
 	public PayDTO() {}
+	
+	public String getbId() {
+		return bId;
+	}
+
+	public void setbId(String bId) {
+		this.bId = bId;
+	}
+
+	public int getbBalance() {
+		return bBalance;
+	}
+
+	public void setbBalance(int bBalance) {
+		this.bBalance = bBalance;
+	}
 
 	public int getyId() {
 		return yId;
@@ -37,62 +62,65 @@ public class PayDTO {
 		this.yId = yId;
 	}
 	
-	public int getyBankId() {
+	public String getyBankId() {
 		return yBankId;
 	}
 
-
-	public void setyBankId(int yBankId) {
+	public void setyBankId(String yBankId) {
 		this.yBankId = yBankId;
 	}
-
 
 	public int getyAdminId() {
 		return yAdminId;
 	}
 
-
 	public void setyAdminId(int yAdminId) {
 		this.yAdminId = yAdminId;
 	}
-
 
 	public int getyPrice() {
 		return yPrice;
 	}
 
-
 	public void setyPrice(int yPrice) {
 		this.yPrice = yPrice;
 	}
-
 
 	public String getyDate() {
 		return yDate;
 	}
 
-
 	public void setyDate(String yDate) {
 		this.yDate = yDate;
 	}
 
-
 	public String getyState() {
 		return yState;
 	}
-
-
+	
 	public void setyState(String yState) {
 		this.yState = yState;
 	}
 
+	public int getrTransportId() {
+		return rTransportId;
+	}
+
+	public void setrTransportId(int rTransportId) {
+		this.rTransportId = rTransportId;
+	}
+
+	public String getrDate() {
+		return rDate;
+	}
+
+	public void setrDate(String rDate) {
+		this.rDate = rDate;
+	}
 
 	@Override
 	public String toString() {
 		return "PayDTO [yId=" + yId + "yBankId=" + yBankId + ", yAdminId=" + yAdminId + ", yPrice=" + yPrice + ", yDate=" + yDate
 				+ ", yState=" + yState + "]";
 	}
-	
-	
-	
 }

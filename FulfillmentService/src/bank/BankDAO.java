@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import release.ReleaseDTO;
 import util.DBManager;
 
 public class BankDAO {
@@ -47,15 +48,50 @@ public class BankDAO {
 		return bList; 
 	}
 	
-	public void updateBank(BankDTO bDto, int balance) {
+	public BankDTO getOneBankList(int bAdminId) { // 운송 번호에 해당하는 배송비 등 조회
+		BankDTO bDto = new BankDTO();
+		conn = DBManager.getConnection();
+		String sql = "select * from bank where bAdminId=?;";
+		try {
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setInt(1, bAdminId);
+			rs = pstmt.executeQuery();
+			while(rs.next()) {
+				bDto.setbId(rs.getString(1));
+				bDto.setbAdminId(rs.getInt(2));
+				bDto.setbBalance(rs.getInt(3)); 
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+			LOG.info("getOneBankList(): Error Code : {}", e.getErrorCode());
+			return null;
+		} finally {
+			try {
+				pstmt.close();
+				conn.close();
+				rs.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+		return bDto;
+	}
+	
+	public void updateBank(BankDTO bDto, int bBalance, String operator) {
+		int newBalance = 0;
 		LOG.debug("");
 		PreparedStatement pStmt = null;
 		conn = DBManager.getConnection();
-		String sql = "update bank set balance=? where bId=?;";
+		String sql = "update bank set bBalance=? where bId=?;";
 		pStmt = null;
+		if(operator.compareTo("+") == 0) {
+			newBalance = bDto.getbBalance() + bBalance;
+		} else if(operator.compareTo("-") == 0) {
+			newBalance = bDto.getbBalance() - bBalance;
+		}
 		try {
 			pStmt = conn.prepareStatement(sql);
-			pStmt.setInt(1, bDto.getbBalance() + balance);
+			pStmt.setInt(1, newBalance);
 			pStmt.setString(2, bDto.getbId());
 			pStmt.executeUpdate();
 			LOG.trace(sql);

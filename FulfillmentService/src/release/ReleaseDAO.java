@@ -95,7 +95,7 @@ public class ReleaseDAO {
 	public ReleaseDTO getOneReleaseList(int rInvoiceId) { // 운송 번호에 해당하는 배송비 등 조회
 		ReleaseDTO rDto = new ReleaseDTO();
 		conn = DBManager.getConnection();
-		String sql = "select * from p_release where rInvoiceID=?;";
+		String sql = "select * from p_release where rInvoiceId=?;";
 		try {
 			pstmt = conn.prepareStatement(sql);
 			pstmt.setInt(1, rInvoiceId);
@@ -116,7 +116,7 @@ public class ReleaseDAO {
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
-			LOG.info("getOneReleaseList (): Error Code : {}", e.getErrorCode());
+			LOG.info("getOneReleaseList(): Error Code : {}", e.getErrorCode());
 			return null;
 		} finally {
 			try {
