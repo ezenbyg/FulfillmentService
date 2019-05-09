@@ -48,7 +48,7 @@ public class BankDAO {
 		return bList; 
 	}
 	
-	public BankDTO getOneBankList(int bAdminId) { // 운송 번호에 해당하는 배송비 등 조회
+	public BankDTO getOneBankList(int bAdminId) { 
 		BankDTO bDto = new BankDTO();
 		conn = DBManager.getConnection();
 		String sql = "select * from bank where bAdminId=?;";
