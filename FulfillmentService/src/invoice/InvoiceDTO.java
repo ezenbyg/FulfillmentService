@@ -10,11 +10,12 @@ public class InvoiceDTO {
 	private int vQuantity;
 	private String vDate;
 	private int vAdminId;
+	private String vState;
 	
 	public InvoiceDTO() {}
 
 	public InvoiceDTO(int vId, String vName, String vTel, String vAddress, int vProductId, String vProductName, int vQuantity,
-			String vDate, int vAdminId) {
+			String vDate, int vAdminId, String vState) {
 		super();
 		this.vId = vId;
 		this.vName = vName;
@@ -112,10 +113,18 @@ public class InvoiceDTO {
 		this.vAdminId = vAdminId;
 	}
 
+	public String getvState() {
+		return vState;
+	}
+
+	public void setvState(String vState) {
+		this.vState = vState;
+	}
+
 	@Override
 	public String toString() {
 		return "InvoiceDTO [vId=" + vId + ", vName=" + vName + ", vTel=" + vTel + ", vAddress=" + vAddress
 				+ ", vProductId=" + vProductId + ", vProductName=" + vProductName + ", vQuantity=" + vQuantity
-				+ ", vDate=" + vDate + ", vAdminId=" + vAdminId + "]";
+				+ ", vDate=" + vDate + ", vAdminId=" + vAdminId + ", vState=" + vState + "]";
 	}
 }

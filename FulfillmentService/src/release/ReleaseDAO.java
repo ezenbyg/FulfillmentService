@@ -150,4 +150,91 @@ public class ReleaseDAO {
 			}
 		}
 	}
+	
+    public int getCount() {
+    	conn = DBManager.getConnection();
+		String sql = "select count(*) from p_release;";
+		PreparedStatement pStmt = null;
+		int count = 0;
+		try {
+			pStmt = conn.prepareStatement(sql);
+			ResultSet rs = pStmt.executeQuery();
+			LOG.trace(sql);
+			while (rs.next()) {				
+				count = rs.getInt(1);
+			}
+			rs.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+			LOG.info("getCount(): Error Code : {}", e.getErrorCode());
+		} finally {
+			try {
+				pstmt.close();
+				conn.close();
+				rs.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+		return count;
+	}
+    
+	public ArrayList<ReleaseDTO> selectJoinAll(int page, int rTransportId) {
+		conn = DBManager.getConnection();
+		int offset = 0;
+		String sql = null;
+		if (page == 0) {	// page가 0이면 모든 데이터를 보냄
+			sql = "select rId, rTransportId, rShoppingId, rInvoiceId, rName, rTel, rAddress, rProductName, rQuantity, rDate, rPrice, rState"
+					+ " from p_release "
+					+ "where rTransportId=?"
+					+ " order by id desc;"; 
+		} else {			// page가 0이 아니면 해당 페이지 데이터만 보냄
+			sql = "select rId, rTransportId, rShoppingId, rInvoiceId, rName, rTel, rAddress, rProductName, rQuantity, rDate, rPrice, rState"
+					+ " from p_release where rTransportId=?"
+					+ " order by id desc limit ?, 10;";  
+			offset = (page - 1) * 10;
+		}
+		ArrayList<ReleaseDTO> rList = new ArrayList<ReleaseDTO>();
+		try {
+			pstmt = conn.prepareStatement(sql);
+			LOG.trace(sql);
+			if (page == 0) {
+				pstmt.setInt(1, rTransportId);
+			} else if(page != 0) {
+				pstmt.setInt(1, rTransportId);
+				pstmt.setInt(2, offset);
+			}
+			ResultSet rs = pstmt.executeQuery();
+			while (rs.next()) {	
+				ReleaseDTO rDto = new ReleaseDTO();
+				rDto.setrId(rs.getInt(1));
+				rDto.setrTransportId(rs.getInt(2));
+				rDto.setrShoppingId(rs.getInt(3));
+				rDto.setrInvoiceId(rs.getInt(4));
+				rDto.setrName(rs.getString(5));
+				rDto.setrTel(rs.getString(6));
+				rDto.setrAddress(rs.getString(7));
+				rDto.setrProductName(rs.getString(8));
+				rDto.setrQuantity(rs.getInt(9));
+				rDto.setrDate(rs.getString(10));
+				rDto.setrPrice(rs.getInt(11));
+				rDto.setrState(rs.getString(12));
+				rList.add(rDto);
+				LOG.trace(sql);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+			LOG.info("selectJoinAll(): Error Code : {}", e.getErrorCode());
+			return null;
+		} finally {
+			try {
+				pstmt.close();
+				conn.close();
+				rs.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+		return rList;
+	}
 }

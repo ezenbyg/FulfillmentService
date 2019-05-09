@@ -125,16 +125,16 @@ public class OrderDAO {
 				count = rs.getInt(1);
 			}
 			rs.close();
-		} catch (Exception e) {
+		} catch (SQLException e) {
 			e.printStackTrace();
-			LOG.trace(e.getMessage());
+			LOG.info("getCount(): Error Code : {}", e.getErrorCode());
 		} finally {
 			try {
-				if (pStmt != null && !pStmt.isClosed()) 
-					pStmt.close();
-			} catch (SQLException se) {
-				se.printStackTrace();
-				LOG.trace(se.getMessage());
+				pstmt.close();
+				conn.close();
+				rs.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
 			}
 		}
 		return count;
@@ -151,7 +151,7 @@ public class OrderDAO {
 					+ " order by id desc;"; 
 		} else {			// page가 0이 아니면 해당 페이지 데이터만 보냄
 			sql = "select oId, oAdminId, oPrdouctId, oQuantity, oPrice, oTotalPrice, oDate"
-					+ " from member where oAdminid=?"
+					+ " from p_order where oAdminid=?"
 					+ " order by id desc limit ?, 10;";  
 			offset = (page - 1) * 10;
 		}
