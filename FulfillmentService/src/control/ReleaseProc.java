@@ -106,7 +106,7 @@ public class ReleaseProc extends HttpServlet {
 			page = "&nbsp;<a href=#>&raquo;</a>";
 			pageList.add(page);
 			
-			rTransportId = Integer.parseInt((String) session.getAttribute("sessionTransportId"));
+			rTransportId = Integer.parseInt((String) session.getAttribute("sessionAdminId"));
 			rList = rDao.selectJoinAll(curPage, rTransportId);
 			request.setAttribute("releaseList", rList);
 			request.setAttribute("releasePageList", pageList);

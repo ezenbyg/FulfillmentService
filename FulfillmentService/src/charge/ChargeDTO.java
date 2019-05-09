@@ -4,25 +4,17 @@ public class ChargeDTO {
 	private int gId;
 	private int gAdminId;
 	private int gInvoiceId;
+	private String gBankId;
 	private String gProductName;
 	private int gQuantity;
 	private int gPrice;
 	private String gDate;
+	private String gState;
 	
-	public ChargeDTO(int gAdminId, int gInvoiceId, String gProductName, int gQuantity,int gPrice, String gDate) {
+	public ChargeDTO(int gAdminId, int gInvoiceId, String gBankId, String gProductName, int gQuantity,int gPrice, String gDate) {
 		this.gAdminId = gAdminId;
 		this.gInvoiceId = gInvoiceId;
-		this.gProductName = gProductName;
-		this.gQuantity = gQuantity;
-		this.gPrice = gPrice;
-		this.gDate = gDate;
-	}
-	
-	public ChargeDTO(int gId, int gAdminId, int gInvoiceId, String gProductName, int gQuantity, int gPrice, String gDate) {
-		super();
-		this.gId = gId;
-		this.gAdminId = gAdminId;
-		this.gInvoiceId = gInvoiceId;
+		this.gBankId = gBankId;
 		this.gProductName = gProductName;
 		this.gQuantity = gQuantity;
 		this.gPrice = gPrice;
@@ -58,18 +50,23 @@ public class ChargeDTO {
 	public int getgAdminId() {
 		return gAdminId;
 	}
+	
 	public void setgAdminId(int gAdminId) {
 		this.gAdminId = gAdminId;
 	}
+	
 	public int getgInvoiceId() {
 		return gInvoiceId;
 	}
+	
 	public void setgInvoiceId(int gInvoiceId) {
 		this.gInvoiceId = gInvoiceId;
 	}
+	
 	public String getgProductName() {
 		return gProductName;
 	}
+	
 	public void setgProductName(String gProductName) {
 		this.gProductName = gProductName;
 	}
@@ -80,10 +77,26 @@ public class ChargeDTO {
 		this.gDate = gDate;
 	}
 
+	public String getgState() {
+		return gState;
+	}
+
+	public void setgState(String gState) {
+		this.gState = gState;
+	}
+
+	public String getgBankId() {
+		return gBankId;
+	}
+
+	public void setgBankId(String gBankId) {
+		this.gBankId = gBankId;
+	}
+
 	@Override
 	public String toString() {
-		return "ChargeDTO [gAdminId=" + gAdminId + ", gInvoiceId=" + gInvoiceId + ", gProductName=" + gProductName
-				+ ", gDate=" + gDate + ", gQuantity=" + gQuantity + ", gPrice=" + gPrice + "]";
+		return "ChargeDTO [gId=" + gId + ", gAdminId=" + gAdminId + ", gInvoiceId=" + gInvoiceId + ", gBankId="
+				+ gBankId + ", gProductName=" + gProductName + ", gQuantity=" + gQuantity + ", gPrice=" + gPrice
+				+ ", gDate=" + gDate + ", gState=" + gState + "]";
 	}
-	
 }
