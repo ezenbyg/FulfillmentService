@@ -3,26 +3,23 @@ package charge;
 public class ChargeDTO {
 	private int gId;
 	private int gAdminId;
-	private int gInvoiceId;
+	private String gShopName;
 	private String gBankId;
-	private String gProductName;
-	private int gQuantity;
-	private int gPrice;
+	private int gTotalPrice;
 	private String gDate;
 	private String gState;
 	
-	public ChargeDTO(int gAdminId, int gInvoiceId, String gBankId, String gProductName, int gQuantity,int gPrice, String gDate) {
+	public ChargeDTO() {}
+
+	public ChargeDTO(int gAdminId, String gShopName, String gBankId, int gTotalPrice, String gDate) {
+		super();
 		this.gAdminId = gAdminId;
-		this.gInvoiceId = gInvoiceId;
+		this.gShopName = gShopName;
 		this.gBankId = gBankId;
-		this.gProductName = gProductName;
-		this.gQuantity = gQuantity;
-		this.gPrice = gPrice;
+		this.gTotalPrice = gTotalPrice;
 		this.gDate = gDate;
 	}
 
-	public ChargeDTO() {}
-	
 	public int getgId() {
 		return gId;
 	}
@@ -31,48 +28,42 @@ public class ChargeDTO {
 		this.gId = gId;
 	}
 
-	public int getgQuantity() {
-		return gQuantity;
-	}
-
-	public void setgQuantity(int gQuantity) {
-		this.gQuantity = gQuantity;
-	}
-
-	public int getgPrice() {
-		return gPrice;
-	}
-
-	public void setgPrice(int gPrice) {
-		this.gPrice = gPrice;
-	}
-
 	public int getgAdminId() {
 		return gAdminId;
 	}
-	
+
 	public void setgAdminId(int gAdminId) {
 		this.gAdminId = gAdminId;
 	}
-	
-	public int getgInvoiceId() {
-		return gInvoiceId;
+
+	public String getgShopName() {
+		return gShopName;
 	}
-	
-	public void setgInvoiceId(int gInvoiceId) {
-		this.gInvoiceId = gInvoiceId;
+
+	public void setgShopName(String gShopName) {
+		this.gShopName = gShopName;
 	}
-	
-	public String getgProductName() {
-		return gProductName;
+
+	public String getgBankId() {
+		return gBankId;
 	}
-	
-	public void setgProductName(String gProductName) {
-		this.gProductName = gProductName;
+
+	public void setgBankId(String gBankId) {
+		this.gBankId = gBankId;
 	}
+
+	public int getgTotalPrice() {
+		return gTotalPrice;
+	}
+
+	public void setgTotalPrice(int gTotalPrice) {
+		this.gTotalPrice = gTotalPrice;
+	}
+
 	public String getgDate() {
 		return gDate;
 	}
+
 	public void setgDate(String gDate) {
 		this.gDate = gDate;
 	}
@@ -85,18 +76,9 @@ public class ChargeDTO {
 		this.gState = gState;
 	}
 
-	public String getgBankId() {
-		return gBankId;
-	}
-
-	public void setgBankId(String gBankId) {
-		this.gBankId = gBankId;
-	}
-
 	@Override
 	public String toString() {
-		return "ChargeDTO [gId=" + gId + ", gAdminId=" + gAdminId + ", gInvoiceId=" + gInvoiceId + ", gBankId="
-				+ gBankId + ", gProductName=" + gProductName + ", gQuantity=" + gQuantity + ", gPrice=" + gPrice
-				+ ", gDate=" + gDate + ", gState=" + gState + "]";
+		return "ChargeDTO [gId=" + gId + ", gAdminId=" + gAdminId + ", gShopName=" + gShopName + ", gBankId=" + gBankId
+				+ ", gTotalPrice=" + gTotalPrice + ", gDate=" + gDate + ", gState=" + gState + "]";
 	}
 }

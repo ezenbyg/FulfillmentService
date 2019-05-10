@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import invoice.InvoiceDTO;
 import util.DBManager;
 
 public class ReleaseDAO {
@@ -240,5 +241,59 @@ public class ReleaseDAO {
 			}
 		}
 		return rList;
+	}
+	
+	public ArrayList<InvoiceDTO> selectdailyToRelease(int page, String date) {
+		conn = DBManager.getConnection();
+		int offset = 0;
+		String sql = null;
+		if (page == 0) {	// page가 0이면 모든 데이터를 보냄
+			sql = 	"select vId, vName, vTel, vAddress, vProductName, vQuantity, vDate "
+					+ "from invoice where vDate=? " 
+					+ "order by vDate desc;";
+			
+		} else {			// page가 0이 아니면 해당 페이지 데이터만 보냄
+			sql = "select vId, vName, vTel, vAddress, vProductName, vQuantity, vDate "
+					+ "from invoice where vDate=? " 
+					+ "order by vDate desc limit ?, 10;";
+			offset = (page - 1) * 10;
+		}
+		ArrayList<InvoiceDTO> vList = new ArrayList<InvoiceDTO>();
+		try {
+			pstmt = conn.prepareStatement(sql);
+			LOG.trace(sql);
+			if (page == 0) {
+				pstmt.setString(1, date);
+			} else if(page != 0) {
+				pstmt.setString(1, date);
+				pstmt.setInt(2, offset);
+			}
+			ResultSet rs = pstmt.executeQuery();
+			while (rs.next()) {	
+				InvoiceDTO vDto = new InvoiceDTO();
+				vDto.setvId(rs.getInt(1));
+				vDto.setvName(rs.getString(2));
+				vDto.setvTel(rs.getString(3));
+				vDto.setvAddress(rs.getString(4));
+				vDto.setvProductName(rs.getString(5));
+				vDto.setvQuantity(rs.getInt(6));
+				vDto.setvDate(rs.getString(7));
+				vList.add(vDto);
+				LOG.trace(sql);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+			LOG.info("selectdailyToRelease(): Error Code : {}", e.getErrorCode());
+			return null;
+		} finally {
+			try {
+				pstmt.close();
+				conn.close();
+				rs.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+		return vList;
 	}
 }

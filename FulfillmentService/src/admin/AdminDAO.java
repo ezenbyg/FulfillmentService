@@ -22,7 +22,19 @@ public class AdminDAO {
 	public static final int ID_DOES_NOT_EXIST = 2;
 	public static final int PASSWORD_IS_WRONG = 3;
 	public static final int DATABASE_ERROR = -1;
-	
+	public static final int JH쇼핑몰 = 20001;
+	public static final int SW쇼핑몰 = 20002;
+	public static final int GJ쇼핑몰 = 20003;
+	public static final int 무신사 = 30001;
+	public static final int 와구와구 = 30002;
+	public static final int 하이마트 = 30003;
+	public static final int 언더아머 = 30004;
+	public static final int 이케아 = 30005;
+	public static final int 경기물류 = 40001;
+	public static final int 중부물류 = 40002;
+	public static final int 영남물류 = 40003;
+	public static final int 서부물류 = 40004;
+
 	public int verifyIdPassword(String id, String password) {
 		return ID_PASSWORD_MATCH;
 	}

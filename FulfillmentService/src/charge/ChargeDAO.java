@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import invoice.InvoiceDTO;
 import util.DBManager;
 
 public class ChargeDAO { // 송장에서 얻은 정보에 가격을 포함해서 청구테이블에 저장
@@ -28,13 +29,11 @@ public class ChargeDAO { // 송장에서 얻은 정보에 가격을 포함해서
 				ChargeDTO gDto = new ChargeDTO();
 				gDto.setgId(rs.getInt(1));
 				gDto.setgAdminId(rs.getInt(2));
-				gDto.setgInvoiceId(rs.getInt(3)); 
+				gDto.setgShopName(rs.getString(3)); 
 				gDto.setgBankId(rs.getString(4));
-				gDto.setgProductName(rs.getString(5));
-				gDto.setgQuantity(rs.getInt(6));
-				gDto.setgPrice(rs.getInt(7));
-				gDto.setgDate(rs.getString(8));
-				gDto.setgState(rs.getString(9));
+				gDto.setgTotalPrice(rs.getInt(5));
+				gDto.setgDate(rs.getString(6));
+				gDto.setgState(rs.getString(7));
 				gList.add(gDto);
 			}
 		} catch (SQLException e) {
@@ -56,16 +55,14 @@ public class ChargeDAO { // 송장에서 얻은 정보에 가격을 포함해서
 	public void addChargeList(ChargeDTO gDto) {
 		LOG.trace("addChargeList(): " + gDto.toString());
 		conn = DBManager.getConnection();
-		String sql = "insert into charge(gAdminId, gInvoiceId, gBankId, gProductName, gQuantity, gPrice, gDate) values(?, ?, ?, ?, ?, ?, ?)";
+		String sql = "insert into charge(gAdminId, gShopName, gBankId, gTotalPrice, gDate) values(?, ?, ?, ?, ?)";
 		try {
 			pstmt = conn.prepareStatement(sql);
 			pstmt.setInt(1, gDto.getgAdminId());
-			pstmt.setInt(2, gDto.getgInvoiceId());
+			pstmt.setString(2, gDto.getgShopName());
 			pstmt.setString(3, gDto.getgBankId());
-			pstmt.setString(4, gDto.getgProductName());
-			pstmt.setInt(5, gDto.getgQuantity());
-			pstmt.setInt(6, gDto.getgPrice());
-			pstmt.setString(7, gDto.getgDate());
+			pstmt.setInt(4, gDto.getgTotalPrice());
+			pstmt.setString(5, gDto.getgDate());
 			
 			pstmt.executeUpdate();
 		} catch (SQLException e) {
@@ -81,22 +78,23 @@ public class ChargeDAO { // 송장에서 얻은 정보에 가격을 포함해서
 		}
 	}
 	
-	public ChargeDTO getOneChargeList(int gInvoiceId) { // 송장 번호 하나에 해당하는 컬럼 값 출력
+	public ChargeDTO getOneChargeList(int gAdminId, String gDate) { 
 		ChargeDTO gDto = new ChargeDTO();
 		conn = DBManager.getConnection();
-		String sql = "select * from charge where gInvoiceId=?;";
+		String sql = "select * from charge where gAdminId=? AND gDate=?;";
 		try {
 			pstmt = conn.prepareStatement(sql);
-			pstmt.setInt(1, gInvoiceId);
+			pstmt.setInt(1, gAdminId);
+			pstmt.setString(2, gDate);
 			rs = pstmt.executeQuery();
 			while(rs.next()) {
-				gDto.setgAdminId(rs.getInt(1));
-				gDto.setgInvoiceId(rs.getInt(2));
-				gDto.setgBankId(rs.getString(3));
-				gDto.setgProductName(rs.getString(4));
-				gDto.setgQuantity(rs.getInt(5));
-				gDto.setgPrice(rs.getInt(6));
-				gDto.setgDate(rs.getString(7));
+				gDto.setgId(rs.getInt(1));
+				gDto.setgAdminId(rs.getInt(2));
+				gDto.setgShopName(rs.getString(3)); 
+				gDto.setgBankId(rs.getString(4));
+				gDto.setgTotalPrice(rs.getInt(5));
+				gDto.setgDate(rs.getString(6));
+				gDto.setgState(rs.getString(7));
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -114,16 +112,16 @@ public class ChargeDAO { // 송장에서 얻은 정보에 가격을 포함해서
 		return gDto;
 	}
 	
-	public void updateChargeState(String gState, int gInvoiceId) {
+	public void updateChargeState(String gState, int gId) {
 		LOG.debug("");
 		PreparedStatement pStmt = null;
 		conn = DBManager.getConnection();
-		String sql = "update charge set gState=? where gInvoiceId=?;";
+		String sql = "update charge set gState=? where gId=?;";
 		pStmt = null;
 		try {
 			pStmt = conn.prepareStatement(sql);
 			pStmt.setString(1, gState);
-			pStmt.setInt(2, gInvoiceId);
+			pStmt.setInt(2, gId);
 			pStmt.executeUpdate();
 			LOG.trace(sql);
 		} catch (SQLException e) {
@@ -167,17 +165,17 @@ public class ChargeDAO { // 송장에서 얻은 정보에 가격을 포함해서
 		return count;
 	}
     
-	public ArrayList<ChargeDTO> selectJoinAll(int page, int gAdminId) {
+	public ArrayList<ChargeDTO> selectJoinAllToPay(int page, int gAdminId) {
 		conn = DBManager.getConnection();
 		int offset = 0;
 		String sql = null;
 		if (page == 0) {	// page가 0이면 모든 데이터를 보냄
-			sql = "select gId, gAdminId, gInvoiceId, gBankId, gProductName, gQuantity, gPrice, gDate, gState"
+			sql = "select gId, gAdminId, gShopName, gBankId, gTotalPrice, gDate, gState"
 					+ " from charge "
 					+ "where gAdminId=?"
 					+ " order by id desc;"; 
 		} else {			// page가 0이 아니면 해당 페이지 데이터만 보냄
-			sql = "select gId, gAdminId, gInvoiceId, gBankId, gProductName, gQuantity, gPrice, gDate, gState"
+			sql = "select gId, gAdminId, gShopName, gBankId, gTotalPrice, gDate, gState"
 					+ " from charge where gAdminId=?"
 					+ " order by id desc limit ?, 10;";  
 			offset = (page - 1) * 10;
@@ -197,19 +195,17 @@ public class ChargeDAO { // 송장에서 얻은 정보에 가격을 포함해서
 				ChargeDTO gDto = new ChargeDTO();
 				gDto.setgId(rs.getInt(1));
 				gDto.setgAdminId(rs.getInt(2));
-				gDto.setgInvoiceId(rs.getInt(3)); 
+				gDto.setgShopName(rs.getString(3)); 
 				gDto.setgBankId(rs.getString(4));
-				gDto.setgProductName(rs.getString(5));
-				gDto.setgQuantity(rs.getInt(6));
-				gDto.setgPrice(rs.getInt(7));
-				gDto.setgDate(rs.getString(8));
-				gDto.setgState(rs.getString(9));
+				gDto.setgTotalPrice(rs.getInt(5));
+				gDto.setgDate(rs.getString(6));
+				gDto.setgState(rs.getString(7));
 				gList.add(gDto);
 				LOG.trace(sql);
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
-			LOG.info("selectJoinAll(): Error Code : {}", e.getErrorCode());
+			LOG.info("selectJoinAllToPay(): Error Code : {}", e.getErrorCode());
 			return null;
 		} finally {
 			try {
@@ -221,5 +217,65 @@ public class ChargeDAO { // 송장에서 얻은 정보에 가격을 포함해서
 			}
 		}
 		return gList;
+	}
+	
+	public ArrayList<InvoiceDTO> selectMotnthToCharge(int page, int category, String date) {
+		conn = DBManager.getConnection();
+		int offset = 0;
+		String sql = null;
+		if (page == 0) {	// page가 0이면 모든 데이터를 보냄
+			sql = 	"select v.vAdminId, v.vId, v.vProductName, s.pPrice, v.vDate "
+					+ "from invoice as v " + 
+					"inner join storage as s "
+					+ "on v.vProductId=s.pId "
+					+ "where v.vAdminId=? AND v.vDate=? "
+					+ "order by v.vId desc;";
+			
+		} else {			// page가 0이 아니면 해당 페이지 데이터만 보냄
+			sql = "select v.vAdminId, v.vId, v.vProductName, s.pPrice, v.vDate "
+					+ "from invoice as v " + 
+					"inner join storage as s "
+					+ "on v.vProductId=s.pId "
+					+ "where v.vAdminId=? AND v.vDate=? "
+					+ "order by v.vId desc limit ?, 10;"; 
+			offset = (page - 1) * 10;
+		}
+		ArrayList<InvoiceDTO> vList = new ArrayList<InvoiceDTO>();
+		try {
+			pstmt = conn.prepareStatement(sql);
+			LOG.trace(sql);
+			if (page == 0) {
+				pstmt.setInt(1, category);
+				pstmt.setString(2, date);
+			} else if(page != 0) {
+				pstmt.setInt(1, category);
+				pstmt.setString(2, date);
+				pstmt.setInt(3, offset);
+			}
+			ResultSet rs = pstmt.executeQuery();
+			while (rs.next()) {	
+				InvoiceDTO vDto = new InvoiceDTO();
+				vDto.setvAdminId(rs.getInt(1));
+				vDto.setvId(rs.getInt(2));
+				vDto.setvProductName(rs.getString(3));
+				vDto.setvPrice(rs.getInt(4));
+				vDto.setvDate(rs.getString(5));
+				vList.add(vDto);
+				LOG.trace(sql);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+			LOG.info("selectJoinAllToCharge(): Error Code : {}", e.getErrorCode());
+			return null;
+		} finally {
+			try {
+				pstmt.close();
+				conn.close();
+				rs.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+		return vList;
 	}
 }
