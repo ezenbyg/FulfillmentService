@@ -61,7 +61,7 @@ public class ChargeProc extends HttpServlet {
 		List<ChargeDTO> gList = null;
 		
 		switch(action) {
-		case "list" : // 청구 리스트
+		case "payList" : 
 			if (!request.getParameter("page").equals("")) {
 				curPage = Integer.parseInt(request.getParameter("page"));
 				LOG.trace("");
@@ -140,7 +140,7 @@ public class ChargeProc extends HttpServlet {
 			
 			// 상태 업데이트(청구 -> 지급완료)
 			gDao.updateChargeState("지급완료", gInvoiceId);
-			rd = request.getRequestDispatcher("/control/chargeServlet?action=list&page=1");
+			rd = request.getRequestDispatcher("/control/chargeServlet?action=payList&page=1");
 			rd.forward(request, response);
 			break;
 			
