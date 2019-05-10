@@ -19,6 +19,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import invoice.InvoiceDAO;
+import invoice.InvoiceDTO;
 import release.ReleaseDAO;
 import release.ReleaseDTO;
 import storage.StorageDAO;
@@ -60,11 +61,19 @@ public class ReleaseProc extends HttpServlet {
 		Date conDateI2 = null;
 		Date conDateI3 = null;
 		
+		SimpleDateFormat mySdf = null;
+		Date today = null;
+		
+		String page = null;
+		int pageNo = 0;
+		int count = 0;
+		
 		ReleaseDAO rDao = null;
 		ReleaseDTO release = null;
 		StorageDAO pDao = null;
 		StorageDTO product = null;
 		List<ReleaseDTO> rList = null;
+		List<InvoiceDTO> vList = null;
 		int rTransportId = 0;
 		int rShoppingId = 0;
 		int rInvoiceId = 0;
@@ -74,6 +83,9 @@ public class ReleaseProc extends HttpServlet {
 		String rAddress = null;
 		String rProductName = null;
 		String rDate = null;
+		String year = null;
+		String month = null;
+		String date = null;
 		int rQuantity = 0;
 		String url = null;
 		String message = null;
@@ -81,25 +93,24 @@ public class ReleaseProc extends HttpServlet {
 		List<String> pageList = new ArrayList<String>();
 		
 		switch(action) {
-		case "list" : // 운송 내역 조회
+		case "transportList" : // 운송 내역 조회
 			if (!request.getParameter("page").equals("")) {
 				curPage = Integer.parseInt(request.getParameter("page"));
 				LOG.trace("");
 			}
 			rDao = new ReleaseDAO();
-			int count = rDao.getCount();
+			count = rDao.getCount();
 			if (count == 0)			// 데이터가 없을 때 대비
 				count = 1;
-			int pageNo = (int)Math.ceil(count/10.0);
+			pageNo = (int)Math.ceil(count/10.0);
 			if (curPage > pageNo)	// 경계선에 걸렸을 때 대비
 				curPage--;
-			session.setAttribute("currentReleasePage", curPage);
+			session.setAttribute("currentTransportListPage", curPage);
 			// 리스트 페이지의 하단 페이지 데이터 만들어 주기
-			String page = null;
 			page = "<a href=#>&laquo;</a>&nbsp;";
 			pageList.add(page);
 			for (int i=1; i<=pageNo; i++) {
-				page = "&nbsp;<a href=releaseServlet?action=list&page=" + i + ">" + i + "</a>&nbsp;";
+				page = "&nbsp;<a href=releaseServlet?action=transportList&page=" + i + ">" + i + "</a>&nbsp;";
 				pageList.add(page);
 				LOG.trace("");
 			}
@@ -108,7 +119,49 @@ public class ReleaseProc extends HttpServlet {
 			
 			rTransportId = Integer.parseInt((String) session.getAttribute("sessionAdminId"));
 			rList = rDao.selectJoinAll(curPage, rTransportId);
-			request.setAttribute("releaseList", rList);
+			request.setAttribute("transportList", rList);
+			request.setAttribute("transportPageList", pageList);
+			rd = request.getRequestDispatcher("XXX.jsp");
+	        rd.forward(request, response);
+	        LOG.trace("");
+			break;
+			
+		case "releaseList" : // 출고 대상 리스트 조회(일별)
+			if (!request.getParameter("page").equals("")) {
+				curPage = Integer.parseInt(request.getParameter("page"));
+				LOG.trace("");
+			}
+			rDao = new ReleaseDAO();
+			count = rDao.getCount();
+			if (count == 0)			// 데이터가 없을 때 대비
+				count = 1;
+			pageNo = (int)Math.ceil(count/10.0);
+			if (curPage > pageNo)	// 경계선에 걸렸을 때 대비
+				curPage--;
+			session.setAttribute("currentReleasePage", curPage);
+			// 리스트 페이지의 하단 페이지 데이터 만들어 주기
+			page = "<a href=#>&laquo;</a>&nbsp;";
+			pageList.add(page);
+			for (int i=1; i<=pageNo; i++) {
+				page = "&nbsp;<a href=releaseServlet?action=releaseList&page=" + i + ">" + i + "</a>&nbsp;";
+				pageList.add(page);
+				LOG.trace("");
+			}
+			page = "&nbsp;<a href=#>&raquo;</a>";
+			pageList.add(page);
+			
+			// 일별 조회
+			date = request.getParameter("dateCharge");
+			if (date == null) {
+				mySdf = new SimpleDateFormat("yyyy-MM-dd");
+				today = new Date();
+				date = mySdf.format(today);
+			}
+			
+			// 운송회사 구분 짓기
+			
+			vList = rDao.selectdailyToRelease(curPage, date);
+			request.setAttribute("releaseList", vList);
 			request.setAttribute("releasePageList", pageList);
 			rd = request.getRequestDispatcher("XXX.jsp");
 	        rd.forward(request, response);
@@ -141,9 +194,9 @@ public class ReleaseProc extends HttpServlet {
 			Date time = new Date();
 			String releaseTime = format.format(time);
 			
-			String year = releaseTime.substring(0, 4);
-			String month = releaseTime.substring(5, 7);
-			String date = releaseTime.substring(8, 10);
+			year = releaseTime.substring(0, 4);
+			month = releaseTime.substring(5, 7);
+			date = releaseTime.substring(8, 10);
 			int subDate = Integer.parseInt(date) - 1;
 			
 			try {
@@ -182,7 +235,7 @@ public class ReleaseProc extends HttpServlet {
 			} else {
 				message = "출고 가능한 시간이 아닙니다!!";
 				request.setAttribute("message", message);
-				url = "XXX.jsp";
+				url = "/control/releaseServlet?action=releaseList&page=1";
 				request.setAttribute("url", url);
 				rd = request.getRequestDispatcher("alertMsg.jsp");
 				rd.forward(request, response);
@@ -230,7 +283,7 @@ public class ReleaseProc extends HttpServlet {
 			default : break;
 			}
 			request.setAttribute("state", state);
-			rd = request.getRequestDispatcher("/control/releaseServlet?action=list&page=1");
+			rd = request.getRequestDispatcher("/control/releaseServlet?action=transportList&page=1");
 			rd.forward(request, response);
 			break;
 			

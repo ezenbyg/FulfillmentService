@@ -11,6 +11,7 @@ public class InvoiceDTO {
 	private String vDate;
 	private int vAdminId;
 	private String vState;
+	private int vPrice;
 	
 	public InvoiceDTO() {}
 
@@ -119,6 +120,14 @@ public class InvoiceDTO {
 
 	public void setvState(String vState) {
 		this.vState = vState;
+	}
+	
+	public int getvPrice() {
+		return vPrice;
+	}
+
+	public void setvPrice(int vPrice) {
+		this.vPrice = vPrice;
 	}
 
 	@Override

@@ -12,11 +12,6 @@ import org.slf4j.LoggerFactory;
 import util.DBManager;
 
 public class StorageDAO {
-	public static final int MUSINSA = 30001;
-	public static final int WHAGUWHAGU = 30002;
-	public static final int HIMART = 30003;
-	public static final int UNDERARMOUR = 30004;
-	public static final int IKEA = 30005;
 	Connection conn;
 	PreparedStatement pstmt;
 	ResultSet rs;

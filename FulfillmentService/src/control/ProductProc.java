@@ -14,6 +14,7 @@ import javax.servlet.http.HttpSession;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import admin.AdminDAO;
 import storage.StorageDAO;
 import storage.StorageDTO;
 
@@ -89,19 +90,19 @@ public class ProductProc extends HttpServlet {
 			String title = null;
 			
 			switch (category) {
-			case StorageDAO.MUSINSA :
+			case AdminDAO.무신사 :
 				title = "무신사 Store";
 				break;
-			case StorageDAO.WHAGUWHAGU :
+			case AdminDAO.와구와구 :
 				title = "와구와구 Store";
 				break;
-			case StorageDAO.HIMART :
+			case AdminDAO.하이마트 :
 				title = "하이마트 Store";
 				break;
-			case StorageDAO.UNDERARMOUR :
+			case AdminDAO.언더아머 :
 				title = "언더아머 Store";
 				break;
-			case StorageDAO.IKEA :
+			case AdminDAO.이케아 :
 				title = "이케아 Store";
 				break;
 			}
