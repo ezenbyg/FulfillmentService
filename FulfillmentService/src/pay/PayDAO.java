@@ -14,10 +14,7 @@ import storage.StorageDTO;
 import util.DBManager;
 
 public class PayDAO {
-	public static final int KK = 40001;
-	public static final int JB = 40002;
-	public static final int YN = 40003;
-	public static final int SB = 40004;
+	
 	private static final Logger LOG = LoggerFactory.getLogger(PayDAO.class);
 	Connection conn;
 	PreparedStatement pstmt;
@@ -26,11 +23,12 @@ public class PayDAO {
 
 	// 운송회사 출고List
 	public ArrayList<PayDTO> getTransportList() {
+		conn = DBManager.getConnection();
 		String sql = "select p_release.rTransportId, p_release.rDate, pay.yState " + "from p_release inner join pay "
 				+ "on p_release.rTransportId=pay.yAdminId order by rTransportId desc;";
 
 		pstmt = null;
-		ArrayList<PayDTO> payList = new ArrayList<PayDTO>();
+		ArrayList<PayDTO> transportPayList = new ArrayList<PayDTO>();
 		try {
 			pstmt = conn.prepareStatement(sql);
 			rs = pstmt.executeQuery();
@@ -40,37 +38,10 @@ public class PayDAO {
 				yDto.setrTransportId(rs.getInt(1));
 				yDto.setyDate(rs.getString(2));
 				yDto.setyState(rs.getString(3));
-				payList.add(yDto);
+				transportPayList.add(yDto);
 			}
 		} catch (Exception e) {
 			LOG.debug(e.getMessage());
-		} finally {
-			try {
-				if (pstmt != null && !pstmt.isClosed())
-					pstmt.close();
-			} catch (SQLException se) {
-				LOG.debug(se.getMessage());
-			}
-		}
-		return payList;
-	}
-
-	// 검색된 운송회사의 리스트 수
-	public int listCount(int rTransportId) {
-		String sql = "select count(?) from p_release";
-		pstmt = null;
-		int count = 0;
-		try {
-			pstmt = conn.prepareStatement(sql);
-			pstmt.setInt(1, rTransportId);
-
-			while (rs.next()) {
-				count = rs.getInt(1);
-			}
-			rs.close();
-		} catch (SQLException e) {
-			e.printStackTrace();
-			LOG.info("listCount(): Error Code : {}", e.getErrorCode());
 		} finally {
 			try {
 				pstmt.close();
@@ -80,17 +51,78 @@ public class PayDAO {
 				e.printStackTrace();
 			}
 		}
-		return count;
+		return transportPayList;
+	}
+
+	// 검색된 운송회사의 지급 총액
+	public int totalTransportPay(int rTransportId) {
+		conn = DBManager.getConnection();
+		String sql = "select count(?) from p_release";
+		pstmt = null;
+		int transportFee = 5000;
+		int count = 0;
+		try {
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setInt(1, rTransportId);
+			rs = pstmt.executeQuery();
+			while (rs.next()) {
+				count = rs.getInt(1);
+			}
+			rs.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+			LOG.info("totalTransportPay(): Error Code : {}", e.getErrorCode());
+		} finally {
+			try {
+				pstmt.close();
+				conn.close();
+				rs.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+		return count * transportFee;
+	}
+
+	// 검색된 구매처의 지급 총액
+	public int totalPurchasingPay(String oTotalPrice, int oAdminId) {
+		conn = DBManager.getConnection();
+		String sql = "select sum(?) from p_order where oAdminId = ?";
+		pstmt = null;
+		int totalPrice = 0;
+		try {
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setString(1, oTotalPrice);
+			pstmt.setInt(2, oAdminId);
+			rs = pstmt.executeQuery();
+			while (rs.next()) {
+				totalPrice = rs.getInt(1);
+			}
+			rs.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+			LOG.info("totalPurchasingPay(): Error Code : {}", e.getErrorCode());
+		} finally {
+			try {
+				pstmt.close();
+				conn.close();
+				rs.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+		return totalPrice;
 	}
 
 	// 검색된 운송회사 출고List
 	public ArrayList<PayDTO> searchTransprotList(int searchId) {
+		conn = DBManager.getConnection();
 		String sql = "select p_release.rTransportId, p_release.rDate, pay.yState " + "from p_release inner join pay "
 				+ "on p_release.rTransportId=pay.yAdminId " + "where p_release.rTransportId = ?"
 				+ "order by rTransportId desc;";
 
 		pstmt = null;
-		ArrayList<PayDTO> searchPayList = new ArrayList<PayDTO>();
+		ArrayList<PayDTO> searchTransportPayList = new ArrayList<PayDTO>();
 		try {
 			pstmt = conn.prepareStatement(sql);
 			pstmt.setInt(1, searchId);
@@ -101,19 +133,54 @@ public class PayDAO {
 				yDto.setrTransportId(rs.getInt(1));
 				yDto.setyDate(rs.getString(2));
 				yDto.setyState(rs.getString(3));
-				searchPayList.add(yDto);
+				searchTransportPayList.add(yDto);
 			}
 		} catch (Exception e) {
 			LOG.debug(e.getMessage());
 		} finally {
 			try {
-				if (pstmt != null && !pstmt.isClosed())
-					pstmt.close();
-			} catch (SQLException se) {
-				LOG.debug(se.getMessage());
+				pstmt.close();
+				conn.close();
+				rs.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
 			}
 		}
-		return searchPayList;
+		return searchTransportPayList;
+	}
+
+	// 검색된 구매처 출고List
+	public ArrayList<PayDTO> searchPurchasingList(int searchId) {
+		conn = DBManager.getConnection();
+		String sql = "select p_order.oAdminId, p_order.oDate, pay.yState " + "from p_release inner join pay "
+				+ "on p_order.oAdminId=pay.yAdminId " + "where p_order.oAdminId = ?" + "order by oAdminId desc;";
+
+		pstmt = null;
+		ArrayList<PayDTO> searchPurchasingPayList = new ArrayList<PayDTO>();
+		try {
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setInt(1, searchId);
+			rs = pstmt.executeQuery();
+
+			while (rs.next()) {
+				yDto = new PayDTO();
+				yDto.setrTransportId(rs.getInt(1));
+				yDto.setyDate(rs.getString(2));
+				yDto.setyState(rs.getString(3));
+				searchPurchasingPayList.add(yDto);
+			}
+		} catch (Exception e) {
+			LOG.debug(e.getMessage());
+		} finally {
+			try {
+				pstmt.close();
+				conn.close();
+				rs.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+		return searchPurchasingPayList;
 	}
 
 	// 지급 버튼 눌렀을 때 값들이 pay 테이블에 삽입
@@ -137,24 +204,26 @@ public class PayDAO {
 			try {
 				pstmt.close();
 				conn.close();
+				rs.close();
 			} catch (SQLException e) {
 				e.printStackTrace();
 			}
 		}
 	}
-	//bank 잔액 조회
+
+	// bank 잔액 조회
 	public PayDTO getBank(int rTransportId) {
 		conn = DBManager.getConnection();
 		String sql = "select bId, bBalance from bAdminId=?;";
 		try {
 			pstmt = conn.prepareStatement(sql);
-			pstmt.setInt(1,rTransportId);
+			pstmt.setInt(1, rTransportId);
 			rs = pstmt.executeQuery();
 			while (rs.next()) {
 				PayDTO yDto = new PayDTO();
 				yDto.setbId(rs.getString(1));
 				yDto.setbBalance(rs.getInt(2));
-				
+
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -171,17 +240,17 @@ public class PayDAO {
 		}
 		return yDto;
 	}
-	
+
 	// 지급 버튼 눌렀을 때 bank 테이블에서 돈 계산
-	public void updateBank(int totalPrice,int rTransportId) {
+	public void updateBank(int totalPrice, int rTransportId) {
 		LOG.debug("");
 		pstmt = null;
 		conn = DBManager.getConnection();
 		String sql = "update bank set bBalance=? where bAdminId=?;";
 		pstmt = null;
-		
+
 		yDto = getBank(rTransportId);
-		int balance= yDto.getbBalance();
+		int balance = yDto.getbBalance();
 		int cal = balance - totalPrice;
 		try {
 			pstmt = conn.prepareStatement(sql);
@@ -201,7 +270,7 @@ public class PayDAO {
 			}
 		}
 	}
-	
+
 	// pay 테이블 전체 조회
 	public ArrayList<PayDTO> getAllPayLists() {
 		ArrayList<PayDTO> yList = new ArrayList<PayDTO>();
@@ -254,12 +323,10 @@ public class PayDAO {
 			try {
 				pstmt.close();
 				conn.close();
-				rs.close();
 			} catch (SQLException e) {
 				e.printStackTrace();
 			}
 		}
 		return count;
 	}
-
 }
