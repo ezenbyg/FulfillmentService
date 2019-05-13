@@ -9,13 +9,14 @@
 	<nav class="my-2 my-md-0 mr-md-3">
 		<nav class="navbar navbar-dark bg-dark">
 					<%
-									if (session.getAttribute("sessionCustomerId") != null) {
+									if ((session.getAttribute("sessionCustomerId") != null) || (session.getAttribute("sessionAdminId") != null)) {
 								%>
-					${sessionCustomerName} 고객님 환영합니다.&nbsp;&nbsp; <a class="btn btn-outline-primary"  href="#">로그아웃</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+					${sessionCustomerName} ${sessionAdminName}고객님 환영합니다.&nbsp;&nbsp; <a class="btn btn-outline-primary" href="/FulfillmentService/control/loginRegisterServlet?action=logout">로그아웃</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 					<%
-									} else {
+									}
+									else {
 								%>
-					<a class="btn btn-outline-light" href="/FulfillmentService/view/loginForm.jsp">로그인</a>&nbsp;&nbsp; <a class="btn btn-outline-success"  href="/FulfillmentService/view/LoginRegister.jsp">회원가입</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+					<a class="btn btn-outline-light" href="/FulfillmentService/view/loginForm.jsp">로그인</a>&nbsp;&nbsp; <a class="btn btn-outline-success"  href="/FulfillmentService/view/loginRegister.jsp">회원가입</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 					<%
 									}
 								%>
@@ -25,36 +26,19 @@
 
 
 <%-- 
-
-<nav class="">
-	<div class="container">
-			<div class="col-md-4">
-				<a class="navbar-brand" href="/FulfillmentService/view/index.jsp">
-					<i class="glyphicon glyphicon-cloud-upload"></i>
-						&nbsp;&nbsp;Ezen 창고&nbsp;&nbsp;
-					<i class="glyphicon glyphicon-cloud-download"></i>
-				</a>
-			</div>
-			
-			<div class="col-md-5">
-			<!-- 로고 이미지 들어가는 곳  -->
-			</div>
-			
-			<div class="col-md-3">
-				<p class="navbar-text navbar-right">
 					<%
 									if (session.getAttribute("sessionCustomerId") != null) {
 								%>
-					${sessionCustomerName} 고객님 환영합니다.&nbsp;&nbsp; <a href="#">로그아웃</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+					${sessionCustomerName} 고객님 환영합니다.&nbsp;&nbsp; <a class="btn btn-outline-primary" href="loginRegisterServlet?action=customerLogout">로그아웃</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 					<%
-									} else {
+									} else if (session.getAttribute("sessionAdminId") != null) { 
 								%>
-					<a href="/FulfillmentService/view/loginForm.jsp">로그인</a>&nbsp;&nbsp; <a href="/FulfillmentService/view/LoginRegister.jsp">회원가입</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+					${sessionAdminName} 고객님 환영합니다.&nbsp;&nbsp; <a class="btn btn-outline-primary" href="loginRegisterServlet?action=adminLogout">로그아웃</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 					<%
 									}
+									else {
 								%>
-				</p>
-			</div>
-	</div>
-	<!-- /.container-fluid -->
-</nav> --%>
+					<a class="btn btn-outline-light" href="/FulfillmentService/view/loginForm.jsp">로그인</a>&nbsp;&nbsp; <a class="btn btn-outline-success"  href="/FulfillmentService/view/LoginRegister.jsp">회원가입</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+					<%
+									}
+								%> --%>
