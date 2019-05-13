@@ -1,55 +1,84 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 
-<link
-	href="//netdna.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css"
-	rel="stylesheet" id="bootstrap-css">
-<script
-	src="//netdna.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
-<script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
+<div class="nav-side-menu">
+	<div class="brand">카테고리</div>
+	<i class="fa fa-bars fa-2x toggle-btn" data-toggle="collapse"
+		data-target="#menu-content"></i>
+	<div class="menu-list">
+		<ul id="menu-content" class="menu-content collapse out">
+			<li data-toggle="collapse" data-target="#products"
+				class="collapsed active"><a href="#"><i class="fas fa-list"></i>
+					상품 목록 <span class="arrow"></span></a></li>
+			<ul class="sub-menu collapse" id="products">
+				<li><a href="/FulfillmentService/view/main/clothing.jsp"> <i
+						class="fas fa-tshirt"></i>&nbsp;의류
+				</a></li>
+				<li><a href="/FulfillmentService/view/main/food.jsp"> <i
+						class="fas fa-utensils"></i>&nbsp;식품
+				</a></li>
+				<li><a href="/FulfillmentService/view/main/sports.jsp"> <i
+						class="fas fa-dumbbell"></i>&nbsp;스포츠
+				</a></li>
+				<li><a href="/FulfillmentService/view/main/furniture.jsp">
+						<i class="fas fa-couch"></i>&nbsp;가구
+				</a></li>
+				<li><a href="/FulfillmentService/view/main/homeAppliances.jsp">
+						<i class="fas fa-tv"></i>&nbsp;가전제품
+				</a></li>
+			</ul>
+		</ul>
+	</div>
+</div>
+<!-- <li data-toggle="collapse" data-target="#service" class="collapsed">
+                  <a href="#"><i class="fab fa-fort-awesome-alt fa-lg"></i> Services <span class="arrow"></span></a>
+                </li>  
+                <ul class="sub-menu collapse" id="service">
+                  <li>New Service 1</li>
+                  <li>New Service 2</li>
+                  <li>New Service 3</li>
+                </ul>
 
-<style>
-.navbar-fixed-left {
-	width: 13%;
-	position: fixed;
-	border-radius: 0;
-	height: 100%;
-	margin-top: 50px;
-}
+                <li data-toggle="collapse" data-target="#new" class="collapsed">
+                  <a href="#"><i class="fab fa-pagelines fa-lg"></i> New <span class="arrow"></span></a>
+                </li>
+             
+                <ul class="sub-menu collapse" id="new">
+                  <li>New New 1</li>
+                  <li>New New 2</li>
+                  <li>New New 3</li>
+                </ul>
+                
+                 <li>
+                  <a href="#">
+                  <i class="fas fa-user-tie fa-lg"></i> Profile
+                  </a>
+                  </li>
 
-.navbar-fixed-left .navbar-nav>li {
-	float: none; /* Cancel default li float: left */
-	width: 180px;
-}
+                 <li>
+                  <a href="#">
+                  <i class="fa fa-users fa-lg"></i> Users
+                  </a>
+                </li> -->
 
-.navbar-fixed-left+.container {
-	padding-left: 160px;
-}
-
-/* On using dropdown menu (To right shift popuped) */
-.navbar-fixed-left .navbar-nav>li>.dropdown-menu {
-	margin-top: 10px;
-	margin-left: 150px;
-}
-
-li {
-	font-size: 17px;
-	text-align: center;
-}
-</style>
+<!-- ====================================원본======================================================= -->
+<!-- 
 <div class="navbar navbar-inverse navbar-fixed-left">
 	<ul class="nav navbar-nav">
-		<li class="dropdown"><a href="#" class="dropdown-toggle"
-			data-toggle="dropdown" role="button" aria-expanded="false"> 상품
-				매장&nbsp;<i class="glyphicon glyphicon-qrcode"></i><span
-				class="caret"></span>
-		</a>
-			<ul class="dropdown-menu" role="menu">
-				<li><a href="/FulfillmentService/view/main/clothing.jsp">의류</a></li>
-				<li><a href="/FulfillmentService/view/main/food.jsp">식품</a></li>
-				<li><a href="/FulfillmentService/view/main/homeAppliances.jsp">가전</a></li>
-				<li><a href="/FulfillmentService/view/main/sports.jsp">스포츠</a></li>
-				<li><a href="/FulfillmentService/view/main/furniture.jsp">가구</a></li>
-			</ul></li>
+		<br>
+		<li><a href="/FulfillmentService/view/index.jsp">상품
+				목록&nbsp;&nbsp;&nbsp;<i class="glyphicon glyphicon-tags"></i>
+		</a></li>
+		<hr>
+		<li><a href="/FulfillmentService/view/main/clothing.jsp">의류</a></li>
+		<br>
+		<li><a href="/FulfillmentService/view/main/food.jsp">식품</a></li>
+		<br>
+		<li><a href="/FulfillmentService/view/main/homeAppliances.jsp">가전</a></li>
+		<br>
+		<li><a href="/FulfillmentService/view/main/sports.jsp">스포츠</a></li>
+		<br>
+		<li><a href="/FulfillmentService/view/main/furniture.jsp">가구</a></li>
 	</ul>
 </div>
+ -->

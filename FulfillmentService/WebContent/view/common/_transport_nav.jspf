@@ -1,49 +1,38 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 
-<link
-	href="//netdna.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css"
-	rel="stylesheet" id="bootstrap-css">
-<script
-	src="//netdna.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
-<script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
-
-<style>
-.navbar-fixed-left {
-	width: 13%;
-	position: fixed;
-	border-radius: 0;
-	height: 100%;
-	margin-top: 50px;
-}
-
-.navbar-fixed-left .navbar-nav>li {
-	float: none; /* Cancel default li float: left */
-	width: 180px;
-}
-
-.navbar-fixed-left+.container {
-	padding-left: 160px;
-}
-
-/* On using dropdown menu (To right shift popuped) */
-.navbar-fixed-left .navbar-nav>li>.dropdown-menu {
-	margin-top: 10px;
-	margin-left: 150px;
-}
-
-li {
-	font-size: 17px;
-	text-align: center;
-}
-</style>
-<div class="navbar navbar-inverse navbar-fixed-left">
-	<ul class="nav navbar-nav">
-	<br>
-			<li><a href="../transport/transportPaymentList.jsp">대금지급리스트&nbsp;<i
-					class="glyphicon glyphicon-th-list"></i></a></li>
-			<li><a href="../transport/transportHistory.jsp">운송 내역
-					조회&nbsp;<i class="glyphicon glyphicon-search"></i>
-			</a></li>
+<div class="nav-side-menu">
+	<div class="brand">운송회사&nbsp;<i class="fas fa-truck-loading"></i></div>
+	<i class="fa fa-bars fa-2x toggle-btn" data-toggle="collapse"
+		data-target="#menu-content"></i>
+	<div class="menu-list">
+		<ul id="menu-content" class="menu-content collapse out">
+			<li data-toggle="collapse" data-target="#transport"
+				class="collapsed active"><a href="#">
+				<i class="fas fa-list"></i> 관리 목록 <span class="arrow"></span></a></li>
+			<ul class="sub-menu collapse" id="transport">
+				<li><a href="/FulfillmentService/view/transport/transportPayList.jsp">
+				<i class="fas fa-clipboard-list"></i>&nbsp;대금지급리스트</a></li>
+				<li><a href="/FulfillmentService/view/transport/transportHistory.jsp">
+				<i class="fas fa-search-location"></i>&nbsp;운송 내역 조회</a></li>
+			</ul>
 		</ul>
+	</div>
 </div>
+
+
+
+
+
+<!-- <div class="navbar navbar-inverse navbar-fixed-left">
+	<ul class="nav navbar-nav">
+		<br>
+		<li><a
+			href="/FulfillmentService/view/transport/transportPayList.jsp">대금지급리스트&nbsp;<i
+				class="glyphicon glyphicon-th-list"></i></a></li>
+		<li><a
+			href="/FulfillmentService/view/transport/transportHistory.jsp">운송
+				내역 조회&nbsp;<i class="glyphicon glyphicon-search"></i>
+		</a></li>
+	</ul>
+</div> -->

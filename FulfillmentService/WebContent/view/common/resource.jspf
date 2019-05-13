@@ -1,0 +1,21 @@
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
+<link href="/FulfillmentService/css/bootstrap.css" rel="stylesheet">
+<link href="/FulfillmentService/css/bootstrap_sidebar.css" rel="stylesheet">
+<link href="/FulfillmentService/css/bootstrap_footer.css" rel="stylesheet">
+<link href="/FulfillmentService/css/bootstrap_login.css" rel="stylesheet">
+<link href="/FulfillmentService/css/bootstrap-reboot.css" rel="stylesheet">
+<link href="/FulfillmentService/css/bootstrap-grid.css" rel="stylesheet">
+<!--monthpicker  -->
+<!-- <link href="/FulfillmentService/css/jquery-ui.css" rel="stylesheet"> -->
+
+<script src="/FulfillmentService/js/jquery3.2.1.js"></script>
+<script src="/FulfillmentService/js/bootstrap.js"></script>
+<script src="/FulfillmentService/js/bootstrap_sidebar.js"></script>
+<script src="/FulfillmentService/js/bootstrap_footer.js"></script>
+<!--monthpicker  -->
+<!-- <script src="/FulfillmentService/js/jquery-1.11.1.min.js"></script>
+<script src="/FulfillmentService/js/jquery.mtz.monthpicker.js"></script>
+<script src="/FulfillmentService/js/ui.min.js"></script> -->

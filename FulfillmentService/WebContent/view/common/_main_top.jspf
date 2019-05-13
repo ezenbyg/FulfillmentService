@@ -1,0 +1,60 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+
+
+<div class="d-flex flex-column flex-md-row align-items-center p-3 px-md-4 mb-3 bg-dark border-bottom box-shadow">
+  	<a class="my-3 mr-md-auto font-weight-normal navbar-brand text-light" href="/FulfillmentService/view/index.jsp">
+	  		Ezen 창고
+	  	<i class="fas fa-boxes"></i>
+  	</a>
+	<nav class="my-2 my-md-0 mr-md-3">
+		<nav class="navbar navbar-dark bg-dark">
+					<%
+									if (session.getAttribute("sessionCustomerId") != null) {
+								%>
+					${sessionCustomerName} 고객님 환영합니다.&nbsp;&nbsp; <a class="btn btn-outline-primary"  href="#">로그아웃</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+					<%
+									} else {
+								%>
+					<a class="btn btn-outline-light" href="/FulfillmentService/view/loginForm.jsp">로그인</a>&nbsp;&nbsp; <a class="btn btn-outline-success"  href="/FulfillmentService/view/LoginRegister.jsp">회원가입</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+					<%
+									}
+								%>
+		</nav>
+	</nav>
+</div>
+
+
+<%-- 
+
+<nav class="">
+	<div class="container">
+			<div class="col-md-4">
+				<a class="navbar-brand" href="/FulfillmentService/view/index.jsp">
+					<i class="glyphicon glyphicon-cloud-upload"></i>
+						&nbsp;&nbsp;Ezen 창고&nbsp;&nbsp;
+					<i class="glyphicon glyphicon-cloud-download"></i>
+				</a>
+			</div>
+			
+			<div class="col-md-5">
+			<!-- 로고 이미지 들어가는 곳  -->
+			</div>
+			
+			<div class="col-md-3">
+				<p class="navbar-text navbar-right">
+					<%
+									if (session.getAttribute("sessionCustomerId") != null) {
+								%>
+					${sessionCustomerName} 고객님 환영합니다.&nbsp;&nbsp; <a href="#">로그아웃</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+					<%
+									} else {
+								%>
+					<a href="/FulfillmentService/view/loginForm.jsp">로그인</a>&nbsp;&nbsp; <a href="/FulfillmentService/view/LoginRegister.jsp">회원가입</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+					<%
+									}
+								%>
+				</p>
+			</div>
+	</div>
+	<!-- /.container-fluid -->
+</nav> --%>
