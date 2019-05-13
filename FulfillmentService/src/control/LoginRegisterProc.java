@@ -1,7 +1,6 @@
 package control;
 
 import java.io.IOException;
-import java.util.ArrayList;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -48,8 +47,6 @@ public class LoginRegisterProc extends HttpServlet {
 		String cName = null;
 		String cPassword = null;
 		String aPassword = null;
-		String url = null;
-		String message = null;
 		String cUserId = null;
 		String aUserId = null;
 		String errorMessage = null;
@@ -128,14 +125,14 @@ public class LoginRegisterProc extends HttpServlet {
 			}
 			break;
 		
-		case "logout" :   // 로그아웃
+		case "logout" : // 로그아웃
 			session.removeAttribute("sessionCustomerId");
 			session.removeAttribute("sessionCustomerName");
 			session.removeAttribute("sessionAdminId");
 			session.removeAttribute("sessionAdminName");
 			response.sendRedirect("../view/loginForm.jsp"); // login.jsp로 보냄
 			break;
-			
+
 		case "register" : // 고객 회원가입
 			cUserId = request.getParameter("cUserId");
 			cName = request.getParameter("cName");
@@ -149,12 +146,7 @@ public class LoginRegisterProc extends HttpServlet {
 			customer = cDao.getOneCustomer(cUserId);
 			session.setAttribute("sessionCustomerId", customer.getcId());
 			session.setAttribute("sessionCustomerName", customer.getcName());
-			message = "귀하의 고객번호는 " + customer.getcId() + " 입니다.";
-			request.setAttribute("message", message);
-			url = "../view/index.jsp";
-			request.setAttribute("url", url);
-			rd = request.getRequestDispatcher("alertMsg.jsp");
-			rd.forward(request, response);
+			response.sendRedirect("/FulfillmentService/view/index.jsp");
 			break;
 			
 		default : break;	

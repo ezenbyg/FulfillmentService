@@ -10,25 +10,6 @@
 <!-- ==================================================================== -->
 <title>Ezen FulfillService</title>
 <jsp:include page="common/resource.jspf"></jsp:include>
-<script type="text/javascript">		// Input 항목 유효성 검사
-		function isValidForm() {
-			var pwd = document.getElementById("password");
-			var pwd2 = document.getElementById("password2");
-			var rgx_pwd = /^[a-zA-Z0-9!@#$%^*+=-_]{8,20}$/;	// 패스워드 정규 표현식
-return true;
-			if (rgx_pwd.test(pwd.val) != true) {
-				alert('[PWD 입력 오류] 유효한 패스워드를 입력해 주십시오.');
-				pwd.focus();
-				return false;
-			}
-			if (pwd.val != pwd2.val) {
-				alert('[PWD 확인 오류] 동일한 패스워드를 입력해 주십시오.');
-				pwd2.focus();
-				return false
-			}
-			return true;
-		}
-	</script>
 </head>
 <body>
 <header>
@@ -39,21 +20,21 @@ return true;
 		<div class="row">
 			<div class="col-md-6 login-form-1">
 				<h3>회원 가입</h3>
-				<form>
+				<form name="registerForm" action="/FulfillmentService/control/loginRegisterServlet?action=register" method=post>
 					<div class="form-group">
-						<input type="text" class="form-control" placeholder="Your ID *"
+						<input type="text" name="cUserId" class="form-control" placeholder="Your ID *"
 							value="" />
 					</div>
 					<div class="form-group">
-						<input type="text" class="form-control" placeholder="Your Name *"
+						<input type="text" name="cName" class="form-control" placeholder="Your Name *"
 							value="" />
 					</div>
 					<div class="form-group">
-						<input type="password" class="form-control"
+						<input type="password" name="cPassword" id="password" class="form-control"
 							placeholder="Your Password *" value="" />
 					</div>
 					<div class="form-group">
-						<input type="password" class="form-control"
+						<input type="password" id="password2" class="form-control"
 							placeholder="Your Password  check *" value="" />
 					</div>
 					<div class="form-group" align="center">
