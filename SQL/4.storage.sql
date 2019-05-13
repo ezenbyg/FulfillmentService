@@ -5,6 +5,7 @@
 	 pPrice int(5) unsigned NOT NULL,
 	 pQuantity int(255) unsigned NOT NULL,
 	 pAdminId int(5) unsigned NOT NULL,
+	 pState varchar(10) DEFAULT "P",
   	PRIMARY KEY (pId),
   	FOREIGN KEY (pAdminId) REFERENCES admins(aId)
   ) AUTO_INCREMENT=50001 DEFAULT CHARSET=utf8;

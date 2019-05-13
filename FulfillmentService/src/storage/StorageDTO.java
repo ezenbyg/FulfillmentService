@@ -7,6 +7,7 @@ public class StorageDTO {
 	private int pPrice;
 	private int pQuantity;
 	private int pAdminId;
+	private String pState;
 	
 	public StorageDTO() {}
 
@@ -18,6 +19,12 @@ public class StorageDTO {
 		this.pPrice = pPrice;
 		this.pQuantity = pQuantity;
 		this.pAdminId = pAdminId;
+	}
+	
+	public StorageDTO(int pQuantity, String pState) {
+		super();
+		this.pQuantity = pQuantity;
+		this.pState = pState;
 	}
 
 	public int getpId() {
@@ -68,9 +75,17 @@ public class StorageDTO {
 		this.pAdminId = pAdminId;
 	}
 
+	public String getpState() {
+		return pState;
+	}
+
+	public void setpState(String pState) {
+		this.pState = pState;
+	}
+
 	@Override
 	public String toString() {
 		return "StorageDTO [pId=" + pId + ", pName=" + pName + ", pImgName=" + pImgName + ", pPrice=" + pPrice
-				+ ", pQuantity=" + pQuantity + ", pAdminId=" + pAdminId + "]";
+				+ ", pQuantity=" + pQuantity + ", pAdminId=" + pAdminId + ", pState=" + pState + "]";
 	}
 }

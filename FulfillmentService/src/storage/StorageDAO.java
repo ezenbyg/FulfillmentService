@@ -19,7 +19,7 @@ public class StorageDAO {
 
 	// 전체 상품 조회 (재고조사)
 	public ArrayList<StorageDTO> getAllProducts() {
-		String sql = "select pId, pName, pQuantity from storage;";
+		String sql = "select pId, pName, pPrice, pQuantity, pAdminId, pState from storage;";
 		ArrayList<StorageDTO> storageList = new ArrayList<StorageDTO>();
 		conn = DBManager.getConnection();
 		try {
@@ -30,7 +30,10 @@ public class StorageDAO {
 				StorageDTO pDto = new StorageDTO();
 				pDto.setpId(rs.getInt(1));
 				pDto.setpName(rs.getString(2));
-				pDto.setpQuantity(rs.getInt(3));
+				pDto.setpPrice(rs.getInt(3));
+				pDto.setpQuantity(rs.getInt(4));
+				pDto.setpAdminId(rs.getInt(5));
+				pDto.setpState(rs.getString(6));
 				LOG.trace(pDto.toString());
 				storageList.add(pDto);
 			}
