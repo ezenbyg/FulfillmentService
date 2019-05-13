@@ -5,7 +5,7 @@ CREATE TABLE charge (
 	gBankId varchar(30) NOT NULL DEFAULT "",
 	gTotalPrice int(10) unsigned NOT NULL,
 	gDate datetime NOT NULL DEFAULT current_timestamp,
-	gState varchar(10) DEFAULT "没备",
+	gState varchar(10) DEFAULT "没备夸没",
   	PRIMARY KEY (gId),
 	FOREIGN KEY (gAdminId) REFERENCES admins(aId),
 	FOREIGN KEY (gBankId) REFERENCES bank(bId)

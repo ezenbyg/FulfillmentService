@@ -10,7 +10,7 @@ CREATE TABLE p_release (
 	rQuantity int(10) unsigned NOT NULL,
 	rDate datetime NOT NULL DEFAULT current_timestamp,
 	rPrice int(10) unsigned,
-	rState varchar(10) DEFAULT "출고",
+	rState varchar(10) DEFAULT "배송요청",
   	PRIMARY KEY (rId),
 	FOREIGN KEY (rTransportId) REFERENCES admins(aId),
 	FOREIGN KEY (rShoppingId) REFERENCES admins(aId),

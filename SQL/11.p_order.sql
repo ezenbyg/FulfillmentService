@@ -6,7 +6,7 @@ CREATE TABLE p_order (
 	oPrice int(10) unsigned NOT NULL,
 	oTotalPrice int(10) unsigned NOT NULL,
 	oDate datetime NOT NULL DEFAULT current_timestamp,
-	oState varchar(10) DEFAULT "발주",
+	oState varchar(10) DEFAULT "구매요청",
   	PRIMARY KEY (oId),
 	FOREIGN KEY (oAdminId) REFERENCES admins(aId),
 	FOREIGN KEY (oProductId) REFERENCES storage(pId)
