@@ -2,9 +2,12 @@
 	pageEncoding="UTF-8"%>
 <%
 	request.setCharacterEncoding("UTF-8");
-	String cId = request.getParameter("cId");
-	if (cId != null)
-		out.println("<script>alert('고객님께서 사용하실 ID는 " + cId + " 입니다.');</script>");
+	String cUserId = request.getParameter("cUserId");
+	String aUserId = request.getParameter("aUserId");
+	if ((cUserId != null) && (aUserId == null))
+		out.println("<script>alert('고객님께서 사용하실 ID는 " + cUserId + " 입니다.');</script>");
+	else if((cUserId == null) && (aUserId != null))
+		out.println("<script>alert('고객님께서 사용하실 ID는 " + aUserId + " 입니다.');</script>");
 %>
 <!DOCTYPE html>
 <html>
@@ -27,11 +30,11 @@
 					<h3>회원 로그인</h3>
 					<form>
 						<div class="form-group">
-							<input type="text" class="form-control" placeholder="Your ID *"
+							<input type="text" name="cUserId" class="form-control" placeholder="Your ID *"
 								value="" />
 						</div>
 						<div class="form-group">
-							<input type="password" class="form-control"
+							<input type="password" name="cPassword" class="form-control"
 								placeholder="Your Password *" value="" />
 						</div>
 						<div class="form-group">
@@ -43,11 +46,11 @@
 					<h3>관리자 로그인</h3>
 					<form>
 						<div class="form-group">
-							<input type="text" class="form-control"
+							<input type="text" name="aUserId" class="form-control"
 								placeholder="Your Admin ID *" value="" />
 						</div>
 						<div class="form-group">
-							<input type="password" class="form-control"
+							<input type="password" name="aPassword" class="form-control"
 								placeholder="Your Password *" value="" />
 						</div>
 						<div class="form-group">
