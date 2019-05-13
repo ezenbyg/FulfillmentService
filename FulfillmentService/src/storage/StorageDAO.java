@@ -145,22 +145,21 @@ public class StorageDAO {
 		String sql = null;
 		ArrayList<StorageDTO> productList = new ArrayList<StorageDTO>();
 		conn = DBManager.getConnection();
-
+		
 		if (page == 0) {
 			sql = "select * from storage where pAdminId=?;";
 		} else {
-			sql = "select * from storage where pAdminId=? limit ?, 10;"; // ? 시작점, 10은 가져올 갯수
-			offset = (page - 1) * 10;
+			sql = "select * from storage where pAdminId=? limit ?, 8;"; // ? 시작점, 10은 가져올 갯수
+			offset = (page - 1) * 8;
 		}
 		try {
+			pstmt = conn.prepareStatement(sql);
 			if (page == 0) {
 				pstmt.setInt(1, category);
 			} else if (page != 0) {
 				pstmt.setInt(1, category);
 				pstmt.setInt(2, offset);
 			}
-
-			pstmt = conn.prepareStatement(sql);
 			rs = pstmt.executeQuery();
 
 			while (rs.next()) { // 쿼리문 넣고, 읽어드리기
@@ -189,30 +188,32 @@ public class StorageDAO {
 		return productList;
 	}
 
-	public int getCount() {
-		String sql = "select count(*) from storage;";
+	public int getCount(int category) {
+		String sql = "select count(*) from storage where pAdminId=?;";
 		conn = DBManager.getConnection();
 		int count = 0;
 		try {
 			pstmt = conn.prepareStatement(sql);
-			ResultSet rs = pstmt.executeQuery();
+			pstmt.setInt(1, category);
+			rs = pstmt.executeQuery();
 			while (rs.next()) {
 				count = rs.getInt(1);
 			}
-			rs.close();
+			return count;
 		} catch (SQLException e) {
 			e.printStackTrace();
+			LOG.info(e.getMessage());
 			LOG.info("getCount(): Error Code : {}", e.getErrorCode());
 		} finally {
 			try {
-				pstmt.close();
-				conn.close();
-				rs.close();
+				if(pstmt != null) pstmt.close();
+				if(conn != null) conn.close();
+				if(rs != null) rs.close();
 			} catch (SQLException e) {
 				e.printStackTrace();
 			}
 		}
-		return count;
+		return 0;
 	}
 	
 	// 재고 검색, 일부 단어 검색 시 여러개 검색될 우려에 리턴값 ArrayList으로 줌
@@ -246,5 +247,4 @@ public class StorageDAO {
 		}
 		return stockList;
 	}
-
 }

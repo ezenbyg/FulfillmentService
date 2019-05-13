@@ -4,6 +4,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 import javax.servlet.RequestDispatcher;
+import javax.servlet.ServletConfig;
+import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -33,12 +35,16 @@ public class ProductProc extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		doAction(request, response);
 	}
-
+	
+	public void init(ServletConfig config) throws ServletException {  
+	    super.init(config);
+	}
+	
 	protected void doAction(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		request.setCharacterEncoding("UTF-9");
+		request.setCharacterEncoding("UTF-8");
 
 		int curPage = 1;
-		int category = 0;
+		int categoryNum = 0;
 		int count = 0;
 		int pageNo = 0;
 		String page = null;
@@ -47,6 +53,8 @@ public class ProductProc extends HttpServlet {
 		ArrayList<String> pageList = new ArrayList<String>();
 		HttpSession session = request.getSession();
 		String action = request.getParameter("action");
+		String name = null;
+		String title = null;
 
 		switch (action) {
 		case "productList" :
@@ -54,11 +62,17 @@ public class ProductProc extends HttpServlet {
 				curPage = Integer.parseInt(request.getParameter("page"));
 				LOG.trace("");
 			}
+			
+			name = request.getParameter("name");
+			categoryNum = Integer.parseInt(request.getParameter("categoryNum"));
+			System.out.println(name);
+			
 			pDao = new StorageDAO();
-			count = pDao.getCount();
+			count = pDao.getCount(categoryNum);
+			System.out.println(count);
 			if (count == 0) // 데이터가 없을 때 대비
 				count = 1;
-			pageNo = (int) Math.ceil(count / 10.0);
+			pageNo = (int) Math.ceil(count / 8.0);
 			if (curPage > pageNo) // 경계선에 걸렸을 때 대비
 				curPage--;
 			session.setAttribute("currentProductPage", curPage);
@@ -66,30 +80,35 @@ public class ProductProc extends HttpServlet {
 			
 			page = "<a href=#>&laquo;</a>&nbsp;";
 			pageList.add(page);
-			for (int i = 1; i <= pageNo; i++) {
-				if (curPage == i)
-					page = "&nbsp;" + i + "&nbsp;";
-				else
-					page = "&nbsp;<a href=/control/productServlet?action=productList&page=" + i + ">" + i + "</a>&nbsp;";
+			for (int i=1; i<=pageNo; i++) {
+				page = "&nbsp;<a href=/FulfillmentService/control/productServlet?action=productList&page=" + i +
+						"&categoryNum="+categoryNum+"&name="+name+">"+ i + "</a>&nbsp;";
 				pageList.add(page);
 			}
 			page = "&nbsp;<a href=#>&raquo;</a>";
 			pageList.add(page);
 
-			category = Integer.parseInt(request.getParameter("category"));
-			ArrayList<StorageDTO> storageList = pDao.getTitleProducts(category,curPage);
+			System.out.println("categoryNum = " + categoryNum);
+			ArrayList<StorageDTO> storageList = pDao.getTitleProducts(categoryNum,curPage);
+			
+			for(StorageDTO st : storageList) {
+				System.out.println(st.toString());
+			}
+		
 			// 해당 구매처의 내용만 출력과 함께 페이지 출력을 위해 parameter값을 카테고리, 현재페이지를 줌
 			request.setAttribute("storageList", storageList);
 			request.setAttribute("pageList", pageList);
-			rd = request.getRequestDispatcher("xxx.jsp");
-			rd.forward(request, response);
+			
+			LOG.debug("/view/main/"+name+".jsp");
+			rd = request.getRequestDispatcher("/view/main/"+name+".jsp");
+	        rd.forward(request, response);
 			break;
 			
 		case "category" :
-			category = Integer.parseInt(request.getParameter("category")); // 목록에서 category 제공할 것
-			String title = null;
+			name = request.getParameter("name");
+			categoryNum = Integer.parseInt(request.getParameter("categoryNum")); // 목록에서 category 제공할 것
 			
-			switch (category) {
+			switch (categoryNum) {
 			case AdminDAO.무신사 :
 				title = "무신사 Store";
 				break;
@@ -106,16 +125,19 @@ public class ProductProc extends HttpServlet {
 				title = "이케아 Store";
 				break;
 			}
+			
+			System.out.println(title);
 			request.setAttribute("title", title);
-			rd = request.getRequestDispatcher("/control/productServlet?action=productList&page=1");
-			rd.forward(request, response);
+			rd = request.getRequestDispatcher("/control/productServlet?action=productList&page=1&categoryNum="+categoryNum+"&name="+name);
+	        rd.forward(request, response);
+			break;
 			
 		case "stockList" :
 			if (!request.getParameter("page").equals("")) {
 				curPage = Integer.parseInt(request.getParameter("page"));
 			}
 			pDao = new StorageDAO();
-			count = pDao.getCount();
+			count = pDao.getCount(categoryNum);
 			if (count == 0) // 데이터가 없을 때 대비
 				count = 1;
 			pageNo = (int) Math.ceil(count / 10.0);
@@ -130,7 +152,7 @@ public class ProductProc extends HttpServlet {
 				if (curPage == i)
 					page = "&nbsp;" + i + "&nbsp;";
 				else
-					page = "&nbsp;<a href=/control/productServlet?action=stockList&page=" + i + ">" + i + "</a>&nbsp;";
+					page = "&nbsp;<a href=/FulfillmentService/control/productServlet?action=stockList&page=" + i + ">" + i + "</a>&nbsp;";
 				pageList.add(page);
 			}
 			page = "&nbsp;<a href=#>&raquo;</a>";

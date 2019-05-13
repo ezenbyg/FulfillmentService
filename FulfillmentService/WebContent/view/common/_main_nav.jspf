@@ -1,6 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
-
 <div class="nav-side-menu">
 	<div class="brand">카테고리</div>
 	<i class="fa fa-bars fa-2x toggle-btn" data-toggle="collapse"
@@ -11,20 +10,20 @@
 				class="collapsed active"><a href="#"><i class="fas fa-list"></i>
 					상품 목록 <span class="arrow"></span></a></li>
 			<ul class="sub-menu collapse" id="products">
-				<li><a href="/FulfillmentService/view/main/clothing.jsp"> <i
+				<li><a href="/FulfillmentService/control/productServlet?action=category&categoryNum=30001&name=clothing"> <i
 						class="fas fa-tshirt"></i>&nbsp;의류
 				</a></li>
-				<li><a href="/FulfillmentService/view/main/food.jsp"> <i
+				<li><a href="/FulfillmentService/control/productServlet?action=category&categoryNum=30002&name=food"> <i
 						class="fas fa-utensils"></i>&nbsp;식품
 				</a></li>
-				<li><a href="/FulfillmentService/view/main/sports.jsp"> <i
-						class="fas fa-dumbbell"></i>&nbsp;스포츠
+				<li><a href="/FulfillmentService/control/productServlet?action=category&categoryNum=30003&name=homeAppliances"> <i
+						class="fas fa-dumbbell"></i>&nbsp;가전제품
 				</a></li>
-				<li><a href="/FulfillmentService/view/main/furniture.jsp">
-						<i class="fas fa-couch"></i>&nbsp;가구
+				<li><a href="/FulfillmentService/control/productServlet?action=category&categoryNum=30004&name=sports">
+						<i class="fas fa-couch"></i>&nbsp;스포츠
 				</a></li>
-				<li><a href="/FulfillmentService/view/main/homeAppliances.jsp">
-						<i class="fas fa-tv"></i>&nbsp;가전제품
+				<li><a href="/FulfillmentService/control/productServlet?action=category&categoryNum=30005&name=furniture">
+						<i class="fas fa-tv"></i>&nbsp;가구
 				</a></li>
 			</ul>
 		</ul>
