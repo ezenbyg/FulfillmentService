@@ -155,9 +155,9 @@ public class StorageDAO {
 		conn = DBManager.getConnection();
 		
 		if (page == 0) {
-			sql = "select pId, pName, pPrice, pQuantity, pState from storage where pAdminId=?;";
+			sql = "select pId, pName, pImgName, pPrice, pQuantity, pState from storage where pAdminId=?;";
 		} else {
-			sql = "select pId, pName, pPrice, pQuantity, pState from storage where pAdminId=? limit ?, 8;"; // ? 시작점, 10은 가져올 갯수
+			sql = "select pId, pName, pImgName, pPrice, pQuantity, pState from storage where pAdminId=? limit ?, 8;"; // ? 시작점, 10은 가져올 갯수
 			offset = (page - 1) * 8;
 		}
 		try {
@@ -174,9 +174,10 @@ public class StorageDAO {
 				StorageDTO pDto = new StorageDTO();
 				pDto.setpId(rs.getInt(1));
 				pDto.setpName(rs.getString(2));
-				pDto.setpPrice(rs.getInt(3));
-				pDto.setpQuantity(rs.getInt(4));
-				pDto.setpState(rs.getString(5));
+				pDto.setpImgName(rs.getString(3));
+				pDto.setpPrice(rs.getInt(4));
+				pDto.setpQuantity(rs.getInt(5));
+				pDto.setpState(rs.getString(6));
 				LOG.trace(pDto.toString());
 				productList.add(pDto);
 			}
