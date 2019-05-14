@@ -53,47 +53,47 @@
 					<div class="col-md-3"></div>
 				</div>
 			</div>
-		<!-- 여기에 글 쓰씨면 됩니다. -->
-				<div class="row" id="dialog" style="display:none;">
-					<div class="col-md-12">
-						<table class="table table-bordered table-striped table-condensed">
-							<tr>
-								<td>구매처이름</td>
-								<td></td>
-							</tr>
-							<tr>	
-								<td>제품코드</td>
-								<td></td>
-							</tr>
-							<tr>
-								<td>제품명</td>
-								<td></td>
-							</tr>
-							<tr>
-								<td>발주수량</td>
-								<td><input type="text"></td>
-							</tr>
-							<tr>
-								<td>물품가격</td>
-								<td></td>
-							</tr>
-							<tr>
-								<td>총가격</td>
-								<td></td>
-							</tr>
-							<tr>
+			<!-- 여기에 글 쓰씨면 됩니다. -->
+			<div class="row" id="dialog" style="display: none;">
+				<div class="col-md-12">
+					<table class="table table-bordered table-striped table-condensed">
+						<tr>
+							<td>구매처이름</td>
+							<td></td>
+						</tr>
+						<tr>
+							<td>제품코드</td>
+							<td></td>
+						</tr>
+						<tr>
+							<td>제품명</td>
+							<td></td>
+						</tr>
+						<tr>
+							<td>발주수량</td>
+							<td><input type="text"></td>
+						</tr>
+						<tr>
+							<td>물품가격</td>
+							<td></td>
+						</tr>
+						<tr>
+							<td>총가격</td>
+							<td></td>
+						</tr>
+						<tr>
 							<td colspan="2" align="center">
-							<button type="button1" class="btn btn-primary">공급실행</button>
-							<button type="button2" class="btn btn-primary">구매확인요청 </button>
-							<button type="button2" class="btn btn-primary">취소 </button>
+								<button type="button1" class="btn btn-primary">공급실행</button>
+								<button type="button2" class="btn btn-primary">구매확인요청</button>
+								<button type="button2" class="btn btn-primary">취소</button>
 							</td>
-							</tr>		
-						</table>
-					</div>
+						</tr>
+					</table>
 				</div>
+			</div>
 		</section>
+		<%@ include file="../common/_bottom.jspf"%>
 	</section>
-	<%@ include file="../common/_bottom.jspf"%>
 </body>
 <script>
 //데이터 가져올때 여기서 가져오세요

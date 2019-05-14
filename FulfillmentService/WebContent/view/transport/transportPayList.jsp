@@ -15,28 +15,25 @@
 <jsp:include page="../common/resource.jspf"></jsp:include>
 </head>
 <body>
-	<header>
 	<%@ include file="../common/_main_top.jspf" %>
-	</header>
-	<nav>
 	<%@ include file="../common/_transport_nav.jspf"%>
-	</nav>
-	<section>
-	<div class="container">
-		<div class="row" style="margin-top: 70px">
-			<div class="col-md-offset-1 col-md-11">
-				<h3>대금지급리스트</h3>
-			</div>
-			<div class="col-md-1"></div>
-			<div class="col-md-8">
-				<div class="panel panel-primary">
-					<table class="table table-striped">
-						<thead>
-							<tr>
-								<th class="col-md-2">지급번호</th>
-								<th class="col-md-3">구매처/운송사번호</th>
-								<th class="col-md-2">지급가격</th>
-								<th class="col-md-3">날짜</th>
+	<section id="main-content">
+		<section class="wrapper">
+			<h3>대금지급리스트</h3>
+			<div class="row">
+				<div class="col-md-12">
+					<div class="content-panel">
+						<h4>
+							<i class="fa fa-angle-right"></i> 운송회사 관리 (대금지급리스트)
+						</h4>
+						<hr>
+						<table class="table table-striped">
+							<thead>
+								<tr>
+								<th>지급번호</th>
+								<th>구매처/운송사번호</th>
+								<th>지급가격</th>
+								<th>날짜</th>
 							</tr>
 						</thead>
 						<tbody>
@@ -52,11 +49,8 @@
 				<div class="col-md-3"></div>
 			</div>
 		</div>
-	</div>
 	</section>
-	<footer>
 	<%@ include file="../common/_bottom.jspf"%>
-	</footer>
-	<!-- ==================================================================== -->
+</section>
 </body>
 </html>

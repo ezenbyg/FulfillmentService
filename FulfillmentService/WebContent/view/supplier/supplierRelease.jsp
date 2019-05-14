@@ -11,59 +11,49 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <!-- ==================================================================== -->
-
-<title>창고 청구/지급 조회</title>
+<title>구매처 상품 출고</title>
 <jsp:include page="../common/resource.jspf"></jsp:include>
 </head>
 <body>
-	<%@ include file="../common/_admin_top.jspf"%>
+	<%@ include file="../common/_main_top.jspf"%>
 	<%@ include file="../common/_storage_nav.jspf"%>
-
 	<section id="main-content">
 		<section class="wrapper">
-			<h3>청구 / 지급 조회</h3>
+			<h3>상품 출고</h3>
 			<div class="row">
 				<div class="col-md-12">
 					<div class="content-panel">
 						<h4>
-							<i class="fa fa-angle-right"></i> 창고 관리 (청구리스트)
+							<i class="fa fa-angle-right"></i> 구매처 관리 (상품 출고)
 						</h4>
 						<hr>
-						<ul class="nav nav-tabs">
-							<li role="presentation"><a
-								href="../main/storageOrderHistory.jsp">발주 내역</a></li>
-							<li role="presentation" class="active"><a href="#">지급</a></li>
-						</ul>
 						<table class="table table-striped">
 							<thead>
 								<tr>
-									<th>출고번호</th>
-									<th>운송회사ID</th>
-									<th>송장ID</th>
-									<th>이름</th>
-									<th>번호</th>
-									<th>주소</th>
-									<th>제품명</th>
+									<th>구매처ID</th>
+									<th>제품ID</th>
 									<th>수량</th>
+									<th>물품 가격</th>
+									<th>총 가격</th>
 									<th>날짜</th>
+									<th></th>
 								</tr>
 							</thead>
 							<tbody>
 								<tr>
-									<th>(출고번호)</th>
-									<th>(운송회사ID)</th>
-									<th>(송장ID)</th>
-									<th>(이름)</th>
-									<th>(번호)</th>
-									<th>(주소)</th>
-									<th>(제품명)</th>
-									<th>(수량)</th>
-									<th>(날짜)</th>
+									<th>?</th>
+									<th>?</th>
+									<th>?</th>
+									<th>?</th>
+									<th>?</th>
+									<th>?</th>
+									<th><input type="button" class="btn btn-success"
+										value="출고"></th>
 								</tr>
 							</tbody>
 						</table>
-						<div class="col-md-3"></div>
 					</div>
+					<div class="col-md-3"></div>
 				</div>
 			</div>
 		</section>

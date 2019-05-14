@@ -12,17 +12,11 @@
 <jsp:include page="../common/resource.jspf"></jsp:include>
 </head>
 <body>
-	<header>
-	<%@ include file="../common/_admin_top.jspf" %>
-	</header>
-	<nav>
+	<%@ include file="../common/_main_top.jspf"%>
 	<%@ include file="../common/_shopping_nav.jspf"%>
-	</nav>
-	<section>
 
-	</section>
-	<footer>
+	<!-- ============================================================= -->
+
 	<%@ include file="../common/_bottom.jspf"%>
-	</footer>
 </body>
 </html>

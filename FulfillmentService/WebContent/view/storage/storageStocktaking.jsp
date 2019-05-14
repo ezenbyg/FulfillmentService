@@ -11,26 +11,35 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <!-- ==================================================================== -->
-<title>재고조사</title>
+<title>재고조사 및 발주</title>
 <jsp:include page="../common/resource.jspf"></jsp:include>
 
 </head>
 <body>
-	<%@ include file="../common/_main_top.jspf"%>
+	<%@ include file="../common/_admin_top.jspf"%>
 	<%@ include file="../common/_storage_nav.jspf"%>
 
 	<section id="main-content">
 		<section class="wrapper">
 			<div class="container">
-				<h3>재고조사</h3>
+				<h3>재고조사 및 발주</h3>
 				<div class="row">
 					<div class="col-md-12">
 						<div class="content-panel">
 							<h4>
-								<i class="fa fa-angle-right"></i> 창고 관리 (재고조사)
+								<i class="fa fa-angle-right"></i> 창고 관리 (재고조사 / 발주)
 							</h4>
-							
 							<hr>
+							<div style="margin-left: 80%;">
+								<select id="menu" onChange="onloadPage(this);"
+									style="border: 5px;">
+									<option value="">의류</option>
+									<option value="">식품</option>
+									<option value="">스포츠</option>
+									<option value="">가구</option>
+									<option value="">가전제품</option>
+								</select> <input type="button" value="조회">
+							</div>
 							<table class="table table-striped">
 								<thead>
 									<tr>
@@ -55,16 +64,16 @@
 						<div class="col-md-3"></div>
 					</div>
 				</div>
-				
+
 				<!-- 여기에 글 쓰씨면 됩니다. -->
-				<div class="row" id="dialog" style="display:none;">
+				<div class="row" id="dialog" style="display: none;">
 					<div class="col-md-12">
 						<table class="table table-bordered table-striped table-condensed">
 							<tr>
 								<td>구매처이름</td>
 								<td></td>
 							</tr>
-							<tr>	
+							<tr>
 								<td>제품코드</td>
 								<td></td>
 							</tr>
@@ -84,19 +93,21 @@
 								<td>총가격</td>
 								<td></td>
 							</tr>
+
 							<tr>
-							<td colspan="2" align="center">
-							<button type="button1" class="btn btn-primary">발주 </button>
-							<button type="button2" class="btn btn-primary">닫기 </button>
-							</td>
-							</tr>	
+								<td colspan="2" align="center">
+									<button type="button1" class="btn btn-primary">발주</button>
+									<button type="button2" class="btn btn-primary">닫기</button>
+								</td>
+							</tr>
+
 						</table>
 					</div>
 				</div>
 			</div>
 		</section>
+		<%@ include file="../common/_bottom.jspf"%>
 	</section>
-	<%@ include file="../common/_bottom.jspf"%>
 	<!-- ==================================================================== -->
 </body>
 

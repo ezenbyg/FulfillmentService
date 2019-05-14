@@ -1,9 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
-<%
-	request.setCharacterEncoding("UTF-8");
-%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -15,7 +12,7 @@
 <jsp:include page="../common/resource.jspf"></jsp:include>
 </head>
 <body>
-	<%@ include file="../common/_main_top.jspf"%>
+	<%@ include file="../common/_admin_top.jspf"%>
 	<%@ include file="../common/_storage_nav.jspf"%>
 	<section id="main-content">
 		<section class="wrapper">
@@ -53,46 +50,46 @@
 					<div class="col-md-3"></div>
 				</div>
 			</div>
-		<!-- 여기에 글 쓰씨면 됩니다. -->
-				<div class="row" id="dialog" style="display:none;">
-					<div class="col-md-12">
-						<table class="table table-bordered table-striped table-condensed">
-							<tr>
-								<td>구매처이름</td>
-								<td></td>
-							</tr>
-							<tr>	
-								<td>제품코드</td>
-								<td></td>
-							</tr>
-							<tr>
-								<td>제품명</td>
-								<td></td>
-							</tr>
-							<tr>
-								<td>발주수량</td>
-								<td><input type="text"></td>
-							</tr>
-							<tr>
-								<td>물품가격</td>
-								<td></td>
-							</tr>
-							<tr>
-								<td>총가격</td>
-								<td></td>
-							</tr>	
-							<tr>
+			<!-- 여기에 글 쓰씨면 됩니다. -->
+			<div class="row" id="dialog" style="display: none;">
+				<div class="col-md-12">
+					<table class="table table-bordered table-striped table-condensed">
+						<tr>
+							<td>구매처이름</td>
+							<td></td>
+						</tr>
+						<tr>
+							<td>제품코드</td>
+							<td></td>
+						</tr>
+						<tr>
+							<td>제품명</td>
+							<td></td>
+						</tr>
+						<tr>
+							<td>발주수량</td>
+							<td><input type="text"></td>
+						</tr>
+						<tr>
+							<td>물품가격</td>
+							<td></td>
+						</tr>
+						<tr>
+							<td>총가격</td>
+							<td></td>
+						</tr>
+						<tr>
 							<td colspan="2" align="center">
-							<button type="button1" class="btn btn-primary">구매확정</button>
-							<button type="button1" class="btn btn-primary">취소</button>
+								<button type="button1" class="btn btn-primary">구매확정</button>
+								<button type="button1" class="btn btn-primary">취소</button>
 							</td>
-							</tr>	
-						</table>
-					</div>
+						</tr>
+					</table>
 				</div>
+			</div>
 		</section>
+		<%@ include file="../common/_bottom.jspf"%>
 	</section>
-	<%@ include file="../common/_bottom.jspf"%>
 	<!-- ==================================================================== -->
 </body>
 

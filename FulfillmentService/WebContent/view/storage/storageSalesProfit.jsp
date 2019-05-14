@@ -15,44 +15,40 @@
 <jsp:include page="../common/resource.jspf"></jsp:include>
 </head>
 <body>
-	<header>
-	<%@ include file="../common/_admin_top.jspf" %>
-	</header>
-	<nav>
+	<%@ include file="../common/_admin_top.jspf"%>
 	<%@ include file="../common/_storage_nav.jspf"%>
-	</nav>
-	<section>
-	<div class="container">
-		<div class="row" style="margin-top: 70px">
-			<div class="col-md-offset-1 col-md-11">
-				<h3>매출이익 조회</h3></div>
-			<div class="col-md-12"><hr>
+
+	<section id="main-content">
+		<section class="wrapper">
+			<h3>매출이익 조회</h3>
+			<div class="row">
+				<div class="col-md-12">
+					<div class="content-panel">
+						<h4>
+							<i class="fa fa-angle-right"></i> 창고 관리 (매출이익 조회)
+						</h4>
+						<hr>
+						<table class="table table-striped">
+							<thead>
+								<tr>
+									<th>날짜</th>
+									<th>총 매출액</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr>
+									<th>(날짜)</th>
+									<th>(총 매출액)</th>
+								</tr>
+							</tbody>
+						</table>
+						<div class="col-md-3"></div>
+					</div>
+				</div>
 			</div>
-			<div class="col-md-1"></div>
-			<div class="col-md-10">
-				<div class="panel panel-primary">
-					<table class="table table-striped">
-						<thead>
-						<tr>
-							<th>날짜</th>
-							<th>총 매출액</th>
-						</tr>
-						</thead>
-						<tbody>
-						<tr>
-							<th>(날짜)</th>
-							<th>(총 매출액)</th>
-						</tr>
-						</tbody>
-					</table>
-				<div class="col-md-3"></div>
-			</div>
-		</div>
-	</div>
+		</section>
+		<%@ include file="../common/_bottom.jspf"%>
 	</section>
-	<footer>
-	<%@ include file="../common/_bottom.jspf"%>
-	</footer>
 	<!-- ==================================================================== -->
 </body>
 </html>
