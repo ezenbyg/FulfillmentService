@@ -15,52 +15,94 @@
 <jsp:include page="../common/resource.jspf"></jsp:include>
 </head>
 <body>
-<header>
-	<%@ include file="../common/_admin_top.jspf" %>
-	</header>
-	<nav>
+	<%@ include file="../common/_main_top.jspf"%>
 	<%@ include file="../common/_storage_nav.jspf"%>
-	</nav>
-	<section>
-	<div class="container">
-		<div class="row" style="margin-top: 70px">
-			<div class="col-md-offset-1 col-md-11">
-				<h3>발주내역 조회</h3></div>
-				<div class="col-md-12"><hr></div>
-			<div class="col-md-1"></div>
-			<div class="col-md-8">
-				<div class="panel panel-primary">
-					<table class="table table-striped">
-						<tr>
-							<th>발주ID</th>
-							<th>구매처ID</th>
-							<th>제품ID</th>
-							<th>수량</th>
-							<th>물품 가격</th>
-							<th>총 가격</th>
-							<th>날짜</th>
-							<th></th>
-						</tr>
-						<tr>
-						<th>?</th>
-						<th>?</th>
-						<th>?</th>
-						<th>?</th>
-						<th>?</th>
-						<th>?</th>
-						<th>?</th>
-							<th><input type="button" class="btn btn-primary" value="납품"></th>
-						</tr>
-					</table>
+	<section id="main-content">
+		<section class="wrapper">
+			<h3>발주내역 조회</h3>
+			<div class="row">
+				<div class="col-md-12">
+					<div class="content-panel">
+						<h4>
+							<i class="fa fa-angle-right"></i> 창고 관리 (발주내역 조회)
+						</h4>
+						<hr>
+						<table class="table table-striped">
+							<thead>
+								<tr>
+									<th>발주번호</th>
+									<th>제품코드</th>
+									<th>제품명</th>
+									<th>발주수량</th>
+									<th>총 가격</th>
+									<th>날짜</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr>
+									<th onclick="modal();">#</th>
+									<th>?</th>
+									<th>?</th>
+									<th>?</th>
+									<th>?</th>
+									<th>?</th>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+					<div class="col-md-3"></div>
 				</div>
-				<div class="col-md-3"></div>
 			</div>
-		</div>
-	</div>
+		<!-- 여기에 글 쓰씨면 됩니다. -->
+				<div class="row" id="dialog" style="display:none;">
+					<div class="col-md-12">
+						<table class="table table-bordered table-striped table-condensed">
+							<tr>
+								<td>구매처이름</td>
+								<td></td>
+							</tr>
+							<tr>	
+								<td>제품코드</td>
+								<td></td>
+							</tr>
+							<tr>
+								<td>제품명</td>
+								<td></td>
+							</tr>
+							<tr>
+								<td>발주수량</td>
+								<td><input type="text"></td>
+							</tr>
+							<tr>
+								<td>물품가격</td>
+								<td></td>
+							</tr>
+							<tr>
+								<td>총가격</td>
+								<td></td>
+							</tr>	
+							<tr>
+							<td colspan="2" align="center">
+							<button type="button1" class="btn btn-primary">구매확정</button>
+							<button type="button1" class="btn btn-primary">취소</button>
+							</td>
+							</tr>	
+						</table>
+					</div>
+				</div>
+		</section>
 	</section>
-	<footer>
 	<%@ include file="../common/_bottom.jspf"%>
-	</footer>
 	<!-- ==================================================================== -->
 </body>
+
+<script>
+//데이터 가져올때 여기서 가져오세요
+// https://api.jqueryui.com/1.12/dialog/
+function modal(){
+	$("#dialog").dialog({
+		  dialogClass: "alert",
+		});
+}
+</script>
 </html>

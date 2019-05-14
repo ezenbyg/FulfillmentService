@@ -10,74 +10,22 @@
 				class="collapsed active"><a href="#"><i class="fas fa-list"></i>
 					상품 목록 <span class="arrow"></span></a></li>
 			<ul class="sub-menu collapse" id="products">
-				<li><a href="/FulfillmentService/control/productServlet?action=category&categoryNum=30001&name=clothing"> <i
+				<li><a href="/FulfillmentService/control/productServlet?action=category&categoryNum=30001&name=clothing&pathNum=1"> <i
 						class="fas fa-tshirt"></i>&nbsp;의류
 				</a></li>
-				<li><a href="/FulfillmentService/control/productServlet?action=category&categoryNum=30002&name=food"> <i
+				<li><a href="/FulfillmentService/control/productServlet?action=category&categoryNum=30002&name=food&pathNum=1"> <i
 						class="fas fa-utensils"></i>&nbsp;식품
 				</a></li>
-				<li><a href="/FulfillmentService/control/productServlet?action=category&categoryNum=30003&name=homeAppliances"> <i
+				<li><a href="/FulfillmentService/control/productServlet?action=category&categoryNum=30003&name=homeAppliances&pathNum=1"> <i
 						class="fas fa-dumbbell"></i>&nbsp;가전제품
 				</a></li>
-				<li><a href="/FulfillmentService/control/productServlet?action=category&categoryNum=30004&name=sports">
+				<li><a href="/FulfillmentService/control/productServlet?action=category&categoryNum=30004&name=sports&pathNum=1">
 						<i class="fas fa-couch"></i>&nbsp;스포츠
 				</a></li>
-				<li><a href="/FulfillmentService/control/productServlet?action=category&categoryNum=30005&name=furniture">
+				<li><a href="/FulfillmentService/control/productServlet?action=category&categoryNum=30005&name=furniture&pathNum=1">
 						<i class="fas fa-tv"></i>&nbsp;가구
 				</a></li>
 			</ul>
 		</ul>
 	</div>
 </div>
-<!-- <li data-toggle="collapse" data-target="#service" class="collapsed">
-                  <a href="#"><i class="fab fa-fort-awesome-alt fa-lg"></i> Services <span class="arrow"></span></a>
-                </li>  
-                <ul class="sub-menu collapse" id="service">
-                  <li>New Service 1</li>
-                  <li>New Service 2</li>
-                  <li>New Service 3</li>
-                </ul>
-
-                <li data-toggle="collapse" data-target="#new" class="collapsed">
-                  <a href="#"><i class="fab fa-pagelines fa-lg"></i> New <span class="arrow"></span></a>
-                </li>
-             
-                <ul class="sub-menu collapse" id="new">
-                  <li>New New 1</li>
-                  <li>New New 2</li>
-                  <li>New New 3</li>
-                </ul>
-                
-                 <li>
-                  <a href="#">
-                  <i class="fas fa-user-tie fa-lg"></i> Profile
-                  </a>
-                  </li>
-
-                 <li>
-                  <a href="#">
-                  <i class="fa fa-users fa-lg"></i> Users
-                  </a>
-                </li> -->
-
-<!-- ====================================원본======================================================= -->
-<!-- 
-<div class="navbar navbar-inverse navbar-fixed-left">
-	<ul class="nav navbar-nav">
-		<br>
-		<li><a href="/FulfillmentService/view/index.jsp">상품
-				목록&nbsp;&nbsp;&nbsp;<i class="glyphicon glyphicon-tags"></i>
-		</a></li>
-		<hr>
-		<li><a href="/FulfillmentService/view/main/clothing.jsp">의류</a></li>
-		<br>
-		<li><a href="/FulfillmentService/view/main/food.jsp">식품</a></li>
-		<br>
-		<li><a href="/FulfillmentService/view/main/homeAppliances.jsp">가전</a></li>
-		<br>
-		<li><a href="/FulfillmentService/view/main/sports.jsp">스포츠</a></li>
-		<br>
-		<li><a href="/FulfillmentService/view/main/furniture.jsp">가구</a></li>
-	</ul>
-</div>
- -->

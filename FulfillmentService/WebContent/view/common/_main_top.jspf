@@ -23,22 +23,3 @@
 		</nav>
 	</nav>
 </div>
-
-
-<%-- 
-					<%
-									if (session.getAttribute("sessionCustomerId") != null) {
-								%>
-					${sessionCustomerName} 고객님 환영합니다.&nbsp;&nbsp; <a class="btn btn-outline-primary" href="loginRegisterServlet?action=customerLogout">로그아웃</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-					<%
-									} else if (session.getAttribute("sessionAdminId") != null) { 
-								%>
-					${sessionAdminName} 고객님 환영합니다.&nbsp;&nbsp; <a class="btn btn-outline-primary" href="loginRegisterServlet?action=adminLogout">로그아웃</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-					<%
-									}
-									else {
-								%>
-					<a class="btn btn-outline-light" href="/FulfillmentService/view/loginForm.jsp">로그인</a>&nbsp;&nbsp; <a class="btn btn-outline-success"  href="/FulfillmentService/view/LoginRegister.jsp">회원가입</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-					<%
-									}
-								%> --%>

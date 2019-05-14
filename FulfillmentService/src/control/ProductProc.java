@@ -46,6 +46,7 @@ public class ProductProc extends HttpServlet {
 		int categoryNum = 0;
 		int count = 0;
 		int pageNo = 0;
+		int pathNum = 0;
 		String page = null;
 		StorageDAO pDao = null;
 		RequestDispatcher rd = null;
@@ -67,7 +68,7 @@ public class ProductProc extends HttpServlet {
 			System.out.println(name);
 			
 			pDao = new StorageDAO();
-			count = pDao.getCount(categoryNum);
+			count = pDao.getEachAdminIdCount(categoryNum);
 			System.out.println(count);
 			if (count == 0) // 데이터가 없을 때 대비
 				count = 1;
@@ -126,17 +127,24 @@ public class ProductProc extends HttpServlet {
 			}
 			
 			System.out.println(title);
-			request.setAttribute("title", title);
-			rd = request.getRequestDispatcher("/control/productServlet?action=productList&page=1&categoryNum="+categoryNum+"&name="+name);
+			pathNum = Integer.parseInt(request.getParameter("pathNum"));
+			if(pathNum == 1) {
+				request.setAttribute("title", title);
+				rd = request.getRequestDispatcher("/control/productServlet?action=productList&page=1&categoryNum="+categoryNum+"&name="+name);
+			} else if (pathNum == 2) {
+				request.setAttribute("title", title);
+				rd = request.getRequestDispatcher("/control/productServlet?action=supplierSearch&page=1&categoryNum="+categoryNum);
+			}
 	        rd.forward(request, response);
 			break;
 			
-		case "stockList" :
+		case "stockList" : // ★전체적 수정 5.14
+			LOG.debug("여기");
 			if (!request.getParameter("page").equals("")) {
 				curPage = Integer.parseInt(request.getParameter("page"));
 			}
 			pDao = new StorageDAO();
-			count = pDao.getCount(categoryNum);
+			count = pDao.getAllAdminIdCount(); // 모든 리스트 카운트.
 			if (count == 0) // 데이터가 없을 때 대비
 				count = 1;
 			pageNo = (int) Math.ceil(count / 10.0);
@@ -160,18 +168,65 @@ public class ProductProc extends HttpServlet {
 			ArrayList<StorageDTO> stockList = pDao.getAllProducts();
 			request.setAttribute("stockList", stockList);
 			request.setAttribute("pageList", pageList);
-
-			rd = request.getRequestDispatcher("xxx.jsp");
+			LOG.debug("/view/storage/storageStocktaking.jsp");
+			rd = request.getRequestDispatcher("/view/storage/storageStocktaking.jsp");
 			rd.forward(request, response);
 			break;
 			
-		case "search" :
+		case "search" : // 상품 이름 일부 검색 리스트 출력
 			String word = request.getParameter("searchWord");
 			pDao = new StorageDAO();
 			ArrayList<StorageDTO> searchList = pDao.getSearchProduct(word);
 			request.setAttribute("searchList", searchList);
 			
-			rd = request.getRequestDispatcher("xxx.jsp");
+			rd = request.getRequestDispatcher("/view/storage/storageStocktaking.jsp");
+			rd.forward(request, response);
+			
+		case "supplierSearch" : // 구매처별 리스트 출력 // ★case 추가 5.14
+			pDao = new StorageDAO();
+			
+			if (!request.getParameter("page").equals("")) {
+				curPage = Integer.parseInt(request.getParameter("page"));
+			}
+			pDao = new StorageDAO();
+			LOG.debug(String.valueOf(categoryNum));
+			count = pDao.getEachAdminIdCount(categoryNum); // 해당 관리자의 잔고 리스트 카운트.
+			if (count == 0) // 데이터가 없을 때 대비
+				count = 1;
+			pageNo = (int) Math.ceil(count / 10.0);
+			if (curPage > pageNo) // 경계선에 걸렸을 때 대비
+				curPage--;
+			session.setAttribute("currentStockPage", curPage);
+			// 리스트 페이지의 하단 페이지 데이터 만들어 주기
+			page = null;
+			page = "<a href=#>&laquo;</a>&nbsp;";
+			pageList.add(page);
+			for (int i = 1; i <= pageNo; i++) {
+				if (curPage == i)
+					page = "&nbsp;" + i + "&nbsp;";
+				else
+					page = "&nbsp;<a href=/FulfillmentService/control/productServlet?action=supplierSearch&page=" + i + ">" + i + "</a>&nbsp;";
+				pageList.add(page);
+			}
+			page = "&nbsp;<a href=#>&raquo;</a>";
+			pageList.add(page);
+			
+			ArrayList<StorageDTO> supplierSearchList = pDao.getTitleProducts(categoryNum,curPage);
+			request.setAttribute("supplierSearchList", supplierSearchList);
+			request.setAttribute("pageList", pageList);
+			LOG.debug("/view/storage/storageStocktaking.jsp");
+			rd = request.getRequestDispatcher("/view/storage/storageStocktaking.jsp");
+			rd.forward(request, response);
+			break;
+			
+		case "modal" : // 상품id 클릭시 세부사항 출력 // ★case 추가 5.14
+			pDao = new StorageDAO();
+			StorageDTO modal = new StorageDTO();
+			
+			int pId = Integer.parseInt(request.getParameter("pId"));
+			modal = pDao.getModal(pId); // pId, pName, pPrice, pQuantity  get
+			LOG.debug(title);
+			request.setAttribute("modal", modal);
 			rd.forward(request, response);
 		}
 	}
