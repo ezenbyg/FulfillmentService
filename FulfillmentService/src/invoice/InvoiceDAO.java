@@ -52,11 +52,12 @@ public class InvoiceDAO {
 	public void addInvoice(InvoiceDTO vDto) {
 		LOG.trace("addInvoice(): " + vDto.toString());
 		conn = DBManager.getConnection();
-		String sql = "insert into invoice(vAdminId, vDate) values(?, ?, ?)";
+		String sql = "insert into invoice(vId, vAdminId, vDate) values(?, ?, ?)";
 		try {
 			pstmt = conn.prepareStatement(sql);
-			pstmt.setInt(1, vDto.getvAdminId());
-			pstmt.setString(2, vDto.getvDate());
+			pstmt.setInt(1, vDto.getvId());
+			pstmt.setInt(2, vDto.getvAdminId());
+			pstmt.setString(3, vDto.getvDate());
 			
 			pstmt.executeUpdate();
 		} catch (SQLException e) {
