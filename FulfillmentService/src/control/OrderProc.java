@@ -177,6 +177,7 @@ public class OrderProc extends HttpServlet {
 				request.setAttribute("url", "/view/storage/storageStocktaking.jsp");
 				rd = request.getRequestDispatcher("/view/alertMsg.jsp");
 				rd.forward(request, response);
+				break;
 			}
 			
 			format = new SimpleDateFormat ("yyyy-MM-dd HH:mm:ss");
@@ -206,6 +207,7 @@ public class OrderProc extends HttpServlet {
 				request.setAttribute("url", "/view/supplier/supplierOrderHistory.jsp");
 				rd = request.getRequestDispatcher("/view/alertMsg.jsp");
 				rd.forward(request, response);
+				break;
 			}
 			
 			oDao = new OrderDAO();
@@ -245,6 +247,7 @@ public class OrderProc extends HttpServlet {
 				request.setAttribute("url", "/view/supplier/supplierOrderHistory.jsp");
 				rd = request.getRequestDispatcher("/view/alertMsg.jsp");
 				rd.forward(request, response);
+				break;
 			}
 			
 			if(!oState.equals("공급실행")) {
@@ -253,6 +256,7 @@ public class OrderProc extends HttpServlet {
 				request.setAttribute("url", "/view/supplier/supplierOrderHistory.jsp");
 				rd = request.getRequestDispatcher("/view/alertMsg.jsp");
 				rd.forward(request, response);
+				break;
 			} 
 			
 			oDao = new OrderDAO();
@@ -273,6 +277,7 @@ public class OrderProc extends HttpServlet {
 				request.setAttribute("url", "/view/storage/storageOrderHistory.jsp");
 				rd = request.getRequestDispatcher("/view/alertMsg.jsp");
 				rd.forward(request, response);
+				break;
 			}
 			pDao = new StorageDAO();
 			product = pDao.getOneProductById(oProductId);

@@ -31,6 +31,21 @@ public class ReleaseDTO {
 		this.rPrice = rPrice;
 	}
 	
+	public ReleaseDTO(int rTransportId, int rShoppingId, int rInvoiceId, String rName, String rTel, String rAddress,
+			String rProductName, int rQuantity, String rDate, int rPrice, String rState) {
+		super();
+		this.rTransportId = rTransportId;
+		this.rShoppingId = rShoppingId;
+		this.rInvoiceId = rInvoiceId;
+		this.rName = rName;
+		this.rTel = rTel;
+		this.rAddress = rAddress;
+		this.rProductName = rProductName;
+		this.rQuantity = rQuantity;
+		this.rDate = rDate;
+		this.rPrice = rPrice;
+		this.rState = rState;
+	}
 
 	public int getrPrice() {
 		return rPrice;

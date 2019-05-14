@@ -72,6 +72,7 @@ public class ReleaseProc extends HttpServlet {
 		ReleaseDTO release = null;
 		StorageDAO pDao = null;
 		StorageDTO product = null;
+		InvoiceDAO vDao = null;
 		List<ReleaseDTO> rList = null;
 		List<InvoiceDTO> vList = null;
 		int rTransportId = 0;
@@ -82,11 +83,13 @@ public class ReleaseProc extends HttpServlet {
 		String rTel = null;
 		String rAddress = null;
 		String rProductName = null;
+		String pState = null;
 		String rDate = null;
 		String year = null;
 		String month = null;
 		String date = null;
 		int rQuantity = 0;
+		int spare = 0;
 		String url = null;
 		String message = null;
 		String action = request.getParameter("action");
@@ -168,8 +171,26 @@ public class ReleaseProc extends HttpServlet {
 	        LOG.trace("");
 			break;
 			
+		case "hold" : // 출고 보류
+			rProductName = request.getParameter("rProductName");
+			rInvoiceId = Integer.parseInt(request.getParameter("rInvoiceId"));
+			
+			pDao = new StorageDAO();
+			product = pDao.getOneProductByName(rProductName);
+	
+			if(!product.getpState().equals("재고부족")) {
+				message = "출고보류 대상이 아닙니다!";
+				request.setAttribute("message", message);
+				request.setAttribute("url", "/view/storage/XXX.jsp");
+				rd = request.getRequestDispatcher("/view/alertMsg.jsp");
+				rd.forward(request, response);
+				break;
+			}
+			rDao = new ReleaseDAO();
+			rDao.updateReleaseState("출고보류", rInvoiceId);
+			break;
+			
 		case "release" : // 출고(창고 -> 운송회사)
-			rPrice = Integer.parseInt(request.getParameter("rPrice"));
 			rTransportId = Integer.parseInt(request.getParameter("rTransportId"));
 			rShoppingId = Integer.parseInt(request.getParameter("rShoppingId"));
 			rInvoiceId = Integer.parseInt(request.getParameter("rInvoiceId"));
@@ -177,16 +198,30 @@ public class ReleaseProc extends HttpServlet {
 			rTel = request.getParameter("rTel");
 			rAddress = request.getParameter("rAddress");
 			rProductName = request.getParameter("rProductName");
+			pState = request.getParameter("pState");
 			rQuantity = Integer.parseInt(request.getParameter("rQuantity"));
-			rDate = request.getParameter("rDate");
+			rPrice = Integer.parseInt(request.getParameter("rPrice"));
 			
 			pDao = new StorageDAO();
 			product = pDao.getOneProductByName(rProductName);
 			
-			// 배송물품수량 > 재고수량 : 출고 불가능 -> 발주
-			if(rQuantity > product.getpQuantity()) {
-				response.sendRedirect("XXX.jsp");
+			// 출고 후 남아있는 예상 제품 수량
+			spare = product.getpQuantity() - rQuantity;
+			
+			// pState가 재고부족이면 출고 불가능
+			if(product.getpState().equals("재고부족")) {
+				message = "재고가 부족합니다.";
+				request.setAttribute("message", message);
+				request.setAttribute("url", "/view/storage/XXX.jsp");
+				rd = request.getRequestDispatcher("/view/alertMsg.jsp");
+				rd.forward(request, response);
 				break;
+			// 재고부족예상인 경우 경고메시지 띄우기
+			} else if(product.getpState().equals("재고부족예상")) {
+				message = "출고 후 발주가 필요합니다!!";
+				request.setAttribute("message", message);
+				rd = request.getRequestDispatcher("/view/alertMsg.jsp");
+				rd.forward(request, response);
 			}
 			
 			// 시간 비교
@@ -223,6 +258,14 @@ public class ReleaseProc extends HttpServlet {
 							rProductName, rQuantity, releaseTime, rPrice);
 					rDao = new ReleaseDAO();
 					rDao.addReleaseList(release);
+					
+					// 제품 상태 및 수량 변경
+					if(spare < 10) pDao.updateStorage(spare, "재고부족예상", product.getpId());
+					else if(spare >= 10) pDao.updateStorage(spare, "P", product.getpId());
+					
+					// 송장 상태 변경
+					vDao = new InvoiceDAO();
+					vDao.updateInvoiceState("출고완료", rInvoiceId);
 				}
 			} else if((releaseDate.getTime() >= conDateR3.getTime()) && (releaseDate.getTime() < conDateR4.getTime())) {
 				if((invoiceDate.getTime() >= conDateI2.getTime()) && (invoiceDate.getTime() <= conDateI3.getTime())) {
@@ -231,59 +274,25 @@ public class ReleaseProc extends HttpServlet {
 							rProductName, rQuantity, releaseTime, rPrice);
 					rDao = new ReleaseDAO();
 					rDao.addReleaseList(release);
+					
+					// 제품 상태 및 수량 변경
+					if(spare < 10) pDao.updateStorage(spare, "재고부족예상", product.getpId());
+					else if(spare >= 10) pDao.updateStorage(spare, "P", product.getpId());
+					
+					// 송장 상태 변경
+					vDao = new InvoiceDAO();
+					vDao.updateInvoiceState("출고완료", rInvoiceId);
 				}
 			} else {
-				message = "출고 가능한 시간이 아닙니다!!";
+				message = "출고 가능 시간이 아닙니다!";
 				request.setAttribute("message", message);
-				url = "/control/releaseServlet?action=releaseList&page=1";
-				request.setAttribute("url", url);
-				rd = request.getRequestDispatcher("alertMsg.jsp");
+				request.setAttribute("url", "/view/storage/XXX.jsp");
+				rd = request.getRequestDispatcher("/view/alertMsg.jsp");
 				rd.forward(request, response);
 				break;
 			}
 			
-			// 송장 상태 변경(N: 미처리 -> Y: 처리완료)
-			InvoiceDAO vDao = new InvoiceDAO();
-			vDao.updateInvoiceState("Y", rInvoiceId);
-			
-			// 창고 테이블 제품 수량 감소 
-			pDao.updateStorage(product.getpQuantity()-rQuantity, product.getpId());
-			
-			release = rDao.getOneReleaseList(rInvoiceId);
-			message = "출고번호는 " + release.getrId() + " 입니다.";
-			request.setAttribute("message", message);
-			url = "XXX.jsp";
-			request.setAttribute("url", url);
-			rd = request.getRequestDispatcher("alertMsg.jsp");
-			rd.forward(request, response);
-			break;
-			
-		case "stateUpdate" : // 운송회사에서 운송상태 변경
-			int stateNum = Integer.parseInt(request.getParameter("state"));
-			rInvoiceId = Integer.parseInt(request.getParameter("rInvoiceId"));
-			rDao = new ReleaseDAO();
-			String state = null;
-			switch (stateNum) {
-			case ReleaseDAO.출고 :
-				state = "출고";
-				rDao.updateReleaseState(state, rInvoiceId);
-				break;
-			case ReleaseDAO.배송전 :
-				state = "배송전";
-				rDao.updateReleaseState(state, rInvoiceId);
-				break;
-			case ReleaseDAO.배송중 :
-				state = "배송중";
-				rDao.updateReleaseState(state, rInvoiceId);
-				break;
-			case ReleaseDAO.배송완료 :
-				state = "배송완료";
-				rDao.updateReleaseState(state, rInvoiceId);
-				break;
-			default : break;
-			}
-			request.setAttribute("state", state);
-			rd = request.getRequestDispatcher("/control/releaseServlet?action=transportList&page=1");
+			rd = request.getRequestDispatcher("/control/orderServlet?action=supplierOrderList&page=1");
 			rd.forward(request, response);
 			break;
 			

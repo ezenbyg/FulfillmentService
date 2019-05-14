@@ -131,9 +131,12 @@ public class ProductProc extends HttpServlet {
 			if(pathNum == 1) {
 				request.setAttribute("title", title);
 				rd = request.getRequestDispatcher("/control/productServlet?action=productList&page=1&categoryNum="+categoryNum+"&name="+name);
-			} else if (pathNum == 2) {
+			} else if(pathNum == 2) {
 				request.setAttribute("title", title);
 				rd = request.getRequestDispatcher("/control/productServlet?action=supplierSearch&page=1&categoryNum="+categoryNum);
+			} else if(pathNum ==3) {
+				request.setAttribute("title", title);
+				rd = request.getRequestDispatcher("/control/productServlet?action=modal");
 			}
 	        rd.forward(request, response);
 			break;
@@ -227,7 +230,9 @@ public class ProductProc extends HttpServlet {
 			modal = pDao.getModal(pId); // pId, pName, pPrice, pQuantity  get
 			LOG.debug(title);
 			request.setAttribute("modal", modal);
-			rd.forward(request, response);
+			break;
+			
+		default : break;
 		}
 	}
 }

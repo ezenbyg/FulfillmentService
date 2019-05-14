@@ -2,7 +2,7 @@
   	 pId int(5) unsigned NOT NULL AUTO_INCREMENT,
  	 pName varchar(50) NOT NULL DEFAULT "",
   	 pImgName varchar(100) NOT NULL DEFAULT "",
-	 pPrice int(5) unsigned NOT NULL,
+	 pPrice int(10) unsigned NOT NULL,
 	 pQuantity int(255) unsigned NOT NULL,
 	 pAdminId int(5) unsigned NOT NULL,
 	 pState varchar(10) DEFAULT "P",

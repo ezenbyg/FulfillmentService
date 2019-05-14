@@ -120,8 +120,6 @@ public class StorageDAO {
 		return pDto;
 	}
 	
-	
-
 	// 재고 수량 변경
 	public void updateStorage(int pQuantity, String pState, int pId) {
 		LOG.debug("");
