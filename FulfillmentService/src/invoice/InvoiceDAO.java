@@ -491,11 +491,10 @@ public class InvoiceDAO {
     public int getCount() {
     	conn = DBManager.getConnection();
 		String sql = "select count(*) from invoice;";
-		PreparedStatement pStmt = null;
 		int count = 0;
 		try {
-			pStmt = conn.prepareStatement(sql);
-			ResultSet rs = pStmt.executeQuery();
+			pstmt = conn.prepareStatement(sql);
+			ResultSet rs = pstmt.executeQuery();
 			LOG.trace(sql);
 			while (rs.next()) {				
 				count = rs.getInt(1);
