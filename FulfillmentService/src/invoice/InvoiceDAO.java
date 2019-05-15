@@ -66,9 +66,9 @@ public class InvoiceDAO {
 	
 	// Invoice
 	public void addInvoice(ArrayList<InvoiceDTO> invoiceList) {
-		conn = DBManager.getConnection();
 		InvoiceDTO vDto = new InvoiceDTO();
 		for(int i=0; i<invoiceList.size(); i++) {
+			conn = DBManager.getConnection();
 			String sql = "insert into invoice(vId, vAdminId, vShopName, vName, vTel, vAddress, vDate) values(?, ?, ?, ?, ?, ?, ?)";
 			vDto = invoiceList.get(i);
 			LOG.trace("addInvoice(): " + vDto.toString());
@@ -99,9 +99,9 @@ public class InvoiceDAO {
 	
 	// InvoiceProduct
 	public void addInvoiceProduct(ArrayList<InvoiceProductDTO> productList) {
-		conn = DBManager.getConnection();
 		InvoiceProductDTO ipDto = new InvoiceProductDTO();
 		for(int i=0; i<productList.size(); i++) {
+			conn = DBManager.getConnection();
 			String sql = "insert into invoiceproduct(pInvoiceId, ipProductId, ipProductName, ipQuantity, ipDate) values(?, ?, ?, ?, ?)";
 			ipDto = productList.get(i);
 			LOG.trace("addInvoiceProduct(): " + ipDto.toString());
@@ -114,13 +114,14 @@ public class InvoiceDAO {
 				pstmt.setString(5, ipDto.getIpDate());
 				
 				pstmt.executeUpdate();
-			} catch (SQLException e) {
+			} 
+			catch (SQLException e) {
 				e.printStackTrace();
 				LOG.info("addInvoiceProduct() Error Code : {}", e.getErrorCode());
 			} finally {
 				try {
 					pstmt.close();
-					//conn.close();
+					conn.close();
 				} catch (SQLException e) {
 					e.printStackTrace();
 				}
@@ -261,9 +262,9 @@ public class InvoiceDAO {
 	                	}
 						System.out.println("");
 	                }
-                	invoiceList.add(invoice);
 					productList.add(product);
 	            }
+	            invoiceList.add(invoice);
 	            br.close();
 	        }
 			addInvoice(invoiceList);
@@ -276,7 +277,7 @@ public class InvoiceDAO {
 	}
 	
 	public void moveDirectory() {
-		File folder1 = new File("D:\\Temp\\complete");
+		File folder1 = new File("C:\\Temp\\complete");
 		File folder2 = new File("C:\\Temp\\shop");
 		InvoiceDAO.copy(folder1, folder2);
 		InvoiceDAO.delete(folder1.toString());
@@ -350,9 +351,10 @@ public class InvoiceDAO {
 		vList = vDao.getAllInvoiceLists();
 		boolean complete = true;
 		
+		LOG.debug(vList.toString());
 		// 중복 방지
 		while(complete) {
-			if(vList == null) { complete = false; break; }
+			if(vList.isEmpty()) { complete = false; break; }
 			for(InvoiceDTO invoice : vList) {
 				if(invoice.getvId().equals(invoiceNumber)) {
 					invoiceNumber = date + idNum + String.valueOf((int)((Math.random()*89)+10));
@@ -498,18 +500,19 @@ public class InvoiceDAO {
 			while (rs.next()) {				
 				count = rs.getInt(1);
 			}
+			return count;
 		} catch (SQLException e) {
 			e.printStackTrace();
 			LOG.info("getCount(): Error Code : {}", e.getErrorCode());
 		} finally {
 			try {
-				pstmt.close();
-				conn.close();
-				rs.close();
+				if(pstmt != null) pstmt.close();
+				if(conn != null) conn.close();
+				if(rs != null) rs.close();
 			} catch (SQLException e) {
 				e.printStackTrace();
 			}
 		}
-		return count;
+		return 0;
 	}
 }
