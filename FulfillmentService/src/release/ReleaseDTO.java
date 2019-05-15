@@ -4,7 +4,7 @@ public class ReleaseDTO {
 	private int rId;
 	private int rTransportId;
 	private int rShoppingId;
-	private int rInvoiceId;
+	private String rInvoiceId;
 	private String rName;
 	private String rTel;
 	private String rAddress;
@@ -16,7 +16,7 @@ public class ReleaseDTO {
 	
 	public ReleaseDTO() {}
 
-	public ReleaseDTO(int rTransportId, int rShoppingId, int rInvoiceId, String rName, String rTel, String rAddress,
+	public ReleaseDTO(int rTransportId, int rShoppingId, String rInvoiceId, String rName, String rTel, String rAddress,
 			String rProductName, int rQuantity, String rDate, int rPrice) {
 		super();
 		this.rTransportId = rTransportId;
@@ -31,7 +31,7 @@ public class ReleaseDTO {
 		this.rPrice = rPrice;
 	}
 	
-	public ReleaseDTO(int rTransportId, int rShoppingId, int rInvoiceId, String rName, String rTel, String rAddress,
+	public ReleaseDTO(int rTransportId, int rShoppingId, String rInvoiceId, String rName, String rTel, String rAddress,
 			String rProductName, int rQuantity, String rDate, int rPrice, String rState) {
 		super();
 		this.rTransportId = rTransportId;
@@ -79,11 +79,11 @@ public class ReleaseDTO {
 		this.rShoppingId = rShoppingId;
 	}
 
-	public int getrInvoiceId() {
+	public String getrInvoiceId() {
 		return rInvoiceId;
 	}
 
-	public void setrInvoiceId(int rInvoiceId) {
+	public void setrInvoiceId(String rInvoiceId) {
 		this.rInvoiceId = rInvoiceId;
 	}
 

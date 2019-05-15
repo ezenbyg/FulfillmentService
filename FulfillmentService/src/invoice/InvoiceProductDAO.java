@@ -25,10 +25,11 @@ public class InvoiceProductDAO {
 			pstmt.setInt(1, pInvoiceId);
 			rs = pstmt.executeQuery();
 			while(rs.next()) {
-				ipDto.setpInvoiceId(rs.getInt(1));
+				ipDto.setpInvoiceId(rs.getString(1));
 				ipDto.setIpProductId(rs.getInt(2));
 				ipDto.setIpProductName(rs.getString(3));
 				ipDto.setIpQuantity(rs.getInt(4));
+				ipDto.setIpDate(rs.getString(5));
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();

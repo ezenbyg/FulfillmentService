@@ -34,7 +34,7 @@ public class ReleaseDAO {
 				rDto.setrId(rs.getInt(1));
 				rDto.setrTransportId(rs.getInt(2));
 				rDto.setrShoppingId(rs.getInt(3));
-				rDto.setrInvoiceId(rs.getInt(4));
+				rDto.setrInvoiceId(rs.getString(4));
 				rDto.setrName(rs.getString(5));
 				rDto.setrTel(rs.getString(6));
 				rDto.setrAddress(rs.getString(7));
@@ -70,7 +70,7 @@ public class ReleaseDAO {
 			pstmt = conn.prepareStatement(sql);
 			pstmt.setInt(1, rDto.getrTransportId());
 			pstmt.setInt(2, rDto.getrShoppingId());
-			pstmt.setInt(3, rDto.getrInvoiceId());
+			pstmt.setString(3, rDto.getrInvoiceId());
 			pstmt.setString(4, rDto.getrName());
 			pstmt.setString(5, rDto.getrTel());
 			pstmt.setString(6, rDto.getrAddress());
@@ -105,7 +105,7 @@ public class ReleaseDAO {
 				rDto.setrId(rs.getInt(1));
 				rDto.setrTransportId(rs.getInt(2));
 				rDto.setrShoppingId(rs.getInt(3));
-				rDto.setrInvoiceId(rs.getInt(4));
+				rDto.setrInvoiceId(rs.getString(4));
 				rDto.setrName(rs.getString(5));
 				rDto.setrTel(rs.getString(6));
 				rDto.setrAddress(rs.getString(7));
@@ -215,7 +215,7 @@ public class ReleaseDAO {
 				rDto.setrId(rs.getInt(1));
 				rDto.setrTransportId(rs.getInt(2));
 				rDto.setrShoppingId(rs.getInt(3));
-				rDto.setrInvoiceId(rs.getInt(4));
+				rDto.setrInvoiceId(rs.getString(4));
 				rDto.setrName(rs.getString(5));
 				rDto.setrTel(rs.getString(6));
 				rDto.setrAddress(rs.getString(7));
@@ -271,7 +271,7 @@ public class ReleaseDAO {
 			ResultSet rs = pstmt.executeQuery();
 			while (rs.next()) {	
 				InvoiceDTO vDto = new InvoiceDTO();
-				vDto.setvId(rs.getInt(1));
+				vDto.setvId(rs.getString(1));
 				vDto.setvName(rs.getString(2));
 				vDto.setvTel(rs.getString(3));
 				vDto.setvAddress(rs.getString(4));

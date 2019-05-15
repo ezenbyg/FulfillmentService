@@ -181,7 +181,7 @@ public class OrderDAO {
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
-			LOG.info("selectJoinAll(): Error Code : {}", e.getErrorCode());
+			LOG.info("selectJoinAllbyId(): Error Code : {}", e.getErrorCode());
 			return null;
 		} finally {
 			try {

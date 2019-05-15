@@ -2,7 +2,7 @@ CREATE TABLE p_release (
   	rId int(8) unsigned NOT NULL AUTO_INCREMENT,
 	rTransportId int(5) unsigned NOT NULL,
 	rShoppingId int(5) unsigned NOT NULL,
-	rInvoiceId int(5) unsigned NOT NULL,
+	rInvoiceId varchar(20) NOT NULL DEFAULT "", 
   	rName varchar(10) NOT NULL DEFAULT "",
 	rTel varchar(15) NOT NULL DEFAULT "",
 	rAddress varchar(50) NOT NULL DEFAULT "",
