@@ -3,6 +3,7 @@ package invoice;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.InputStreamReader;
 import java.sql.Connection;
@@ -190,7 +191,6 @@ public class InvoiceDAO {
 		ArrayList<InvoiceProductDTO> productList = new ArrayList<InvoiceProductDTO>();
 		AdminDAO aDao = new AdminDAO();
 		AdminDTO admin = new AdminDTO();
-		InvoiceProductDTO product = new InvoiceProductDTO();
 		InvoiceDTO invoice = new InvoiceDTO();
 		TempDTO temp = new TempDTO();
 		int i = 0;
@@ -228,7 +228,7 @@ public class InvoiceDAO {
 				number++;
 			}
 		}
-		
+    	
 		try {
 			for(TempDTO tDto : tempList) { 
 				invoice.setvId(tDto.gettId());
@@ -245,6 +245,8 @@ public class InvoiceDAO {
 	            String line = "";
 	 
 	            while ((line = br.readLine()) != null) {
+	            	InvoiceProductDTO product = new InvoiceProductDTO();
+	            	product.setpInvoiceId(tDto.gettId());
 	                String[] token = line.split(",");
 	                for(int p=0; p<7; p++) {
 	                	if((token[p] != null) && !(token[p].equals(" ")) && !(token[p].equals(""))) {
@@ -253,7 +255,6 @@ public class InvoiceDAO {
 							if(p==0)invoice.setvName(token[p]);
 							if(p==1)invoice.setvTel(token[p]);
 							if(p==2)invoice.setvAddress(token[p]);
-							product.setpInvoiceId(tDto.gettId());
 							if(p==3)product.setIpProductId(Integer.parseInt(token[p]));
 							if(p==4)product.setIpProductName(token[p]);
 							if(p==5)product.setIpQuantity(Integer.parseInt(token[p]));
@@ -265,19 +266,80 @@ public class InvoiceDAO {
 					productList.add(product);
 	            }
 	            br.close();
-	        } 
+	        }
+			addInvoice(invoiceList);
+			addInvoiceProduct(productList);
+			moveDirectory(); // 읽은 파일들을 폴더 이동 시킨다.
 		}
         catch (Exception e) {
             e.printStackTrace();
         } 
-		addInvoice(invoiceList);
-		addInvoiceProduct(productList);
 		try {
 			if(conn != null) conn.close();
 		} catch (SQLException e) {
 			LOG.debug(e.getMessage());
 			e.printStackTrace();
 		}
+	}
+	
+	public void moveDirectory() {
+		File folder1 = new File("D:\\Temp\\complete");
+		File folder2 = new File("C:\\Temp\\shop");
+		InvoiceDAO.copy(folder1, folder2);
+		InvoiceDAO.delete(folder1.toString());
+	}
+	
+	public static void copy(File sourceF, File targetF){
+		File[] target_file = sourceF.listFiles();
+		for (File file : target_file) {
+			File temp = new File(targetF.getAbsolutePath() + File.separator + file.getName());
+			if(file.isDirectory()){
+				temp.mkdir();
+				copy(file, temp);
+			} else {
+			        FileInputStream fis = null;
+				FileOutputStream fos = null;
+				try {
+					fis = new FileInputStream(file);
+					fos = new FileOutputStream(temp) ;
+					byte[] b = new byte[4096];
+					int cnt = 0;
+					while((cnt=fis.read(b)) != -1){
+						fos.write(b, 0, cnt);
+					}
+				} catch (Exception e) {
+					e.printStackTrace();
+				} finally{
+					try {
+						fis.close();
+						fos.close();
+					} catch (Exception e) {
+						e.printStackTrace();
+					}
+						
+				}
+			}
+		   }
+	    }
+		
+    public static void delete(String path) {
+		File folder = new File(path);
+		try {
+			if(folder.exists()){
+			    File[] folder_list = folder.listFiles();
+					
+			    for (int i = 0; i < folder_list.length; i++) {
+				if(folder_list[i].isFile()) {
+					folder_list[i].delete();
+				}else {
+					delete(folder_list[i].getPath());
+				}
+				folder_list[i].delete();
+			    }
+			}
+		} catch (Exception e) {
+			e.getStackTrace();
+		}  
 	}
 	
 	// 송장 번호 생성
