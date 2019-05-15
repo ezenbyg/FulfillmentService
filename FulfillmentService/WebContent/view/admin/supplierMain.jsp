@@ -11,11 +11,11 @@
 	<title>관리자 모드</title>
 	<jsp:include page="../common/resource.jspf"></jsp:include>
 </head>
-
 <body>
 	<%@ include file="../common/_admin_top.jspf" %> 
-	<%@ include file="../common/_supplie_nav.jspf" %> 
-	<div class="container">
+	<%@ include file="../common/_supplier_nav.jspf" %> 
+	<section id="main-content">
+		<section class="wrapper">
 		<div class="row" style="margin-top: 90px">
 			<div class="col-md-1"></div>
 			<div class="col-md-10">
@@ -64,9 +64,9 @@
 			</div>
 			<div class="col-md-1"></div>
 		</div>
-	</div>
-
+	</section>
 	<%@ include file="../common/_bottom.jspf"%>
+	</section>
 	<!-- ==================================================================== -->
 </body>
 </html>

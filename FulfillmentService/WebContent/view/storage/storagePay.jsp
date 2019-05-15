@@ -34,13 +34,16 @@
 							<li role="presentation"><a
 								href="../storage/storageCharge.jsp">청구</a></li>
 							<li role="presentation" class="active"><a href="#">지급</a></li>
-							<li style="margin-left: 70%">기간 조회 : <input type="date"
-								id="datepicker1">&nbsp; <input type="button"
-								class="btn btn-primary" value="조회"></li>
 						</ul>
+						<div class="col-md-8"></div>
+						<div class="col-md-offset-3">
+							기간 조회 : <input id="monthpicker" type="text" /> 
+							<input type="button" class="btn btn-primary" id="btn_monthpicker" value="조회" />
+						</div>
+						<hr>
 						<table class="table">
 							<thead>
-								<tr>
+							<tr>
 									<th><select id="Payment" onChange="onloadPage(this);"
 										style="border: 5px;">
 											<option value="storagePay.jsp">구매처</option>
@@ -66,8 +69,8 @@
 								</tr>
 							</tbody>
 						</table>
-						<div class="panel panel-danger">
-							<table class="table table-striped">
+						<div class="panel panel-danger" align="center">
+							<table class="table table-striped" >
 								<tr>
 									<th>회사이름</th>
 									<th>계좌</th>
@@ -91,6 +94,31 @@
 	</section>
 	<!-- ==================================================================== -->
 	<script>
+		/* MonthPicker 옵션 */
+		options = {
+			pattern : 'yyyy-mm', // Default is 'mm/yyyy' and separator char is not mandatory
+			selectedYear : 2014,
+			startYear : 2008,
+			finalYear : 2018,
+			monthNames : [ '1월', '2월', '3월', '4월', '5월', '6월', '7월', '8월',
+					'9월', '10월', '11월', '12월' ]
+		};
+
+		/* MonthPicker Set */
+		$('#monthpicker').monthpicker(options);
+
+		/* 버튼 클릭시 MonthPicker Show */
+		$('#btn_monthpicker').bind('click', function() {
+			$('#monthpicker').monthpicker('show');
+		});
+
+		/* MonthPicker 선택 이벤트 */
+		$('#monthpicker').monthpicker().bind('monthpicker-click-month',
+				function(e, month) {
+					alert("선택하신 월은 : " + month + "월");
+				});
+	</script>
+	<!-- <script>
 		$.datepicker.setDefaults({
 			dateFormat : 'yy-mm-dd',
 			prevText : '이전 달',
@@ -108,6 +136,6 @@
 		$(function() {
 			$("#datepicker1").datepicker();
 		});
-	</script>
+	</script> -->
 </body>
 </html>

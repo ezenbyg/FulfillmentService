@@ -12,42 +12,56 @@
 <jsp:include page="common/resource.jspf"></jsp:include>
 </head>
 <body>
-<header>
 	<%@ include file="common/_main_top.jspf"%>
-</header>
 <section style="height: 550px;">
-	<div class="container join-container" style="margin-left: 30%; margin-top: 4%; margin-left: 25%; height: 400px;">
-		<div class="row">
-			<div class="col-md-6 login-form-1">
-				<h3>회원 가입</h3>
-				<form name="registerForm" action="/FulfillmentService/control/loginRegisterServlet?action=register" method=post>
+	<div class="container">
+		<div class="row" style="margin-top: 90px">
+			<div class="col-md-1"></div>
+			<div class="col-md-10">
+				<div class="jumbotron">
+					<p><h2>회원가입</h2></p>
+					<p><h5>Ezen FulfillmentService에 로그인하기 위해 회원가입을 해주세요.</h5></p>
+				</div><br>
+				<form action="/FulfillmentService/control/loginRegisterServlet?action=register" class="form-horizontal" 
+										method="POST" onSubmit="return isValidForm();">
 					<div class="form-group">
-						<input type="text" name="cUserId" class="form-control" placeholder="Your ID *"
-							value="" />
+						<label class="col-md-4 control-label">id</label>
+						<div class="col-md-3">
+							<input type="text" class="form-control" name="cUserId" id="userId">
+						</div>
 					</div>
 					<div class="form-group">
-						<input type="text" name="cName" class="form-control" placeholder="Your Name *"
-							value="" />
+						<label class="col-md-4 control-label">이름</label>
+						<div class="col-md-3">
+							<input type="text" class="form-control" name="cName" id="name">
+						</div>
 					</div>
 					<div class="form-group">
-						<input type="password" name="cPassword" id="password" class="form-control"
-							placeholder="Your Password *" value="" />
+						<label class="col-md-4 control-label">패스워드</label>
+						<div class="col-md-3">
+							<input type="password" class="form-control" name="cPassword" id="password">
+						</div>
 					</div>
 					<div class="form-group">
-						<input type="password" id="password2" class="form-control"
-							placeholder="Your Password  check *" value="" />
+						<label class="col-md-4 control-label">패스워드 확인</label>
+						<div class="col-md-3">
+							<input type="password" class="form-control" name="password2" id="password2">
+						</div>
 					</div>
-					<div class="form-group" align="center">
-						<input type="submit" class="btnSubmit" value="가입"><br><br> 
+					<div class="form-group">
+						<div class="col-md-offset-4 col-md-6">
+							<input class="btn btn-primary" type="submit" value="회원가입">&nbsp;
+							<button class="btn btn-default" type="reset" type="button">취소</button>
+						</div>
 					</div>
 				</form>
 			</div>
+			<div class="col-md-1"></div>
 		</div>
-	</div>
+		</div>
 </section>
 	<footer>
 	<%@ include file="common/_bottom.jspf"%>
 	</footer>
-	<!-- ==================================================================== -->
 </body>
 </html>

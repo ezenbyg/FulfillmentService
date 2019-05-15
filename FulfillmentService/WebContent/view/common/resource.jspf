@@ -83,3 +83,5 @@
   	<link href="/FulfillmentService/img/favicon.png" rel="icon">
 	<link href="/FulfillmentService/img/apple-touch-icon.png" rel="apple-touch-icon">
   	
+  	<!-- Monthpicker -->
+	<script type="text/javascript" src="/FulfillmentService/lib/monthpicker/jquery.mtz.monthpicker.js"></script>

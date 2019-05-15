@@ -4,15 +4,14 @@
 <aside>
 	<div id="sidebar" class="nav-collapse ">
 		<ul class="sidebar-menu" id="nav-accordion">
-			<li class="sub-menu"><a href="javascript:;"> <i class="fa fa-desktop"></i> <span>운송회사</span></a>
+			<li class="sub-menu"><a href="javascript:;"> <i class="fa fa-desktop"></i> <span>구매처</span></a>
 				<ul class="sub">
-					<li><a href="/FulfillmentService/view/transport/transportPayList.jsp">
-					<i class="fas fa-clipboard-list"></i>&nbsp;대금지급리스트</a></li>
-					<li><a href="/FulfillmentService/view/transport/transportHistory.jsp">
-					<i class="fas fa-search-location"></i>&nbsp;운송 내역 조회</a></li>
+					<li><a href="/FulfillmentService/view/supplier/supplierPayList.jsp"> <i class="fas fa-clipboard-list"></i>&nbsp;대금지급리스트</a></li>
+					<li><a href="/FulfillmentService/view/supplier/supplierOrderHistory.jsp"> <i class="fas fa-bars"></i>&nbsp;발주내역</a></li>
+					<li><a href="/FulfillmentService/view/supplier/supplierRelease.jsp"> <i class="fas fa-truck"></i>&nbsp;상품 출고</a></li>
 				</ul>
 			</li>
-		<li class="sub-menu"><a href="javascript:;"> <i class="fa fa-desktop"></i> <span>관리자</span></a>
+			<li class="sub-menu"><a href="javascript:;"> <i class="fa fa-desktop"></i> <span>관리자</span></a>
 				<ul class="sub">
 					<li><a href="/FulfillmentService/view/admin/shoppingMain.jsp"> <i class="fas fa-tshirt"></i>&nbsp;쇼핑몰 관리자</a></li>
 					<li><a href="/FulfillmentService/view/admin/storageMain.jsp"> <i class="fas fa-utensils"></i>&nbsp;창고 관리자</a></li>

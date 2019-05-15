@@ -11,13 +11,12 @@
 <title>Ezen FulfillService</title>
 <jsp:include page="common/resource.jspf"></jsp:include>
 </head>
-<body>
-	<header>
+<header>
 		<%@ include file="common/_main_top.jspf"%>
 	</header>
 	<section style="height: 550px;;">
 		<div class="container login-container" style="margin-left: 25%;height: 400px;">
-			<div class="row">
+			<div class="row" style="margin-top: 200px;">
 				<div class="col-md-4 login-form-1">
 					<h3>회원 로그인</h3>
 					<form name="customerLoginForm" action="/FulfillmentService/control/loginRegisterServlet?action=customersLogin" method=post>
@@ -53,8 +52,6 @@
 			</div>
 		</div>
 	</section>
-	<footer>
 		<%@ include file="common/_bottom.jspf"%>
-	</footer>
 </body>
 </html>

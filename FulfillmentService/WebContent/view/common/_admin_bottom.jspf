@@ -12,19 +12,19 @@
 				</a>
 					<ul class="dropdown-menu" role="menu">
 						<li><a
-							href="/FulfillmentService/view/adminMain/storageMain.jsp">창고
+							href="/FulfillmentService/view/admin/storageMain.jsp">창고
 								관리자&nbsp;<i class="glyphicon glyphicon-plane"></i>
 						</a></li>
 						<li><a
-							href="/FulfillmentService/view/adminMain/shoppingMain.jsp">쇼핑몰
+							href="/FulfillmentService/view/admin/shoppingMain.jsp">쇼핑몰
 								관리자&nbsp;<i class="glyphicon glyphicon-shopping-cart"></i>
 						</a></li>
 						<li><a
-							href="/FulfillmentService/view/adminMain/purchaseMain.jsp">구매처
+							href="/FulfillmentService/view/admin/supplierMain.jsp">구매처
 								관리자&nbsp;<i class="glyphicon glyphicon-gift"></i>
 						</a></li>
 						<li><a
-							href="/FulfillmentService/view/adminMain/transportMain.jsp">운송회사
+							href="/FulfillmentService/view/admin/transportMain.jsp">운송회사
 								관리자&nbsp;<i class="glyphicon glyphicon-send"></i>
 						</a></li>
 					</ul>
