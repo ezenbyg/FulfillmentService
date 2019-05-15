@@ -89,7 +89,7 @@ public class InvoiceDAO {
 			} finally {
 				try {
 					pstmt.close();
-					//conn.close();
+					conn.close();
 				} catch (SQLException e) {
 					e.printStackTrace();
 				}
@@ -185,7 +185,6 @@ public class InvoiceDAO {
 	
 	// 송장 읽고 DB에 넣기
 	public void readCSV() {
-		conn = DBManager.getConnection();
 		ArrayList<TempDTO> tempList = new ArrayList<TempDTO>();
 		ArrayList<InvoiceDTO> invoiceList = new ArrayList<InvoiceDTO>();
 		ArrayList<InvoiceProductDTO> productList = new ArrayList<InvoiceProductDTO>();
@@ -274,12 +273,6 @@ public class InvoiceDAO {
         catch (Exception e) {
             e.printStackTrace();
         } 
-		try {
-			if(conn != null) conn.close();
-		} catch (SQLException e) {
-			LOG.debug(e.getMessage());
-			e.printStackTrace();
-		}
 	}
 	
 	public void moveDirectory() {
@@ -359,10 +352,11 @@ public class InvoiceDAO {
 		
 		// 중복 방지
 		while(complete) {
+			if(vList == null) { complete = false; break; }
 			for(InvoiceDTO invoice : vList) {
 				if(invoice.getvId().equals(invoiceNumber)) {
 					invoiceNumber = date + idNum + String.valueOf((int)((Math.random()*89)+10));
-				} else if(!invoice.getvId().equals(invoiceNumber)) {
+				} else {
 					complete = false;
 					break;
 				}
@@ -504,7 +498,6 @@ public class InvoiceDAO {
 			while (rs.next()) {				
 				count = rs.getInt(1);
 			}
-			rs.close();
 		} catch (SQLException e) {
 			e.printStackTrace();
 			LOG.info("getCount(): Error Code : {}", e.getErrorCode());
