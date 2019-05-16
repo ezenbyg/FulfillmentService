@@ -78,29 +78,21 @@ public class InvoiceProc extends HttpServlet {
 			page = "&nbsp;<a href=#>&raquo;</a>";
 			pageList.add(page);
 			
-			// 드롭다운으로 선택한 쇼핑몰 아이디로 구분 짓기
-			// vAdminId 파라미터 값이 Zero(0)일 경우 전체 페이지 출력
-			vAdminId = Integer.parseInt(request.getParameter("vAdminId"));
-			if(vAdminId == 0) { // 전체 출력
-				vList = vDao.selectJoinAll(curPage);
-				request.setAttribute("invoiceList", vList);
-				request.setAttribute("invoicePageList", pageList);
-				rd = request.getRequestDispatcher("/control/invoiceServlet?action=invoiceList&page=1");
-		        rd.forward(request, response);
-			} else { // 각 쇼핑몰에 대한 송장 내역 출력
-				vList = vDao.selectJoinAllbyId(curPage, vAdminId);
-				request.setAttribute("invoiceList", vList);
-				request.setAttribute("invoicePageList", pageList);
-				rd = request.getRequestDispatcher("/control/invoiceServlet?action=invoiceList&page=1");
-		        rd.forward(request, response);
-			}
-		case "download" : // CSV 파일 다운로드
-			FileController fc = new FileController();
-			fc.readCSV();
-			rd = request.getRequestDispatcher("/control/invoiceServlet?action=invoiceList&page=1");
+			vList = vDao.selectJoinAll(curPage);
+			for (InvoiceDTO vDto: vList)
+				LOG.debug(vDto.toString());
+			request.setAttribute("invoiceList", vList);
+			request.setAttribute("invoicePageList", pageList);
+			rd = request.getRequestDispatcher("/FulfillmentService/view/storage/storageShipping.jsp");
 	        rd.forward(request, response);
 			
+		case "download" : // CSV 파일 다운로드
+			FileController fc = new FileController();
+			fc.readCSV(); 
+			fc.moveFile();
+			// response.sendRedirect("/FulfillmentService/control/invoiceServlet?action=invoiceList&page=1");
+			rd = request.getRequestDispatcher("/control/invoiceServlet?action=invoiceList&page=1");
+	        rd.forward(request, response);
 		}
-		
 	}
 }

@@ -27,8 +27,8 @@
 							</h4>
 							<hr>
 							<div style="margin-left: 90%;">
-								<a href ="/FulfillmentService/control/invoiceServlet?action=download">
-								<input type="button" class="btn btn-info" value="다운로드"></a>
+								<a class="btn btn-primary" href ="/FulfillmentService/control/invoiceServlet?action=download" role="button">다운로드
+								</a>
 							</div>
 								<table class="table table-striped table-advance table-hover">
 									<thead>
@@ -40,22 +40,23 @@
 											<th>날짜</th>
 											<th>쇼핑몰</th>
 											<th>수량</th>
-											<th>날짜</th>
 											<th>상태</th>
 										</tr>
 									</thead>
 									<tbody>
+									<c:set var="invoiceList" value="${requestScope.invoiceList}" />
+									<c:forEach var="vDto" items="${invoiceList}">
 										<tr>
-											<th onclick="modal1();">#</th>
-											<th>#</th>
-											<th>#</th>
-											<th>#</th>
-											<th>#</th>
-											<th>#</th>
-											<th>#</th>
-											<th>#</th>
-											<th onclick="modal2();">#</th>
+											<th onclick="modal1();">${vDto.vId}</th>
+											<th>${vDto.vName}</th>
+											<th>${vDto.vTel}</th>
+											<th>${vDto.vAddress}</th>
+											<th>${vDto.vDate}</th>
+											<th>${vDto.vShopName}</th>
+											<th>${vDto.vQuantity}</th>
+											<th onclick="modal2();">${vDto.vState}</th>
 										</tr>
+									</c:forEach>
 									</tbody>
 								</table>
 							</div>
@@ -142,6 +143,10 @@
 							</div>
 						</div>
 					</div>
+			<c:set var="pageList" value="${requestScope.pageList}" />
+			<c:forEach var="pageNo" items="${pageList}">
+				${pageNo}
+				</c:forEach>
 		</section>
 		<%@ include file="../common/_bottom.jspf"%>
 	</section>

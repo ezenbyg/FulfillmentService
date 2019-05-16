@@ -3,7 +3,6 @@ package control;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.StringTokenizer;
@@ -32,6 +31,7 @@ public class FileController {
 	AdminDTO admin = new AdminDTO();
 	InvoiceDTO invoice = new InvoiceDTO();
 	InvoiceDAO vDao = new InvoiceDAO();
+	InvoiceProductDTO product = new InvoiceProductDTO();
 	
 	// 송장 읽고 DB에 넣기
 	public void readCSV() {
@@ -39,9 +39,10 @@ public class FileController {
 		String path = "C:\\Temp\\shop\\";
 		File dir = new File(path);
 		File[] fileList = dir.listFiles();
-
+		
 		int number = 0; 
 		for(File file : fileList) {
+			int count = 0; 
 			if(file.isFile()) {
 				fullFileName.add(file.getName());
 				filePath.add(path+fullFileName.get(number));
@@ -67,11 +68,7 @@ public class FileController {
 				BufferedReader br = new BufferedReader(new InputStreamReader(
 	                    new FileInputStream(filePath.get(number)), "euc-kr"));
 	            String line = "";
-	            int count = 0;
-	            
 	            while ((line = br.readLine()) != null) { // 파일 읽기
-	            	count++;
-	            	InvoiceProductDTO product = new InvoiceProductDTO();
 	            	product.setpInvoiceId(invoice.getvId());
 	                String[] token = line.split(",", -1);
 	                for(int p=0; p<5; p++) {
@@ -89,79 +86,50 @@ public class FileController {
 							if(p==4)product.setIpQuantity(Integer.parseInt(token[p]));
 	                	}
 	                }
-	                if(count==1) vDao.addInvoice(invoice);
+	                if(count == 0) {
+	                	vDao.addInvoice(invoice);
+	                	count++;
+	                	LOG.debug("count : " + count);
+	                }
 	                vDao.addInvoiceProduct(product);
+	                count++;
 	            }
-				moveDirectory(); // 읽은 파일들을 폴더 이동 시킨다.
 				number++;
-	            br.close();
+				br.close();
 			}
 	        catch (Exception e) {
 	            e.printStackTrace();
 	        }
 		}
 	}
-	
-	public void moveDirectory() {
-		File folder1 = new File("C:\\Temp\\complete");
-		File folder2 = new File("C:\\Temp\\shop");
-		copy(folder1, folder2);
-		delete(folder1.toString());
-	}
-	
-	public static void copy(File sourceF, File targetF){
-		File[] target_file = sourceF.listFiles();
-		for (File file : target_file) {
-			File temp = new File(targetF.getAbsolutePath() + File.separator + file.getName());
-			if(file.isDirectory()){
-				temp.mkdir();
-				copy(file, temp);
-			} else {
-			        FileInputStream fis = null;
-				FileOutputStream fos = null;
-				try {
-					fis = new FileInputStream(file);
-					fos = new FileOutputStream(temp) ;
-					byte[] b = new byte[4096];
-					int cnt = 0;
-					while((cnt=fis.read(b)) != -1){
-						fos.write(b, 0, cnt);
-					}
-				} catch (Exception e) {
-					e.printStackTrace();
-				} finally{
-					try {
-						fis.close();
-						fos.close();
-					} catch (Exception e) {
-						e.printStackTrace();
-					}
-						
-				}
-			}
-		   }
-	    }
+
+	public void moveFile() {
+		File original_dir = new File("C:\\Temp\\shop"); 
+		File move_dir = new File("C:\\Temp\\complete"); 
 		
-    public static void delete(String path) {
-		File folder = new File(path);
-		try {
-			if(folder.exists()){
-			    File[] folder_list = folder.listFiles();
-					
-			    for (int i = 0; i < folder_list.length; i++) {
-				if(folder_list[i].isFile()) {
-					folder_list[i].delete();
-				}else {
-					delete(folder_list[i].getPath());
+		if(original_dir.exists()) { // 폴더의 내용물 확인 -> 폴더 & 파일.. 
+			File[] fileNames = original_dir.listFiles(); // 내용 목록 반환 
+			LOG.debug("--------------폴더 읽기-----------------");
+			for(int i=0; i<fileNames.length; i++) { 
+				if(fileNames[i].isDirectory()) { 
+					System.out.println(fileNames[i].getName()); // 폴더 존재 유무 
+					} 
+				} 
+			LOG.debug("--------------파일 읽기-----------------");
+			for(int i=0; i<fileNames.length; i++) { 
+				if(fileNames[i].isFile()) { 
+					if(fileNames[i].exists()) { 
+						if(original_dir.exists()) { 
+							File MoveFile = new File(move_dir, fileNames[i].getName()); // 이동될 파일 경로 및 파일 이름 
+							fileNames[i].renameTo(MoveFile); // 변경(이동) 
+							LOG.debug(fileNames[i].getName()); // 폴더내에 있는 파일 리스트 
+						}
+					}
 				}
-				folder_list[i].delete();
-			    }
 			}
-		} catch (Exception e) {
-			e.getStackTrace();
-		}  
+		}
 	}
-	
+	 
 	// 송장 번호 생성
     public String createInvoiceNumber(String fileName) {
 		ArrayList<InvoiceDTO> vList = new ArrayList<InvoiceDTO>();

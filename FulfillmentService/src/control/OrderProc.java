@@ -113,7 +113,7 @@ public class OrderProc extends HttpServlet {
 			oList = oDao.selectJoinAllbyId(curPage, oAdminId);
 			request.setAttribute("orderList", oList);
 			request.setAttribute("orderPageList", pageList);
-			rd = request.getRequestDispatcher("/control/orderServlet?action=supplierOrderList&page=1");
+			rd = request.getRequestDispatcher("jsp");
 	        rd.forward(request, response);
 			
 			break;

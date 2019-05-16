@@ -256,7 +256,7 @@ public class ChargeDAO { // 송장에서 얻은 정보에 가격을 포함해서
 			while (rs.next()) {	
 				InvoiceDTO vDto = new InvoiceDTO();
 				vDto.setvAdminId(rs.getInt(1));
-				vDto.setvId(rs.getInt(2));
+				vDto.setvId(rs.getString(2));
 				vDto.setvProductName(rs.getString(3));
 				vDto.setvPrice(rs.getInt(4));
 				vDto.setvDate(rs.getString(5));

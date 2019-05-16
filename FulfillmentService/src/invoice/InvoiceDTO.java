@@ -10,6 +10,9 @@ public class InvoiceDTO {
 	private String vDate;
 	private int vPrice;
 	private String vState;
+	private int vQuantity;
+	private String vProductId;
+	private String vProductName;
 	
 	public InvoiceDTO() {}
 
@@ -96,6 +99,30 @@ public class InvoiceDTO {
 
 	public void setvState(String vState) {
 		this.vState = vState;
+	}
+
+	public int getvQuantity() {
+		return vQuantity;
+	}
+
+	public void setvQuantity(int vQuantity) {
+		this.vQuantity = vQuantity;
+	}
+
+	public String getvProductId() {
+		return vProductId;
+	}
+
+	public void setvProductId(String vProductId) {
+		this.vProductId = vProductId;
+	}
+
+	public String getvProductName() {
+		return vProductName;
+	}
+
+	public void setvProductName(String vProductName) {
+		this.vProductName = vProductName;
 	}
 
 	@Override
