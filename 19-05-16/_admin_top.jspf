@@ -1,0 +1,29 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+	pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<header class="header black-bg">
+	<div class="sidebar-toggle-box">
+		<div class="fa fa-bars tooltips" data-placement="right" data-original-title="Toggle Navigation"></div>
+	</div>
+	<!--logo start-->
+	<a href="/FulfillmentService/view/index.jsp" class="logo"><b>Ezen_<span>admin</span></b></a>
+	<!--logo end-->
+	<div class="nav notify-row" id="top_menu">
+	</div>
+			<%
+									if (session.getAttribute("sessionCustomerId") != null) {
+								%>
+			${sessionCustomerName} 관리자님 환영합니다.&nbsp;&nbsp; <a
+				class="btn btn-outline-primary" href="#">로그아웃</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+			<%
+									} else {
+								%>
+			<div class="top-menu">
+				<ul class="nav pull-right top-menu">
+					<li><a class="logout" href="/FulfillmentService/view/loginForm.jsp">로그인</a></li>
+				</ul>
+			</div> 
+			<%
+									}
+								%>
+</header>

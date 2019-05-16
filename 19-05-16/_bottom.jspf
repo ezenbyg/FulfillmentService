@@ -1,0 +1,15 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+	pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<footer class="site-footer" style="position: relative;">
+      <div class="text-center">
+        <p style=" margin-top: 15px;">
+      	자바기반 전자정부 프레임워크 개발
+        </p>
+        <div class="credits">
+        </div>
+        <a href="index.html#" class="go-top">
+          <i class="fa fa-angle-up"></i>
+          </a>
+      </div>
+    </footer>
