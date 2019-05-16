@@ -64,7 +64,8 @@ public class InvoiceDAO {
 	// Invoice
 	public void addInvoice(InvoiceDTO invoice) {
 		conn = DBManager.getConnection();
-		String sql = "insert into invoice(vId, vAdminId, vShopName, vName, vTel, vAddress, vDate, vPrice) values(?, ?, ?, ?, ?, ?, ?, ?)";
+		String sql = "insert into invoice(vId, vAdminId, vShopName, vName, vTel, vAddress, vDate, vPrice) "
+				+ "values(?, ?, ?, ?, ?, ?, ?, ?);";
 		LOG.trace("addInvoice(): " + invoice.toString());
 		try {
 			pstmt = conn.prepareStatement(sql);
@@ -94,7 +95,7 @@ public class InvoiceDAO {
 	// InvoiceProduct
 	public void addInvoiceProduct(InvoiceProductDTO product) {
 		conn = DBManager.getConnection();
-		String sql = "insert into invoiceproduct(pInvoiceId, ipProductId, ipQuantity) values(?, ?, ?)";
+		String sql = "insert into invoiceproduct(pInvoiceId, ipProductId, ipQuantity) values(?, ?, ?);";
 		LOG.trace("addInvoiceProduct(): " + product.toString());
 		try {
 			pstmt = conn.prepareStatement(sql);
@@ -188,24 +189,24 @@ public class InvoiceDAO {
 	}
 	
 	public ArrayList<InvoiceDTO> selectJoinAll(int page) {
+		ArrayList<InvoiceDTO> vList = new ArrayList<InvoiceDTO>();
 		conn = DBManager.getConnection();
 		int offset = 0;
 		String sql = null;
 		if (page == 0) {	// page가 0이면 모든 데이터를 보냄
-			sql = "select v.vId, v.vShopName, v.vName, v.vTel, v.vAddress, v.vDate, v.vState, p.ipQuantity "
+			sql = "select distinct v.vId, v.vShopName, v.vName, v.vTel, v.vAddress, v.vDate, v.vState "
 					+ "from invoice as v " 
 					+ "inner join invoiceproduct as p "
 					+ "on v.vId=p.pInvoiceId "
 					+ "order by v.vDate desc;";
 		} else {			// page가 0이 아니면 해당 페이지 데이터만 보냄
-			sql = "select v.vId, v.vShopName, v.vName, v.vTel, v.vAddress, v.vDate, v.vState, p.ipQuantity "
+			sql = "select distinct v.vId, v.vShopName, v.vName, v.vTel, v.vAddress, v.vDate, v.vState "
 					+ "from invoice as v " 
 					+ "inner join invoiceproduct as p "
 					+ "on v.vId=p.pInvoiceId "
 					+ "order by v.vDate desc limit ?, 10;";
 			offset = (page - 1) * 10;
 		}
-		ArrayList<InvoiceDTO> vList = new ArrayList<InvoiceDTO>();
 		try {
 			pstmt = conn.prepareStatement(sql);
 			LOG.trace(sql);
@@ -222,7 +223,6 @@ public class InvoiceDAO {
 				vDto.setvAddress(rs.getString(5));
 				vDto.setvDate(rs.getString(6));
 				vDto.setvState(rs.getString(7));
-				vDto.setvQuantity(rs.getInt(8));
 				vList.add(vDto);
 				LOG.debug(vDto.toString());
 			}

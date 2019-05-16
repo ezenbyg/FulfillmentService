@@ -39,7 +39,6 @@
 											<th>주소</th>
 											<th>날짜</th>
 											<th>쇼핑몰</th>
-											<th>수량</th>
 											<th>상태</th>
 										</tr>
 									</thead>
@@ -53,7 +52,6 @@
 											<th>${vDto.vAddress}</th>
 											<th>${vDto.vDate}</th>
 											<th>${vDto.vShopName}</th>
-											<th>${vDto.vQuantity}</th>
 											<th onclick="modal2();">${vDto.vState}</th>
 										</tr>
 									</c:forEach>

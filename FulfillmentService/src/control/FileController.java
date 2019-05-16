@@ -70,7 +70,7 @@ public class FileController {
 	            String line = "";
 	            while ((line = br.readLine()) != null) { // 파일 읽기
 	            	product.setpInvoiceId(invoice.getvId());
-	                String[] token = line.split(",", -1);
+	                String[] token = line.split(",");
 	                for(int p=0; p<5; p++) {
 	                	if((token[p] != null) && !(token[p].equals(" ")) && !(token[p].equals(""))) {
 	                		LOG.debug(token[p] + " ");
@@ -86,6 +86,7 @@ public class FileController {
 							if(p==4)product.setIpQuantity(Integer.parseInt(token[p]));
 	                	}
 	                }
+	                LOG.debug("readCSV실행");
 	                if(count == 0) {
 	                	vDao.addInvoice(invoice);
 	                	count++;
