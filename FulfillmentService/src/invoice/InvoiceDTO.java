@@ -8,11 +8,12 @@ public class InvoiceDTO {
 	private String vTel;
 	private String vAddress;
 	private String vDate;
+	private int vPrice;
 	private String vState;
 	
 	public InvoiceDTO() {}
 
-	public InvoiceDTO(String vId, int vAdminId, String vShopName, String vName, String vTel, String vAddress, String vDate, String vState) {
+	public InvoiceDTO(String vId, int vAdminId, String vShopName, String vName, String vTel, String vAddress, String vDate, int vPrice, String vState) {
 		super();
 		this.vId = vId;
 		this.vAdminId = vAdminId;
@@ -21,6 +22,7 @@ public class InvoiceDTO {
 		this.vTel = vTel;
 		this.vAddress = vAddress;
 		this.vDate = vDate;
+		this.vPrice = vPrice;
 		this.vState = vState;
 	}
 
@@ -80,6 +82,14 @@ public class InvoiceDTO {
 		this.vDate = vDate;
 	}
 
+	public int getvPrice() {
+		return vPrice;
+	}
+
+	public void setvPrice(int vPrice) {
+		this.vPrice = vPrice;
+	}
+
 	public String getvState() {
 		return vState;
 	}
@@ -91,6 +101,7 @@ public class InvoiceDTO {
 	@Override
 	public String toString() {
 		return "InvoiceDTO [vId=" + vId + ", vAdminId=" + vAdminId + ", vShopName=" + vShopName + ", vName=" + vName
-				+ ", vTel=" + vTel + ", vAddress=" + vAddress + ", vDate=" + vDate + ", vState=" + vState + "]";
+				+ ", vTel=" + vTel + ", vAddress=" + vAddress + ", vDate=" + vDate + ", vPrice=" + vPrice + ", vState="
+				+ vState + "]";
 	}
 }

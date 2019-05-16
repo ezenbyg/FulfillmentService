@@ -5,17 +5,15 @@ public class InvoiceProductDTO {
 	private int ipProductId;
 	private String ipProductName;
 	private int ipQuantity;
-	private String ipDate;
 	
 	public InvoiceProductDTO() {}
 
-	public InvoiceProductDTO(String pInvoiceId, int ipProductId, String ipProductName, int ipQuantity, String ipDate) {
+	public InvoiceProductDTO(String pInvoiceId, int ipProductId, String ipProductName, int ipQuantity) {
 		super();
 		this.pInvoiceId = pInvoiceId;
 		this.ipProductId = ipProductId;
 		this.ipProductName = ipProductName;
 		this.ipQuantity = ipQuantity;
-		this.ipDate = ipDate;
 	}
 
 	public String getpInvoiceId() {
@@ -50,17 +48,9 @@ public class InvoiceProductDTO {
 		this.ipQuantity = ipQuantity;
 	}
 
-	public String getIpDate() {
-		return ipDate;
-	}
-
-	public void setIpDate(String ipDate) {
-		this.ipDate = ipDate;
-	}
-
 	@Override
 	public String toString() {
 		return "InvoiceProductDTO [pInvoiceId=" + pInvoiceId + ", ipProductId=" + ipProductId + ", ipProductName="
-				+ ipProductName + ", ipQuantity=" + ipQuantity + ", ipDate=" + ipDate + "]";
+				+ ipProductName + ", ipQuantity=" + ipQuantity + "]";
 	}
 }

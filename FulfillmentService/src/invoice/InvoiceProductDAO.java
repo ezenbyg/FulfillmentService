@@ -29,7 +29,6 @@ public class InvoiceProductDAO {
 				ipDto.setIpProductId(rs.getInt(2));
 				ipDto.setIpProductName(rs.getString(3));
 				ipDto.setIpQuantity(rs.getInt(4));
-				ipDto.setIpDate(rs.getString(5));
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();

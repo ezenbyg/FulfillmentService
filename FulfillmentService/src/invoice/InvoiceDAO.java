@@ -4,7 +4,6 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
-import java.io.FileReader;
 import java.io.InputStreamReader;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -20,6 +19,8 @@ import org.slf4j.LoggerFactory;
 
 import admin.AdminDAO;
 import admin.AdminDTO;
+import storage.StorageDAO;
+import storage.StorageDTO;
 import util.DBManager;
 
 
@@ -45,7 +46,8 @@ public class InvoiceDAO {
 				vDto.setvTel(rs.getString(5));
 				vDto.setvAddress(rs.getString(6));
 				vDto.setvDate(rs.getString(7));
-				vDto.setvState(rs.getString(8));
+				vDto.setvPrice(rs.getInt(8));
+				vDto.setvState(rs.getString(9));
 				vList.add(vDto);
 			}
 		} catch (SQLException e) {
@@ -65,66 +67,57 @@ public class InvoiceDAO {
 	}
 	
 	// Invoice
-	public void addInvoice(ArrayList<InvoiceDTO> invoiceList) {
-		InvoiceDTO vDto = new InvoiceDTO();
-		for(int i=0; i<invoiceList.size(); i++) {
-			conn = DBManager.getConnection();
-			String sql = "insert into invoice(vId, vAdminId, vShopName, vName, vTel, vAddress, vDate) values(?, ?, ?, ?, ?, ?, ?)";
-			vDto = invoiceList.get(i);
-			LOG.trace("addInvoice(): " + vDto.toString());
+	public void addInvoice(InvoiceDTO invoice) {
+		conn = DBManager.getConnection();
+		String sql = "insert into invoice(vId, vAdminId, vShopName, vName, vTel, vAddress, vDate, vPrice) values(?, ?, ?, ?, ?, ?, ?, ?)";
+		LOG.trace("addInvoice(): " + invoice.toString());
+		try {
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setString(1, invoice.getvId());
+			pstmt.setInt(2, invoice.getvAdminId());
+			pstmt.setString(3, invoice.getvShopName());
+			pstmt.setString(4, invoice.getvName());
+			pstmt.setString(5, invoice.getvTel());
+			pstmt.setString(6, invoice.getvAddress());
+			pstmt.setString(7, invoice.getvDate());
+			pstmt.setInt(8, invoice.getvPrice());
+			
+			pstmt.executeUpdate();
+		} catch (SQLException e) {
+			e.printStackTrace();
+			LOG.info("addInvoice() Error Code : {}", e.getErrorCode());
+		} finally {
 			try {
-				pstmt = conn.prepareStatement(sql);
-				pstmt.setString(1, vDto.getvId());
-				pstmt.setInt(2, vDto.getvAdminId());
-				pstmt.setString(3, vDto.getvShopName());
-				pstmt.setString(4, vDto.getvName());
-				pstmt.setString(5, vDto.getvTel());
-				pstmt.setString(6, vDto.getvAddress());
-				pstmt.setString(7, vDto.getvDate());
-				
-				pstmt.executeUpdate();
+				pstmt.close();
+				conn.close();
 			} catch (SQLException e) {
 				e.printStackTrace();
-				LOG.info("addInvoice() Error Code : {}", e.getErrorCode());
-			} finally {
-				try {
-					pstmt.close();
-					conn.close();
-				} catch (SQLException e) {
-					e.printStackTrace();
-				}
 			}
 		}
 	}
 	
 	// InvoiceProduct
-	public void addInvoiceProduct(ArrayList<InvoiceProductDTO> productList) {
-		InvoiceProductDTO ipDto = new InvoiceProductDTO();
-		for(int i=0; i<productList.size(); i++) {
-			conn = DBManager.getConnection();
-			String sql = "insert into invoiceproduct(pInvoiceId, ipProductId, ipProductName, ipQuantity, ipDate) values(?, ?, ?, ?, ?)";
-			ipDto = productList.get(i);
-			LOG.trace("addInvoiceProduct(): " + ipDto.toString());
+	public void addInvoiceProduct(InvoiceProductDTO product) {
+		conn = DBManager.getConnection();
+		String sql = "insert into invoiceproduct(pInvoiceId, ipProductId, ipQuantity) values(?, ?, ?)";
+		LOG.trace("addInvoiceProduct(): " + product.toString());
+		try {
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setString(1, product.getpInvoiceId());
+			pstmt.setInt(2, product.getIpProductId());
+			pstmt.setInt(3, product.getIpQuantity());
+			
+			pstmt.executeUpdate();
+		} 
+		catch (SQLException e) {
+			e.printStackTrace();
+			LOG.info("addInvoiceProduct() Error Code : {}", e.getErrorCode());
+		} finally {
 			try {
-				pstmt = conn.prepareStatement(sql);
-				pstmt.setString(1, ipDto.getpInvoiceId());
-				pstmt.setInt(2, ipDto.getIpProductId());
-				pstmt.setString(3, ipDto.getIpProductName());
-				pstmt.setInt(4, ipDto.getIpQuantity());
-				pstmt.setString(5, ipDto.getIpDate());
-				
-				pstmt.executeUpdate();
-			} 
-			catch (SQLException e) {
+				pstmt.close();
+				conn.close();
+			} catch (SQLException e) {
 				e.printStackTrace();
-				LOG.info("addInvoiceProduct() Error Code : {}", e.getErrorCode());
-			} finally {
-				try {
-					pstmt.close();
-					conn.close();
-				} catch (SQLException e) {
-					e.printStackTrace();
-				}
 			}
 		}
 	}
@@ -186,94 +179,82 @@ public class InvoiceDAO {
 	
 	// 송장 읽고 DB에 넣기
 	public void readCSV() {
-		ArrayList<TempDTO> tempList = new ArrayList<TempDTO>();
 		ArrayList<InvoiceDTO> invoiceList = new ArrayList<InvoiceDTO>();
 		ArrayList<InvoiceProductDTO> productList = new ArrayList<InvoiceProductDTO>();
-		AdminDAO aDao = new AdminDAO();
-		AdminDTO admin = new AdminDTO();
-		InvoiceDTO invoice = new InvoiceDTO();
-		TempDTO temp = new TempDTO();
-		int i = 0;
-		
 		ArrayList<String> fullFileName = new ArrayList<String>();
 		ArrayList<String> splitFileName = new ArrayList<String>();
 		ArrayList<String> filePath = new ArrayList<String>();
+		StorageDAO pDao = new StorageDAO();
+		StorageDTO pDto = new StorageDTO();
+		AdminDAO aDao = new AdminDAO();
+		AdminDTO admin = new AdminDTO();
+		InvoiceDTO invoice = new InvoiceDTO();
 		
 		// 해당 디렉터리에 있는 파일 목록 읽기 
 		String path = "C:\\Temp\\shop\\";
 		File dir = new File(path);
 		File[] fileList = dir.listFiles();
-		
-		int number = 0;
+
+		int number = 0; 
 		for(File file : fileList) {
 			if(file.isFile()) {
 				fullFileName.add(file.getName());
 				filePath.add(path+fullFileName.get(number));
-				
-				LOG.debug(filePath.get(number));
-				LOG.debug(fullFileName.get(number));
-				
 				StringTokenizer st = new StringTokenizer(fullFileName.get(number), ".");
 				splitFileName.add(st.nextToken()); 
+				admin = aDao.getOneAdminByName(splitFileName.get(number).substring(12));
+				LOG.debug(splitFileName.get(number).substring(0, 12));
 				LOG.debug(splitFileName.get(number));
-				admin = aDao.getOneAdminByName(splitFileName.get(number).substring(8));
-				LOG.debug(splitFileName.get(number).substring(8));
-				
-				// TempDTO에 값 세팅하여 List에 저장
-				temp.settId(createInvoiceNumber(splitFileName.get(number)));
-				temp.settAdminId(admin.getaId());
-				temp.settShopName(splitFileName.get(number).substring(8));
-				temp.settDate(splitFileName.get(number).substring(0, 8));
-				tempList.add(temp);
-				number++;
+				invoice.setvId(createInvoiceNumber(splitFileName.get(number)));
+				LOG.debug(createInvoiceNumber(splitFileName.get(number)));
+				invoice.setvAdminId(admin.getaId());
+				invoice.setvShopName(splitFileName.get(number).substring(12));
+				String year = splitFileName.get(number).substring(0, 4);
+				String month = splitFileName.get(number).substring(4, 6);
+				String date = splitFileName.get(number).substring(6, 8);
+				String hour = splitFileName.get(number).substring(8, 10);
+				String minute = splitFileName.get(number).substring(10, 12);
+				LOG.debug(year+"-"+month+"-"+date+" "+hour+":"+minute);
+				invoice.setvDate(year+"-"+month+"-"+date+" "+hour+":"+minute);
+				LOG.debug(splitFileName.get(number).substring(0, 12));
 			}
-		}
-    	
-		try {
-			for(TempDTO tDto : tempList) { 
-				invoice.setvId(tDto.gettId());
-				LOG.debug("Id : " + String.valueOf(tDto.gettId()));
-				invoice.setvAdminId(tDto.gettAdminId());
-				LOG.debug("AdminId : " + String.valueOf(tDto.gettAdminId()));
-				invoice.setvShopName(tDto.gettShopName());
-				LOG.debug("ShopName : " + tDto.gettShopName());
-				invoice.setvDate(tDto.gettDate());
-				LOG.debug("Date : " + tDto.gettDate());
-				
+			try {
 				BufferedReader br = new BufferedReader(new InputStreamReader(
-	                    new FileInputStream(filePath.get(i)), "euc-kr"));
+	                    new FileInputStream(filePath.get(number)), "euc-kr"));
 	            String line = "";
-	 
-	            while ((line = br.readLine()) != null) {
+	            int count = 0;
+	            
+	            while ((line = br.readLine()) != null) { // 파일 읽기
+	            	count++;
 	            	InvoiceProductDTO product = new InvoiceProductDTO();
-	            	product.setpInvoiceId(tDto.gettId());
-	                String[] token = line.split(",");
-	                for(int p=0; p<7; p++) {
+	            	product.setpInvoiceId(invoice.getvId());
+	                String[] token = line.split(",", -1);
+	                for(int p=0; p<5; p++) {
 	                	if((token[p] != null) && !(token[p].equals(" ")) && !(token[p].equals(""))) {
 	                		LOG.debug(token[p] + " ");
 	                		System.out.println(token[p] + " ");
 							if(p==0)invoice.setvName(token[p]);
 							if(p==1)invoice.setvTel(token[p]);
 							if(p==2)invoice.setvAddress(token[p]);
-							if(p==3)product.setIpProductId(Integer.parseInt(token[p]));
-							if(p==4)product.setIpProductName(token[p]);
-							if(p==5)product.setIpQuantity(Integer.parseInt(token[p]));
-							if(p==6)product.setIpDate(token[p]);
+							if(p==3) {
+								product.setIpProductId(Integer.parseInt(token[p]));
+								pDto = pDao.getOneProductById(Integer.parseInt(token[p]));
+								invoice.setvPrice(pDto.getpPrice());
+							}
+							if(p==4)product.setIpQuantity(Integer.parseInt(token[p]));
 	                	}
-						System.out.println("");
 	                }
-					productList.add(product);
+	                if(count==1) addInvoice(invoice);
+	                addInvoiceProduct(product);
 	            }
-	            invoiceList.add(invoice);
+				moveDirectory(); // 읽은 파일들을 폴더 이동 시킨다.
+				number++;
 	            br.close();
+			}
+	        catch (Exception e) {
+	            e.printStackTrace();
 	        }
-			addInvoice(invoiceList);
-			addInvoiceProduct(productList);
-			moveDirectory(); // 읽은 파일들을 폴더 이동 시킨다.
 		}
-        catch (Exception e) {
-            e.printStackTrace();
-        } 
 	}
 	
 	public void moveDirectory() {
@@ -343,8 +324,9 @@ public class InvoiceDAO {
 		ArrayList<InvoiceDTO> vList = new ArrayList<InvoiceDTO>();
 		InvoiceDAO vDao = new InvoiceDAO();
 		String date = fileName.substring(0, 8);
-		String name = fileName.substring(8);
+		String name = fileName.substring(12);
 		admin = aDao.getOneAdminByName(name);
+		LOG.debug(String.valueOf(admin.getaId()).substring(0, 2));
 		String idNum = String.valueOf(admin.getaId()).substring(0, 2);
 		String count = String.valueOf((int)((Math.random()*89)+10));
 		String invoiceNumber = date + idNum + count;
@@ -357,7 +339,7 @@ public class InvoiceDAO {
 			if(vList.isEmpty()) { complete = false; break; }
 			for(InvoiceDTO invoice : vList) {
 				if(invoice.getvId().equals(invoiceNumber)) {
-					invoiceNumber = date + idNum + String.valueOf((int)((Math.random()*89)+10));
+					invoiceNumber = date + String.valueOf((int)((Math.random()*89)+10)) + idNum;
 				} else {
 					complete = false;
 					break;
