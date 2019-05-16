@@ -95,8 +95,8 @@ public class InvoiceProc extends HttpServlet {
 		        rd.forward(request, response);
 			}
 		case "download" : // CSV 파일 다운로드
-			vDao = new InvoiceDAO();
-			vDao.readCSV();
+			FileController fc = new FileController();
+			fc.readCSV();
 			rd = request.getRequestDispatcher("/control/invoiceServlet?action=invoiceList&page=1");
 	        rd.forward(request, response);
 			
