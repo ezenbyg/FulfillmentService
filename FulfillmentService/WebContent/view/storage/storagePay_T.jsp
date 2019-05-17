@@ -12,32 +12,38 @@
 	<jsp:include page="../common/resource.jspf"></jsp:include>
 </head>
 <body>
-	<header>
 	<%@ include file="../common/_admin_top.jspf" %>
-	</header>
-	<nav>
 	<%@ include file="../common/_storage_nav.jspf"%>
-	</nav>
-	<section>
-	<div class="container">
-		<div class="row" style="margin-top: 70px">
-			<div class="col-md-offset-1 col-md-11"><h3>청구 / 지급 (운송회사)</h3></div>
-			<div class="col-md-12"><hr></div>
-			<div class="col-md-1"></div>
-			<div class="col-md-8">
-				<div class="panel panel-primary">
+	<section id="main-content">
+		<section class="wrapper">
+			<h3>청구 / 지급 조회 (창고)</h3>
+			<div class="row">
+				<div class="col-md-12">
+					<div class="content-panel">
+						<h4>
+							<i class="fa fa-angle-right"></i> 창고 관리 (청구리스트)
+						</h4>
+						<hr>
 				<ul class="nav nav-tabs">
 						  <li role="presentation"><a href="/FulfillmentService/view/storage/storageCharge.jsp">청구</a></li>
 						  <li role="presentation" class="active"><a href="#">지급</a></li>
 						</ul>
-					
-					<table class="table table-striped">
-						<%-- <%@ include file="../common/_storage.jspf" %> --%>
+					<div class="col-md-8"></div>
+						<div class="col-md-offset-10" style="margin-bottom: -15px; margin-top: 10px;">
+							<input type="date" id="datepicker1">&nbsp;
+							<input type="button" class="btn btn-info btn-xs" value="조회">
+						</div>
+						<hr>
+					<table class="table">
+					<thead>
 						<tr>
-						<th><select id="Payment" onChange="onloadPage(this);" style="border: 5px;">
-							<option value="storagePay_T.jsp">운송회사</option>
-							<option value="storagePay.jsp">구매처</option>
-							</select>
+						<th>
+						<form name="move" method="post">
+											<select id="Payment" onChange="onloadPage(this.value);" style="border: 5px;">
+												<option value="/FulfillmentService/control/payServlet?action=payList&page=1&firstAdminId=4">운송회사</option>
+												<option value="/FulfillmentService/control/payServlet?action=payList&page=1&firstAdminId=3">구매처</option>
+											</select>
+										</form>
 						</th>
 						<th>관리자 ID</th>
 						<th>이름</th>
@@ -45,15 +51,18 @@
 						<th>지급 상태</th>
 						<th></th>
 						</tr>
+						</thead>
+						<tbody>
 						<tr>
 							<th>?</th>
 							<th>?</th>
 							<th>?</th>
 							<th style="font-size: 14px"><input type="date" id="datepicker1">&nbsp;&nbsp;</th>
 						</tr>
+						</tbody>
 					</table>
 					<hr>
-					<div class="panel panel-primary">
+					<div align="center">
 						<table class="table table-striped">
 							<tr>
 								<th>ID</th>
@@ -74,12 +83,9 @@
 				</div>
 			</div>
 		</div>
-	</div>
 	</section>
-	<footer>
+</section>
 	<%@ include file="../common/_bottom.jspf"%>
-	</footer>
-	<!-- ==================================================================== -->
 	<script>
 	    $.datepicker.setDefaults({
 	        dateFormat: 'yy-mm-dd',
@@ -103,5 +109,30 @@
 			//console.log(i.value);
 		}
    </script>
+   <script>
+		/* MonthPicker 옵션 */
+		options = {
+			pattern : 'yyyy-mm', // Default is 'mm/yyyy' and separator char is not mandatory
+			selectedYear : 2014,
+			startYear : 2008,
+			finalYear : 2018,
+			monthNames : [ '1월', '2월', '3월', '4월', '5월', '6월', '7월', '8월',
+					'9월', '10월', '11월', '12월' ]
+		};
+
+		/* MonthPicker Set */
+		$('#monthpicker').monthpicker(options);
+
+		/* 버튼 클릭시 MonthPicker Show */
+		$('#btn_monthpicker').bind('click', function() {
+			$('#monthpicker').monthpicker('show');
+		});
+
+		/* MonthPicker 선택 이벤트 */
+		$('#monthpicker').monthpicker().bind('monthpicker-click-month',
+				function(e, month) {
+					alert("선택하신 월은 : " + month + "월");
+				});
+	</script>
 </body>
 </html>

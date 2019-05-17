@@ -1,9 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
-<%
-	request.setCharacterEncoding("UTF-8");
-%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -17,7 +14,6 @@
 <body>
 	<%@ include file="../common/_admin_top.jspf"%>
 	<%@ include file="../common/_storage_nav.jspf"%>
-
 	<section id="main-content">
 		<section class="wrapper">
 			<h3>발주</h3>
@@ -25,12 +21,12 @@
 				<div class="col-md-12">
 					<div class="content-panel">
 						<h4>
-							<i class="fa fa-angle-right"></i> 창고 관리 (청구리스트)
+							<i class="fa fa-angle-right"></i> 창고 관리 (발주)
 						</h4>
 						<hr>
 						<ul class="nav nav-tabs">
 							<li role="presentation" class="active"><a href="#">발주</a></li>
-							<li role="presentation"><a href="/main/storageShipping.jsp">출고</a></li>
+							<li role="presentation"><a href="../storage/storageRelease.jsp">출고</a></li>
 						</ul>
 						<table class="table table-striped">
 							<thead>
@@ -51,10 +47,9 @@
 									<th>#</th>
 									<th>#</th>
 									<th>#</th>
-									<th>
-									<th class="col-md-3"><input class="btn btn-primary btn-sm"
-										type="button" value="발주하기"> &nbsp;&nbsp;<input
-										class="btn btn-primary btn-sm" type="reset" value="취소">
+									<th class="col-md-3">
+									<input class="btn btn-primary btn-sm" type="button" value="발주하기"> &nbsp;&nbsp;
+									<input class="btn btn-primary btn-sm" type="reset" value="취소">
 									</th>
 								</tr>
 

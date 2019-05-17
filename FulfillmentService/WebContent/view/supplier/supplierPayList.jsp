@@ -13,7 +13,7 @@
 <jsp:include page="../common/resource.jspf"></jsp:include>
 </head>
 <body>
-	<%@ include file="../common/_main_top.jspf"%>
+	<%@ include file="../common/_admin_top.jspf"%>
 	<%@ include file="../common/_storage_nav.jspf"%>
 	<section id="main-content">
 		<section class="wrapper">
@@ -22,7 +22,7 @@
 				<div class="col-md-12">
 					<div class="content-panel">
 						<h4>
-							<i class="fa fa-angle-right"></i> 구매처 관리 (발주내역 조회)
+							<i class="fa fa-angle-right"></i> 구매처 관리 (대금지급리스트 조회)
 						</h4>
 						<hr>
 						<table class="table table-striped">

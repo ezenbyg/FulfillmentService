@@ -5,44 +5,52 @@
 	<div id="sidebar" class="nav-collapse ">
 		<!-- sidebar menu start-->
 		<ul class="sidebar-menu" id="nav-accordion">
-		
-			<li class="sub-menu">
-				<a href="javascript:;">
-				<i class="fa fa-desktop"></i>
-				<span>조회</span>
-				</a>
-				
+			<li class="sub-menu"><a href="javascript:;"><i class="fa fa-search"></i><span>조회</span>&nbsp;<i class="fa fa-caret-down"></i></a>
 				<ul class="sub">
-					<li><a href="/FulfillmentService/view/storage/storageCharge.jsp"> <i class="fas fa-tshirt"></i>&nbsp;청구/지급 조회</a></li>
-					<li><a href="/FulfillmentService/view/storage/storageSalesHistory.jsp"> <i class="fas fa-utensils"></i>&nbsp;판매 내역 조회</a></li>
-					<li><a href="/FulfillmentService/view/storage/storageSalesProfit.jsp"> <i class="fas fa-dumbbell"></i>&nbsp;매출 이익 조회 </a></li>
-					<li><a href="/FulfillmentService/view/storage/storageOrderHistory.jsp"><i class="fas fa-couch"></i>&nbsp;발주 내역 조회</a></li>
-					<li><a href="/FulfillmentService/view/storage/storageTransportHistory.jsp"><i class="fas fa-tv"></i>&nbsp;운송 내역 조회 </a></li>
+					<li><a href="/FulfillmentService/control/adminServlet?action=payList&page=1&firstAdminId=3">&nbsp;청구/지급 조회</a></li>
+					<li><a href="/FulfillmentService/view/storage/storageSalesHistory.jsp">&nbsp;판매내역 조회</a></li>
+					<li><a href="/FulfillmentService/view/storage/storageSalesProfit.jsp">&nbsp;매출 이익 조회 </a></li>
+					<li><a href="/FulfillmentService/view/storage/storageOrderHistory.jsp">&nbsp;발주내역 조회</a></li>
+					<li><a href="/FulfillmentService/view/storage/storageTransportHistory.jsp">&nbsp;운송내역 조회 </a></li>
 				</ul>
 			</li>
 
-			<li class="sub-menu">
-				<a href="javascript:;">
-				<i class="fa fa-desktop"></i>
-					<span>청구/지급</span></a>
+			<li class="sub-menu"><a href="javascript:;"> <i
+					class="fa fa-won"></i> <span>청구/지급</span>&nbsp;<i class="fa fa-caret-down"></i></a>
 				<ul class="sub">
-					<li><a href="/FulfillmentService/view/storage/storageCharge.jsp"> <i class="fas fa-hand-holding-usd"></i>&nbsp;대금 청구</a></li>
-					<li><a href="/FulfillmentService/view/storage/storagePay.jsp"><i class="fas fa-money-check"></i>&nbsp;대금 지급</a></li>
+					<li><a href="/FulfillmentService/view/storage/storageCharge.jsp"> 
+						대금 청구</a></li>
+					<li><a href="/FulfillmentService/view/storage/storagePay.jsp">
+						대금 지급</a></li>
+				</ul>
+			</li>
+			<li class="sub-menu"><a href="javascript:;"> <i class="fa fa-retweet"></i>
+			<span>발주/출고</span>&nbsp;<i class="fa fa-caret-down"></i></a>
+				<ul class="sub">
+					<li><a href="/FulfillmentService/control/adminServlet?action=stockList&page=1">
+					<span>발주</span></a></li>
+					<li><a href="/FulfillmentService/control/adminServlet?action=releasePage">
+					<span>출고</span></a>
 				</ul>
 			</li>
 
-			<li class="sub-menu">
-				<a href="/FulfillmentService/view/storage/storageShipping.jsp">
-				<i class="fa fa-desktop"></i>
+			<li class="sub-menu"><a href="javascript:;"> <i class="fa fa-paste"></i>
+			<span>송장/조회</span>&nbsp;<i class="fa fa-caret-down"></i></a>
+				<ul class="sub">
+					<li><a href="/FulfillmentService/control/adminServlet?action=invoiceList&page=1">
 					<span>송장처리</span></a>
-			<li class="sub-menu"><a href="/FulfillmentService/view/storage/storageStocktaking.jsp"><i class="fa fa-desktop"></i><span>재고조사 및 발주</span></a></li>
+				</ul>
+			</li>
 
-			<li class="sub-menu"><a href="javascript:;"> <i class="fa fa-desktop"></i> <span>관리자</span></a>
+			<li class="sub-menu"><a href="/FulfillmentService/control/adminServlet?action=stockList&page=1">
+			<i class="fa fa-pencil-square-o"></i><span>재고조사</span></a></li>
+
+			<li class="sub-menu"><a href="javascript:;"> <i class="fa fa-cogs"></i>
+			<span>관리자</span>&nbsp;<i class="fa fa-caret-down"></i></a>
 				<ul class="sub">
-					<li><a href="/FulfillmentService/view/admin/shoppingMain.jsp"> <i class="fas fa-tshirt"></i>&nbsp;쇼핑몰 관리자</a></li>
-					<li><a href="/FulfillmentService/view/admin/storageMain.jsp"> <i class="fas fa-utensils"></i>&nbsp;창고 관리자</a></li>
-					<li><a href="/FulfillmentService/view/admin/transportMain.jsp"> <i class="fas fa-dumbbell"></i>&nbsp;운송회사 관리자</a></li>
-					<li><a href="/FulfillmentService/view/admin/supplierMain.jsp"> <i class="fas fa-couch"></i>&nbsp;구매처 관리자</a></li>
+					<li><a href="/FulfillmentService/view/supplier/supplierPayList.jsp">구매처 관리자</a></li>
+					<li><a href="/FulfillmentService/view/transport/transportPayList.jsp">운송회사 관리자</a></li>
+					<li><a href="/FulfillmentService/view/shopping/shoppingChargeList.jsp">쇼핑몰 관리자</a></li>
 				</ul>
 			</li>
 		</ul>

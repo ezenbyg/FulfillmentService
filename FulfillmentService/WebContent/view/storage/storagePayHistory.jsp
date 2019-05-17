@@ -31,7 +31,7 @@
 						<hr>
 						<ul class="nav nav-tabs">
 							<li role="presentation"><a
-								href="../main/storageOrderHistory.jsp">발주 내역</a></li>
+								href="/FulfillmentService/view/storage/storageCharge.jsp">청구</a></li>
 							<li role="presentation" class="active"><a href="#">지급</a></li>
 						</ul>
 						<table class="table table-striped">

@@ -21,115 +21,48 @@
 				<i class="fa fa-angle-right"></i> 식품
 			</h3>
 			<div class="row mt">
-				<div class="col-lg-4 col-md-4 col-sm-4 col-xs-12 desc">
-					<div class="project-wrapper">
-						<div class="project">
-							<div class="photo-wrapper">
-								<div class="photo">
-									<a class="fancybox" href="../img/의류/기능성티.PNG"> <img
-										class="../img-responsive" src="../img/의류/기능성티.PNG" " alt=""></a>
-									<p style="font-size: 20px;">기능성 티</p>
-								</div>
-								<div class="overlay"></div>
-							</div>
+				<div class="container">
+					<div class="row" style="margin-top: 70px">
+						<div class="col-md-offset-1 col-md-11">
+							<h3>${requestScope.title}</h3>
 						</div>
+						<div class="col-md-12">
+							<hr>
+						</div>
+						<c:set var="productList" value="${requestScope.storageList}" />
+						<c:set var="count" value="0" />
+						<c:forEach var="pDto" items="${productList}">
+							<c:if test="${count % 5 == 0}">
+								<div class="col-md-1"></div>
+							</c:if>
+							<div class="col-md-2">
+								<div class="thumbnail">
+									<img src="${pDto.pImgName}" alt="${pDto.pName}">
+									<div class="caption" style="text-align: center;">
+										<h4>${pDto.pName}</h4>
+										<p>가격: ${pDto.pPrice}원
+										<p>
+										<p>수량: ${pDto.pQuantity}개
+										<p>
+									</div>
+								</div>
+							</div>
+							<c:if test="${(count+1) % 5 == 4}">
+								<div class="col-md-1"></div>
+								<div class="col-md-12">
+									<hr>
+								</div>
+							</c:if>
+						</c:forEach>
 					</div>
 				</div>
-				<!-- col-lg-4 -->
-				<div class="col-lg-4 col-md-4 col-sm-4 col-xs-12 desc">
-					<div class="project-wrapper">
-						<div class="project">
-							<div class="photo-wrapper">
-								<div class="photo">
-									<a class="fancybox" href="../img/의류/볼트 로우 신발.PNG"><img
-										class="../img-responsive" src="../img/의류/볼트 로우 신발.PNG" alt=""></a>
-									<p style="font-size: 20px;">볼트 로우 신발</p>
-								</div>
-								<div class="overlay"></div>
-							</div>
-						</div>
-					</div>
-				</div>
-				<!-- col-lg-4 -->
-				<div class="col-lg-4 col-md-4 col-sm-4 col-xs-12 desc">
-					<div class="project-wrapper">
-						<div class="project">
-							<div class="photo-wrapper">
-								<div class="photo">
-									<a class="fancybox" href="../img/의류/사이드홀 로퍼.PNG"><img
-										class="../img-responsive" src="../img/의류/사이드홀 로퍼.PNG" alt=""></a>
-									<p style="font-size: 20px;">사이드홀 로퍼</p>
-								</div>
-								<div class="overlay"></div>
-							</div>
-						</div>
-					</div>
-				</div>
-				<!-- col-lg-4 -->
 			</div>
-			<!-- /row -->
-			<div class="row mt">
-				<div class="col-lg-4 col-md-4 col-sm-4 col-xs-12 desc">
-					<div class="project-wrapper">
-						<div class="project">
-							<div class="photo-wrapper">
-								<div class="photo">
-									<a class="fancybox" href="../img/의류/엔더슨벨 후드.PNG"><img
-										class="../img-responsive" src="../img/의류/엔더슨벨 후드.PNG" alt=""></a>
-									<p style="font-size: 20px;">엔더슨벨 후드</p>
-								</div>
-								<div class="overlay"></div>
-							</div>
-						</div>
-					</div>
-				</div>
-				<!-- col-lg-4 -->
-				<div class="col-lg-4 col-md-4 col-sm-4 col-xs-12 desc">
-					<div class="project-wrapper">
-						<div class="project">
-							<div class="photo-wrapper">
-								<div class="photo">
-									<a class="fancybox" href="../img/의류/커버낫 가방.PNG"><img
-										class="../img-responsive" src="../img/의류/커버낫 가방.PNG" alt=""></a>
-									<p style="font-size: 20px;">커버낫 가방</p>
-								</div>
-								<div class="overlay"></div>
-							</div>
-						</div>
-					</div>
-				</div>
-				<!-- col-lg-4 -->
-				<div class="col-lg-4 col-md-4 col-sm-4 col-xs-12 desc">
-					<div class="project-wrapper">
-						<div class="project">
-							<div class="photo-wrapper">
-								<div class="photo">
-									<a class="fancybox" href="../img/의류/크로스백 2.PNG"><img
-										class="../img-responsive" src="../img/의류/크로스백 2.PNG" alt=""></a>
-									<p style="font-size: 20px;">크로스백</p>
-								</div>
-								<div class="overlay"></div>
-							</div>
-						</div>
-					</div>
-				</div>
-				<!-- col-lg-4 -->
-			</div>
-			<!-- /row -->
-			<div class="row mt mb">
-				<!-- col-lg-4 -->
-				<!-- col-lg-4 -->
-			</div>
-			<!-- /row -->
+			<c:set var="pageList" value="${requestScope.pageList}" />
+			<c:forEach var="pageNo" items="${pageList}">
+				${pageNo}
+				</c:forEach>
 		</section>
 		<%@ include file="../common/_bottom.jspf"%>
 	</section>
-	<!--script for this page-->
-	<script type="text/javascript">
-    $(function() {
-      //    fancybox
-      jQuery(".fancybox").fancybox();
-    });
-  </script>
 </body>
 </html>

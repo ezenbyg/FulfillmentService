@@ -10,9 +10,13 @@ public class InvoiceDTO {
 	private String vDate;
 	private int vPrice;
 	private String vState;
+	private int vlogisId;
 	private int vQuantity;
-	private String vProductId;
+	private int vProductId;
 	private String vProductName;
+	private String vTransportName;
+	private String vProductState;
+	private String vlogisName;
 	
 	public InvoiceDTO() {}
 
@@ -109,11 +113,11 @@ public class InvoiceDTO {
 		this.vQuantity = vQuantity;
 	}
 
-	public String getvProductId() {
+	public int getvProductId() {
 		return vProductId;
 	}
 
-	public void setvProductId(String vProductId) {
+	public void setvProductId(int vProductId) {
 		this.vProductId = vProductId;
 	}
 
@@ -125,10 +129,44 @@ public class InvoiceDTO {
 		this.vProductName = vProductName;
 	}
 
+	public String getvTransportName() {
+		return vTransportName;
+	}
+
+	public void setvTransportName(String vTransportName) {
+		this.vTransportName = vTransportName;
+	}
+
+	public int getVlogisId() {
+		return vlogisId;
+	}
+
+	public void setVlogisId(int vlogisId) {
+		this.vlogisId = vlogisId;
+	}
+
+	public String getvProductState() {
+		return vProductState;
+	}
+
+	public void setvProductState(String vProductState) {
+		this.vProductState = vProductState;
+	}
+
+	public String getVlogisName() {
+		return vlogisName;
+	}
+
+	public void setVlogisName(String vlogisName) {
+		this.vlogisName = vlogisName;
+	}
+
 	@Override
 	public String toString() {
 		return "InvoiceDTO [vId=" + vId + ", vAdminId=" + vAdminId + ", vShopName=" + vShopName + ", vName=" + vName
 				+ ", vTel=" + vTel + ", vAddress=" + vAddress + ", vDate=" + vDate + ", vPrice=" + vPrice + ", vState="
-				+ vState + "]";
+				+ vState + ", vlogisId=" + vlogisId + ", vQuantity=" + vQuantity + ", vProductId=" + vProductId
+				+ ", vProductName=" + vProductName + ", vTransportName=" + vTransportName + ", vProductState="
+				+ vProductState + ", vlogisName=" + vlogisName + "]";
 	}
 }

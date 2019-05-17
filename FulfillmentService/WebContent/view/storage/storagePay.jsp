@@ -10,7 +10,12 @@
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-
+<script type="text/javascript">
+	function onloadPage(i) {
+		location.href = i;
+		//console.log(i.value);
+	}
+</script>
 <!-- ==================================================================== -->
 <title>대금 청구/지급</title>
 <jsp:include page="../common/resource.jspf"></jsp:include>
@@ -21,8 +26,7 @@
 
 	<section id="main-content">
 		<section class="wrapper">
-			<i class="fa fa-angle-right"></i>
-			<h3>청구 / 지급 조회</h3>
+			<h3>청구 / 지급 조회 (창고)</h3>
 			<div class="row">
 				<div class="col-md-12">
 					<div class="content-panel">
@@ -31,59 +35,68 @@
 						</h4>
 						<hr>
 						<ul class="nav nav-tabs">
-							<li role="presentation"><a
-								href="../storage/storageCharge.jsp">청구</a></li>
+							<li role="presentation"><a href="../storage/storageCharge.jsp">청구</a></li>
 							<li role="presentation" class="active"><a href="#">지급</a></li>
 						</ul>
 						<div class="col-md-8"></div>
-						<div class="col-md-offset-3">
-							기간 조회 : <input id="monthpicker" type="text" /> 
-							<input type="button" class="btn btn-primary" id="btn_monthpicker" value="조회" />
+						<div class="col-md-offset-10" style="margin-bottom: -15px; margin-top: 10px;">
+							<input type="date" id="datepicker1">&nbsp;
+							<input type="button" class="btn btn-info btn-xs" value="조회">
 						</div>
 						<hr>
 						<table class="table">
 							<thead>
-							<tr>
-									<th><select id="Payment" onChange="onloadPage(this);"
-										style="border: 5px;">
-											<option value="storagePay.jsp">구매처</option>
-											<option value="storagePay_T.jsp">운송회사</option>
-									</select></th>
-									<th>송장ID</th>
-									<th>물품명</th>
-									<th>수량</th>
-									<th>총가격</th>
+								<tr>
+									<th>
+										<form name="move" method="post">
+											<select id="Payment" onChange="onloadPage(this.value);" style="border: 5px;">
+												<option value="/FulfillmentService/control/payServlet?action=payList&page=1&firstAdminId=3">구매처</option>
+												<option value="/FulfillmentService/control/payServlet?action=payList&page=1&firstAdminId=4">운송회사</option>
+											</select>
+										</form>
+									</th>
+									<th>지급번호</th>
+									<th>회사이름</th>
+									<th>가격</th>
 									<th>날짜</th>
+									<th>지급상태</th>
 								</tr>
 							</thead>
 							<tbody>
-								<tr>
-									<th>?</th>
-									<th>?</th>
-									<th>?</th>
-									<th>?</th>
-									<th>?</th>
-									<th>
-										<!--  style="font-size: 14px"><input type="date" id="datepicker1">&nbsp;&nbsp; -->
-									</th>
-								</tr>
+								<c:set var="payList" value="${requestScope.payList}" />
+								<c:forEach var="yDto" items="${payList}">
+									<tr>
+										<td onclick="modal();">${yDto.pId}</td>
+										<td>${yDto.pName}</td>
+										<td>${yDto.pPrice}</td>
+										<td>${yDto.pQuantity}</td>
+										<td>${yDto.pState}</td>
+									</tr>
+								</c:forEach>
+								<!--  style="font-size: 14px"><input type="date" id="datepicker1">&nbsp;&nbsp; -->
 							</tbody>
 						</table>
-						<div class="panel panel-danger" align="center">
-							<table class="table table-striped" >
-								<tr>
-									<th>회사이름</th>
-									<th>계좌</th>
-									<th>총가격</th>
-									<th></th>
-								</tr>
-								<tr>
-									<th>#</th>
-									<th>#</th>
-									<th>#</th>
-									<th><input type="submit" class="btn btn-primary"
-										value="지급"></th>
-								</tr>
+						<div align="center">
+							<table class="table table-striped">
+								<thead>
+									<tr>
+										<th>회사이름</th>
+										<th>계좌</th>
+										<th>총가격</th>
+										<th></th>
+									</tr>
+								</thead>
+								<tbody>
+									<c:set var="payList" value="${requestScope.payList}" />
+									<c:forEach var="yDto" items="${payList}">
+										<tr>
+											<th>${yDto.pName}</th>
+											<th>${yDto.pBankId}</th>
+											<th>${yDto.pTotalPrice}</th>
+											<th><input type="submit" class="btn btn-primary" value="지급"></th>
+										</tr>
+									</c:forEach>
+								</tbody>
 							</table>
 						</div>
 					</div>
@@ -92,7 +105,6 @@
 		</section>
 		<%@ include file="../common/_bottom.jspf"%>
 	</section>
-	<!-- ==================================================================== -->
 	<script>
 		/* MonthPicker 옵션 */
 		options = {
@@ -119,23 +131,23 @@
 				});
 	</script>
 	<!-- <script>
-		$.datepicker.setDefaults({
-			dateFormat : 'yy-mm-dd',
-			prevText : '이전 달',
-			nextText : '다음 달',
-			monthNames : [ '1월', '2월', '3월', '4월', '5월', '6월', '7월', '8월',
-					'9월', '10월', '11월', '12월' ],
-			monthNamesShort : [ '1월', '2월', '3월', '4월', '5월', '6월', '7월', '8월',
-					'9월', '10월', '11월', '12월' ],
-			dayNames : [ '일', '월', '화', '수', '목', '금', '토' ],
-			dayNamesShort : [ '일', '월', '화', '수', '목', '금', '토' ],
-			dayNamesMin : [ '일', '월', '화', '수', '목', '금', '토' ],
-			showMonthAfterYear : true,
-			yearSuffix : '년'
-		});
-		$(function() {
-			$("#datepicker1").datepicker();
-		});
-	</script> -->
+	$.datepicker.setDefaults({
+		dateFormat : 'yy-mm-dd',
+		prevText : '이전 달',
+		nextText : '다음 달',
+		monthNames : [ '1월', '2월', '3월', '4월', '5월', '6월', '7월', '8월',
+				'9월', '10월', '11월', '12월' ],
+		monthNamesShort : [ '1월', '2월', '3월', '4월', '5월', '6월', '7월', '8월',
+				'9월', '10월', '11월', '12월' ],
+		dayNames : [ '일', '월', '화', '수', '목', '금', '토' ],
+		dayNamesShort : [ '일', '월', '화', '수', '목', '금', '토' ],
+		dayNamesMin : [ '일', '월', '화', '수', '목', '금', '토' ],
+		showMonthAfterYear : true,
+		yearSuffix : '년'
+	});
+	$(function() {
+		$("#datepicker1").datepicker();
+	});
+</script> -->
 </body>
 </html>

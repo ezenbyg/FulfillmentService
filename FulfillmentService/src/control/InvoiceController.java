@@ -17,8 +17,9 @@ import invoice.InvoiceDTO;
 import invoice.InvoiceProductDTO;
 import storage.StorageDAO;
 import storage.StorageDTO;
+import transport.Central;
 
-public class FileController {
+public class InvoiceController {
 	private static final Logger LOG = LoggerFactory.getLogger(InvoiceDAO.class);
 	ArrayList<InvoiceDTO> invoiceList = new ArrayList<InvoiceDTO>();
 	ArrayList<InvoiceProductDTO> productList = new ArrayList<InvoiceProductDTO>();
@@ -77,13 +78,18 @@ public class FileController {
 	                		System.out.println(token[p] + " ");
 							if(p==0)invoice.setvName(token[p]);
 							if(p==1)invoice.setvTel(token[p]);
-							if(p==2)invoice.setvAddress(token[p]);
+							if(p==2) {
+								invoice.setvAddress(token[p]);
+								invoice.setVlogisId(selectLogis(token[p]));
+							}
 							if(p==3) {
 								product.setIpProductId(Integer.parseInt(token[p]));
 								pDto = pDao.getOneProductById(Integer.parseInt(token[p]));
-								invoice.setvPrice(pDto.getpPrice());
 							}
-							if(p==4)product.setIpQuantity(Integer.parseInt(token[p]));
+							if(p==4) {
+								product.setIpQuantity(Integer.parseInt(token[p]));
+								invoice.setvPrice(pDto.getpPrice()*product.getIpQuantity());
+							}
 	                	}
 	                }
 	                LOG.debug("readCSV실행");
@@ -159,5 +165,32 @@ public class FileController {
 		}
 		LOG.debug(String.valueOf(invoiceNumber));
 		return invoiceNumber;
+	}
+    
+    // 운송 회사 번호 얻기
+	int selectLogis(String addr) {
+		int logisId = 0;
+		char ad = addr.charAt(0);
+		
+		if (ad=='서' || ad=='인') 
+			logisId = 40001;
+		else if (ad=='충' || ad=='세' || ad=='강')
+			logisId = 40002;
+		else if (ad=='부' || ad=='울')
+			logisId = 40003;
+		else if (ad=='광' || ad=='전' || ad=='제')
+			logisId = 40003;
+		else if (ad=='경') {
+			if (addr.charAt(1) == '기')
+				logisId = 40001;
+			else
+				logisId = 40003;
+		} else if (ad=='대') {
+			if (addr.charAt(1) == '전')
+				logisId = 40002;
+			else
+				logisId = 40003;
+		}
+		return logisId;
 	}
 }

@@ -13,7 +13,12 @@
 <!-- ==================================================================== -->
 <title>재고조사 및 발주</title>
 <jsp:include page="../common/resource.jspf"></jsp:include>
-
+<script type="text/javascript">
+	function onloadPage(i) {
+		location.href = i;
+		//console.log(i.value);
+	}
+</script>
 </head>
 <body>
 	<%@ include file="../common/_admin_top.jspf"%>
@@ -30,15 +35,27 @@
 								<i class="fa fa-angle-right"></i> 창고 관리 (재고조사 / 발주)
 							</h4>
 							<hr>
-							<div style="margin-left: 80%;">
-								<select id="menu" onChange="onloadPage(this);"
-									style="border: 5px;">
-									<option value="">의류</option>
-									<option value="">식품</option>
-									<option value="">스포츠</option>
-									<option value="">가구</option>
-									<option value="">가전제품</option>
-								</select> <input type="button" value="조회">
+							<div style="margin-left: 50%;">
+							<div class="col-md-6">
+							<input type="text" placeholder="검색" style="text-align: center;">
+							<input type="button" value="검색" class="btn btn-info btn-xs"></div>
+								<div class="col-md-6">
+								<form name="move" method="post">
+									<select id="menu" onChange="onloadPage(this.value);"
+										style="border: 5px;">
+										<option
+											value="/FulfillmentService/control/productServlet?action=category&pathNum=2&page=1&categoryNum=30001&name=supplier">의류</option>
+										<option
+											value="/FulfillmentService/control/productServlet?action=category&pathNum=2&page=1&categoryNum=30002&name=supplier">식품</option>
+										<option
+											value="/FulfillmentService/control/productServlet?action=category&pathNum=2&page=1&categoryNum=30003&name=supplier">스포츠</option>
+										<option
+											value="/FulfillmentService/control/productServlet?action=category&pathNum=2&page=1&categoryNum=30004&name=supplier">가구</option>
+										<option
+											value="/FulfillmentService/control/productServlet?action=category&pathNum=2&page=1&categoryNum=30005&name=supplier">가전제품</option>
+									</select>
+								</form>
+								</div>
 							</div>
 							<table class="table table-striped">
 								<thead>
@@ -51,13 +68,16 @@
 									</tr>
 								</thead>
 								<tbody>
-									<tr>
-										<th onclick="modal();">#</th>
-										<th>#</th>
-										<th>#</th>
-										<th>#</th>
-										<th>#</th>
-									</tr>
+									<c:set var="stockList" value="${requestScope.stockList}" />
+									<c:forEach var="pDto" items="${stockList}">
+										<tr>
+											<td onclick="modal();" ><a href="/FulfillmentService/control/productServlet?action=modal&pId=${pDto.pId}" >${pDto.pId}</a></td>
+											<td>${pDto.pName}</td>
+											<td>${pDto.pPrice}</td>
+											<td>${pDto.pQuantity}</td>
+											<td>${pDto.pState}</td>
+										</tr>
+									</c:forEach>
 								</tbody>
 							</table>
 						</div>
@@ -69,13 +89,14 @@
 				<div class="row" id="dialog" style="display: none;">
 					<div class="col-md-12">
 						<table class="table table-bordered table-striped table-condensed">
+						<c:set var="modal" value="${requestScope.modal}"/>
 							<tr>
 								<td>구매처이름</td>
-								<td></td>
+								<td>${ProductProc.title}</td>
 							</tr>
 							<tr>
 								<td>제품코드</td>
-								<td></td>
+								<td>${modal.pId}</td>
 							</tr>
 							<tr>
 								<td>제품명</td>
@@ -83,21 +104,21 @@
 							</tr>
 							<tr>
 								<td>발주수량</td>
-								<td><input type="text"></td>
+								<td><input type="text" id="quantity"></td>
 							</tr>
 							<tr>
 								<td>물품가격</td>
-								<td></td>
+								<td>${modal.pPrice}</td>
 							</tr>
 							<tr>
 								<td>총가격</td>
-								<td></td>
+								<td>${modal.pPrice}*${param.quantity}</td>
 							</tr>
 
 							<tr>
 								<td colspan="2" align="center">
-									<button type="button1" class="btn btn-primary">발주</button>
-									<button type="button2" class="btn btn-primary">닫기</button>
+									<button type="button" class="btn btn-primary">발주</button>
+									<button type="button" class="btn btn-primary">닫기</button>
 								</td>
 							</tr>
 
@@ -112,12 +133,13 @@
 </body>
 
 <script>
-//데이터 가져올때 여기서 가져오세요
-// https://api.jqueryui.com/1.12/dialog/
-function modal(){
-	$("#dialog").dialog({
-		  dialogClass: "alert",
+	//데이터 가져올때 여기서 가져오세요
+	// https://api.jqueryui.com/1.12/dialog/
+	function modal() {
+		$("#dialog").dialog({
+			dialogClass : "alert",
+			$(this).show();
 		});
-}
+	}
 </script>
 </html>

@@ -8,6 +8,7 @@ CREATE TABLE invoice (
 	vDate datetime NOT NULL DEFAULT current_timestamp,
 	vPrice int(10) DEFAULT 0,
 	vState varchar(10) DEFAULT "출고대기",
+	vlogisId int unsigned default 0,
   	PRIMARY KEY (vId),
   	FOREIGN KEY (vAdminId) REFERENCES admins(aId)
   ) DEFAULT CHARSET=utf8;

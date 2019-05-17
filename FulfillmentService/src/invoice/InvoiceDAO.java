@@ -11,6 +11,8 @@ import java.util.ArrayList;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import storage.StorageDAO;
+import storage.StorageDTO;
 import util.DBManager;
 
 
@@ -23,26 +25,33 @@ public class InvoiceDAO {
 	public ArrayList<InvoiceDTO> getAllInvoiceLists() {
 		ArrayList<InvoiceDTO> vList = new ArrayList<InvoiceDTO>();
 		conn = DBManager.getConnection();
-		String sql = "select vId, vAdminId, vShopName, vName, vTel, vAddress, vDate, vPrice, vState, p.ipQuantity, p.ipProductId "
+		String sql = "select v.vId, v.vShopName, v.vName, v.vTel, v.vAddress, v.vDate, v.vPrice, vState, a.aName, a.aId, p.ipProductId, p.ipQuantity, s.pName, s.pState "
 				+ "from invoice as v " 
 				+ "inner join invoiceproduct as p "
-				+ "on v.vId=p.pInvoiceId;";
+				+ "on v.vId=p.pInvoiceId "
+				+ "inner join storage as s "
+				+ "on s.pId=p.ipProductId " 
+				+ "inner join admins as a "
+				+ "on a.aId =v.vlogisId;";
 		try {
 			pstmt = conn.prepareStatement(sql);
 			rs = pstmt.executeQuery();
 			while(rs.next()) {
 				InvoiceDTO vDto = new InvoiceDTO();
 				vDto.setvId(rs.getString(1));
-				vDto.setvAdminId(rs.getInt(2));
-				vDto.setvShopName(rs.getString(3));
-				vDto.setvName(rs.getString(4));
-				vDto.setvTel(rs.getString(5));
-				vDto.setvAddress(rs.getString(6));
-				vDto.setvDate(rs.getString(7));
-				vDto.setvPrice(rs.getInt(8));
-				vDto.setvState(rs.getString(9));
-				vDto.setvQuantity(rs.getInt(10));
-				vDto.setvProductId(rs.getString(11));
+				vDto.setvShopName(rs.getString(2));
+				vDto.setvName(rs.getString(3));
+				vDto.setvTel(rs.getString(4));
+				vDto.setvAddress(rs.getString(5));
+				vDto.setvDate(rs.getString(6));
+				vDto.setvPrice(rs.getInt(7));
+				vDto.setvState(rs.getString(8));
+				vDto.setvTransportName(rs.getString(9));
+				vDto.setVlogisId(rs.getInt(10));
+				vDto.setvProductId(rs.getInt(11));
+				vDto.setvQuantity(rs.getInt(12));
+				vDto.setvProductName(rs.getString(13));
+				vDto.setvProductState(rs.getString(14));
 				vList.add(vDto);
 			}
 		} catch (SQLException e) {
@@ -61,11 +70,23 @@ public class InvoiceDAO {
 		return vList;
 	}
 	
+	// 송장에 있는 제품번호와 수량을 주어서 제품상태 변경
+	public void changeProductState(int pId, int pQuantity) {
+		StorageDAO sDao = new StorageDAO();
+		StorageDTO sDto = new StorageDTO();
+		sDto = sDao.getOneProductById(pId);
+		if(sDto.getpQuantity() < pQuantity) {
+			sDao.updateProductState("재고부족", pId);
+		} else if((sDto.getpQuantity() >= pQuantity) && (pQuantity < 10)) {
+			sDao.updateProductState("재고부족예상", pId);
+		} else sDao.updateProductState("P", pId);
+	}
+	
 	// Invoice
 	public void addInvoice(InvoiceDTO invoice) {
 		conn = DBManager.getConnection();
-		String sql = "insert into invoice(vId, vAdminId, vShopName, vName, vTel, vAddress, vDate, vPrice) "
-				+ "values(?, ?, ?, ?, ?, ?, ?, ?);";
+		String sql = "insert into invoice(vId, vAdminId, vShopName, vName, vTel, vAddress, vDate, vPrice, vlogisId) "
+				+ "values(?, ?, ?, ?, ?, ?, ?, ?, ?);";
 		LOG.trace("addInvoice(): " + invoice.toString());
 		try {
 			pstmt = conn.prepareStatement(sql);
@@ -77,7 +98,7 @@ public class InvoiceDAO {
 			pstmt.setString(6, invoice.getvAddress());
 			pstmt.setString(7, invoice.getvDate());
 			pstmt.setInt(8, invoice.getvPrice());
-			
+			pstmt.setInt(9, invoice.getVlogisId());
 			pstmt.executeUpdate();
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -118,19 +139,28 @@ public class InvoiceDAO {
 		}
 	}
 	
-	public InvoiceDTO getOneInvoice(int vId) { // 송장 번호에 해당하는 컬럼값 얻어오기
+	public InvoiceDTO getInvoiceById(String vId) { // 송장 번호에 해당하는 컬럼값 얻어오기
 		InvoiceDTO vDto = new InvoiceDTO();
 		conn = DBManager.getConnection();
-		String sql = "select * from invoice where vId=?;";
+		String sql = "select v.vId, v.vShopName, v.vName, a.aName, v.vState, p.ipQuantity, v.vPrice "
+				+ "from invoice as v " 
+				+ "inner join invoiceproduct as p "
+				+ "on v.vId=p.pInvoiceId "
+				+ "inner join admins as a "
+				+ "on a.aId=v.vlogisId "
+				+ "where v.vId=?;";
 		try {
 			pstmt = conn.prepareStatement(sql);
-			pstmt.setInt(1, vId);
+			pstmt.setString(1, vId);
 			rs = pstmt.executeQuery();
 			while(rs.next()) {
 				vDto.setvId(rs.getString(1));
-				vDto.setvAdminId(rs.getInt(2));
-				vDto.setvDate(rs.getString(3));
-				vDto.setvState(rs.getString(4));
+				vDto.setvShopName(rs.getString(2));
+				vDto.setvName(rs.getString(3));
+				vDto.setvTransportName(rs.getString(4));
+				vDto.setvState(rs.getString(5));
+				vDto.setvQuantity(rs.getInt(6));
+				vDto.setvPrice(rs.getInt(7));
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -186,6 +216,47 @@ public class InvoiceDAO {
 		LocalDateTime cTime = LocalDateTime.now();	
     	DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
     	return cTime.format(dtf);
+	}
+	
+	// 송장에 해당하는 제품들 가져오기 
+	public ArrayList<InvoiceProductDTO> getProductByInvoiceId() {
+		ArrayList<InvoiceProductDTO> pList = new ArrayList<InvoiceProductDTO>();
+		conn = DBManager.getConnection();
+		String sql = null;
+		sql = "select p.pInvoiceId, p.ipQuantity, s.pName, s.pState "
+				+ "from invoiceproduct as p " 
+				+ "inner join storage as s "
+				+ "on p.ipProductId=s.pId "
+				+ "inner join invoice as v "
+				+ "on v.vId=p.pInvoiceId;";
+		try {
+			pstmt = conn.prepareStatement(sql);
+			//pstmt.setInt(1, vId);
+			LOG.trace(sql);
+			rs = pstmt.executeQuery();
+			while (rs.next()) {	
+				InvoiceProductDTO pDto = new InvoiceProductDTO();
+				pDto.setpInvoiceId(rs.getString(1));
+				pDto.setIpQuantity(rs.getInt(2));
+				pDto.setIpProductName(rs.getString(3));
+
+				pList.add(pDto);
+				LOG.debug(pDto.toString());
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+			LOG.info("selectJoinAll(): Error Code : {}", e.getErrorCode());
+			return null; 
+		} finally { 
+			try {
+				if(pstmt != null) pstmt.close();
+				if(conn != null) conn.close();
+				if(rs != null) rs.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+		return pList;
 	}
 	
 	public ArrayList<InvoiceDTO> selectJoinAll(int page) {

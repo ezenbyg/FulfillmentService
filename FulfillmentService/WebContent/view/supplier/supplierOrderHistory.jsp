@@ -15,7 +15,7 @@
 <jsp:include page="../common/resource.jspf"></jsp:include>
 </head>
 <body>
-	<%@ include file="../common/_main_top.jspf"%>
+	<%@ include file="../common/_admin_top.jspf"%>
 	<%@ include file="../common/_storage_nav.jspf"%>
 	<section id="main-content">
 		<section class="wrapper">

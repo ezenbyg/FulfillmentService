@@ -5,6 +5,7 @@ public class InvoiceProductDTO {
 	private int ipProductId;
 	private String ipProductName;
 	private int ipQuantity;
+	private String ipState;
 	
 	public InvoiceProductDTO() {}
 
@@ -48,9 +49,17 @@ public class InvoiceProductDTO {
 		this.ipQuantity = ipQuantity;
 	}
 
+	public String getIpState() {
+		return ipState;
+	}
+
+	public void setIpState(String ipState) {
+		this.ipState = ipState;
+	}
+
 	@Override
 	public String toString() {
 		return "InvoiceProductDTO [pInvoiceId=" + pInvoiceId + ", ipProductId=" + ipProductId + ", ipProductName="
-				+ ipProductName + ", ipQuantity=" + ipQuantity + "]";
+				+ ipProductName + ", ipQuantity=" + ipQuantity + ", ipState=" + ipState + "]";
 	}
 }

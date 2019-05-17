@@ -1,9 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
-<%
-	request.setCharacterEncoding("UTF-8");
-%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -15,7 +12,7 @@
 <jsp:include page="../common/resource.jspf"></jsp:include>
 </head>
 <body>
-	<%@ include file="../common/_main_top.jspf" %>
+	<%@ include file="../common/_admin_top.jspf" %>
 	<%@ include file="../common/_transport_nav.jspf"%>
 	<section id="main-content">
 		<section class="wrapper">

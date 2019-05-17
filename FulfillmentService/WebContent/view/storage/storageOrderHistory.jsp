@@ -24,6 +24,10 @@
 							<i class="fa fa-angle-right"></i> 창고 관리 (발주내역 조회)
 						</h4>
 						<hr>
+						<ul class="nav nav-tabs">
+							<li role="presentation"  class="active"><a href="#">발주 내역</a></li>
+							<li role="presentation"><a href="/FulfillmentService/view/storage/storagePayHistory.jsp">지급</a></li>
+						</ul>
 						<table class="table table-striped">
 							<thead>
 								<tr>

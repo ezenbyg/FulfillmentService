@@ -11,13 +11,10 @@ import org.slf4j.LoggerFactory;
 
 import invoice.InvoiceDTO;
 import util.DBManager;
+import util.ProductState;
 
 public class ReleaseDAO {
 	private static final Logger LOG = LoggerFactory.getLogger(ReleaseDAO.class);
-	public static final int 출고 = 1;
-	public static final int 배송전 = 2;
-	public static final int 배송중 = 3;
-	public static final int 배송완료 = 4;
 	Connection conn;
 	PreparedStatement pstmt;
 	ResultSet rs;
@@ -32,17 +29,10 @@ public class ReleaseDAO {
 			while (rs.next()) {
 				ReleaseDTO rDto = new ReleaseDTO();
 				rDto.setrId(rs.getInt(1));
-				rDto.setrTransportId(rs.getInt(2));
-				rDto.setrShoppingId(rs.getInt(3));
-				rDto.setrInvoiceId(rs.getString(4));
-				rDto.setrName(rs.getString(5));
-				rDto.setrTel(rs.getString(6));
-				rDto.setrAddress(rs.getString(7));
-				rDto.setrProductName(rs.getString(8));
-				rDto.setrQuantity(rs.getInt(9));
-				rDto.setrDate(rs.getString(10));
-				rDto.setrPrice(rs.getInt(11));
-				rDto.setrState(rs.getString(12));
+				rDto.setrInvoiceId(rs.getString(2));
+				rDto.setrTransportName(rs.getString(3));
+				rDto.setrDate(rs.getString(4));
+				rDto.setrState(rs.getString(5));
 				rList.add(rDto);
 			}
 		} catch (SQLException e) {
@@ -64,20 +54,13 @@ public class ReleaseDAO {
 	public void addReleaseList(ReleaseDTO rDto) {
 		LOG.trace("addReleaseList(): " + rDto.toString());
 		conn = DBManager.getConnection();
-		String sql = "insert into p_release(rTransportId, rShoppingId, rInvoiceId, rName, rTel, rAddress, rProductName, rQuantity, rDate, rPrice)"
-				+ " values(?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+		String sql = "insert into p_release(rInvoiceId, rTransportName, rDate)"
+				+ " values(?, ?, ?)";
 		try {
 			pstmt = conn.prepareStatement(sql);
-			pstmt.setInt(1, rDto.getrTransportId());
-			pstmt.setInt(2, rDto.getrShoppingId());
-			pstmt.setString(3, rDto.getrInvoiceId());
-			pstmt.setString(4, rDto.getrName());
-			pstmt.setString(5, rDto.getrTel());
-			pstmt.setString(6, rDto.getrAddress());
-			pstmt.setString(7, rDto.getrProductName());
-			pstmt.setInt(8, rDto.getrQuantity());
+			pstmt.setString(1, rDto.getrInvoiceId());
+			pstmt.setString(2, rDto.getrTransportName());
 			pstmt.setString(9, rDto.getrDate());
-			pstmt.setInt(10, rDto.getrPrice());
 			
 			pstmt.executeUpdate();
 		} catch (SQLException e) {
@@ -103,17 +86,10 @@ public class ReleaseDAO {
 			rs = pstmt.executeQuery();
 			while(rs.next()) {
 				rDto.setrId(rs.getInt(1));
-				rDto.setrTransportId(rs.getInt(2));
-				rDto.setrShoppingId(rs.getInt(3));
-				rDto.setrInvoiceId(rs.getString(4));
-				rDto.setrName(rs.getString(5));
-				rDto.setrTel(rs.getString(6));
-				rDto.setrAddress(rs.getString(7));
-				rDto.setrProductName(rs.getString(8));
-				rDto.setrQuantity(rs.getInt(9));
-				rDto.setrDate(rs.getString(10));
-				rDto.setrPrice(rs.getInt(11));
-				rDto.setrState(rs.getString(12));
+				rDto.setrInvoiceId(rs.getString(2));
+				rDto.setrTransportName(rs.getString(3));
+				rDto.setrDate(rs.getString(4));
+				rDto.setrState(rs.getString(5));
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -213,17 +189,10 @@ public class ReleaseDAO {
 			while (rs.next()) {	
 				ReleaseDTO rDto = new ReleaseDTO();
 				rDto.setrId(rs.getInt(1));
-				rDto.setrTransportId(rs.getInt(2));
-				rDto.setrShoppingId(rs.getInt(3));
-				rDto.setrInvoiceId(rs.getString(4));
-				rDto.setrName(rs.getString(5));
-				rDto.setrTel(rs.getString(6));
-				rDto.setrAddress(rs.getString(7));
-				rDto.setrProductName(rs.getString(8));
-				rDto.setrQuantity(rs.getInt(9));
-				rDto.setrDate(rs.getString(10));
-				rDto.setrPrice(rs.getInt(11));
-				rDto.setrState(rs.getString(12));
+				rDto.setrInvoiceId(rs.getString(2));
+				rDto.setrTransportName(rs.getString(3));
+				rDto.setrDate(rs.getString(4));
+				rDto.setrState(rs.getString(5));
 				rList.add(rDto);
 				LOG.trace(sql);
 			}
@@ -295,5 +264,19 @@ public class ReleaseDAO {
 			}
 		}
 		return vList;
+	}
+	
+	// 출고 가능 여부 판단 메소드
+	public boolean isPossibleRelease(String pState) {
+		ProductState state = ProductState.valueOf(pState);
+		switch(state) {
+		case P : 
+			return true;
+		case 제품부족 : 
+			return false;
+		case 제품부족예상 :
+			return true;
+		}
+		return true;
 	}
 }

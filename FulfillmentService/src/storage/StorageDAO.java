@@ -144,6 +144,30 @@ public class StorageDAO {
 			}
 		}
 	}
+	
+	// 재고 상태 변경
+	public void updateProductState(String pState, int pId) {
+		LOG.debug("");
+		conn = DBManager.getConnection();
+		String sql = "update storage set pState=? where pId=?;";
+		try {
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setString(1, pState);
+			pstmt.setInt(2, pId);
+			pstmt.executeUpdate();
+			LOG.trace(sql);
+		} catch (SQLException e) {
+			e.printStackTrace();
+			LOG.info("updateProductState() Error Code : {}", e.getErrorCode());
+		} finally {
+			try {
+				pstmt.close();
+				conn.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+	}
 
 	// 항목별 상품 조회
 	public ArrayList<StorageDTO> getTitleProducts(int category, int page) {

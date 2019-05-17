@@ -5,16 +5,16 @@
       <div id="sidebar" class="nav-collapse ">
         <!-- sidebar menu start-->
         <ul class="sidebar-menu" id="nav-accordion">
-            	<li class="menu"><a href="/FulfillmentService/view/shopping/shoppingChargeList.jsp">청구리스트</a></li>
-				<li class="menu"><a href="/FulfillmentService/view/shopping/shoppinginvoice.jsp">송장보내기</a></li>
-				<li class="menu"><a href="/FulfillmentService/view/shopping/shoppingInvoiceDetail.jsp">송장내역 조회</a></li>
+            	<li class="menu"><a href="/FulfillmentService/view/shopping/shoppingChargeList.jsp"> <i class="fa fa-list-ul"></i> 청구리스트</a></li>
+				<li class="menu"><a href="/FulfillmentService/view/shopping/shoppingInvoiceDetail.jsp"> <i class="fa fa-search"></i> 송장내역 조회</a></li>
+				<li class="menu"><a href="/FulfillmentService/view/shopping/shoppinginvoice.jsp"> <i class="fa fa-share"></i> 송장보내기</a></li>
 	
-		<li class="sub-menu"><a href="javascript:;"> <i class="fa fa-desktop"></i> <span>관리자</span></a>
+		<li class="sub-menu"><a href="javascript:;"> <i class="fa fa-cogs"></i><span>관리자</span>&nbsp;&nbsp;<i class="fa fa-caret-down"></i></a>
 				<ul class="sub">
-					<li><a href="/FulfillmentService/view/admin/shoppingMain.jsp"> <i class="fas fa-tshirt"></i>&nbsp;쇼핑몰 관리자</a></li>
-					<li><a href="/FulfillmentService/view/admin/storageMain.jsp"> <i class="fas fa-utensils"></i>&nbsp;창고 관리자</a></li>
-					<li><a href="/FulfillmentService/view/admin/transportMain.jsp"> <i class="fas fa-dumbbell"></i>&nbsp;운송회사 관리자</a></li>
-					<li><a href="/FulfillmentService/view/admin/supplierMain.jsp"> <i class="fas fa-couch"></i>&nbsp;구매처 관리자</a></li>
+					<li><a href="/FulfillmentService/view/storage/storageCharge.jsp"> <i class="fas fa-utensils"></i>&nbsp;창고 관리자</a></li>
+					<li><a href="/FulfillmentService/view/transport/transportPayList.jsp"> <i class="fas fa-dumbbell"></i>&nbsp;운송회사 관리자</a></li>
+					<li><a href="/FulfillmentService/view/supplier/supplierPayList.jsp"> <i class="fas fa-couch"></i>&nbsp;구매처 관리자</a></li>
+					
 				</ul>
 			</li>
 		</ul>
