@@ -30,7 +30,7 @@
 							<li role="presentation" class="active"><a href="#">출고</a></li>
 						</ul>
 						<c:set var="vList" value="${requestScope.vList}" />
-						<c:forEach var="vDto" items="${vList}">
+						<c:set var="vDetailList" value="${requestScope.vDetailList}" />
 						<table class="table table-striped">
 							<thead>
 								<tr>
@@ -41,9 +41,11 @@
 									<th>전화번호</th>
 									<th>주소</th>
 									<th>날짜</th>
+									<th>상태</th>
 								</tr>
 							</thead>
 							<tbody>
+							<c:forEach var="vDto" items="${vList}">
 								<tr>
 									<th><a data-target="#modal${vDto.vId}" data-toggle="modal">${vDto.vId}</a></th>
 									<th>${vDto.vTransportName}</th>
@@ -52,15 +54,17 @@
 									<th>${vDto.vTel}</th>
 									<th>${vDto.vAddress}</th>
 									<th>${vDto.vDate}</th>
+									<th>${vDto.vState}</th>
+								</tr>
+							</c:forEach>
 							</tbody>
 						</table>
-						</c:forEach>
 					</div>
 				</div>
 				<!-- modal -->
 		<div class="row">
-		<c:forEach var="vDto" items="${vList}">
-			<div class="modal" id="modal${vDto.vId}" tabindex="-1">
+		<c:forEach var="vDetailList" items="${vDetailList}">
+			<div class="modal" id="modal${vDetailList.vId}" tabindex="-1">
 				<div class="modal-dialog modal-md">
 					<div class="modal-content">
 						<div class="modal-header">
@@ -76,10 +80,10 @@
 								<td>제품상태</td>
 							</tr>
 							<tr>
-								<td>${vDto.vId}</td>
-								<td>${vDto.vProductName}</td>
-								<td>${vDto.vQuantity}</td>
-								<td>${vDto.vProductState}</td>
+								<td>${vDetailList.vId}</td>
+								<td>${vDetailList.vProductName}</td>
+								<td>${vDetailList.vQuantity}</td>
+								<td>${vDetailList.vProductState}</td>
 							</tr>
 							<tr>
 								<td colspan="4">

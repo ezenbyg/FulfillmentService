@@ -96,6 +96,7 @@ public class AdminProc extends HttpServlet {
 		
 		String action = request.getParameter("action");
 		List<InvoiceDTO> vList = null;
+		List<InvoiceDTO> vDetailList = null;
 		List<OrderDTO> oList = null;
 		List<InvoiceProductDTO> ipList = null;
 		ArrayList<String> pageList = new ArrayList<String>();
@@ -318,8 +319,10 @@ public class AdminProc extends HttpServlet {
 				vId = request.getParameter("vId");
 			}
 			vDao = new InvoiceDAO();
+			vList = vDao.getAllInvoiceListsById(vId);
 			invoice = vDao.getInvoiceById(vId);
 			request.setAttribute("ivto", invoice);
+			request.setAttribute("vList", vList);
 			rd = request.getRequestDispatcher("/view/storage/storageInvoiceDetail.jsp");
 			rd.forward(request, response);
 			break;
@@ -374,8 +377,10 @@ public class AdminProc extends HttpServlet {
 				vDao.changeProductState(ivto.getvProductId(), ivto.getvQuantity());
 			}
 			// 변경한 상태와 정보를 화면에 뿌림
-			vList = vDao.getAllInvoiceLists();
+			vList = vDao.getInvoiceListsForRelease();
+			vDetailList = vDao.getAllInvoiceLists();
 			request.setAttribute("vList", vList);
+			request.setAttribute("vDetailList", vDetailList);
 			rd = request.getRequestDispatcher("/view/storage/storageRelease.jsp");
 	        rd.forward(request, response);
 			break;

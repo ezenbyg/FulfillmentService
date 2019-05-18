@@ -70,6 +70,100 @@ public class InvoiceDAO {
 		return vList;
 	}
 	
+	// 출고 메인 페이지에 출력할 내용
+	public ArrayList<InvoiceDTO> getInvoiceListsForRelease() {
+		ArrayList<InvoiceDTO> vList = new ArrayList<InvoiceDTO>();
+		conn = DBManager.getConnection();
+		String sql = "select distinct v.vId, v.vShopName, v.vName, v.vTel, v.vAddress, v.vDate, vState, a.aName "
+				+ "from invoice as v " 
+				+ "inner join invoiceproduct as p "
+				+ "on v.vId=p.pInvoiceId "
+				+ "inner join storage as s "
+				+ "on s.pId=p.ipProductId " 
+				+ "inner join admins as a "
+				+ "on a.aId =v.vlogisId;";
+		try {
+			pstmt = conn.prepareStatement(sql);
+			rs = pstmt.executeQuery();
+			while(rs.next()) {
+				InvoiceDTO vDto = new InvoiceDTO();
+				vDto.setvId(rs.getString(1));
+				vDto.setvShopName(rs.getString(2));
+				vDto.setvName(rs.getString(3));
+				vDto.setvTel(rs.getString(4));
+				vDto.setvAddress(rs.getString(5));
+				vDto.setvDate(rs.getString(6));
+				vDto.setvState(rs.getString(7));
+				vDto.setvTransportName(rs.getString(7));
+				vList.add(vDto);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+			LOG.info("getInvoiceListsForRelease(): Error Code : {}", e.getErrorCode());
+			return null;
+		} finally {
+			try {
+				pstmt.close();
+				conn.close();
+				rs.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+		return vList;
+	}
+	
+	// 송장 아이디를 통한 list 추출 
+	public ArrayList<InvoiceDTO> getAllInvoiceListsById(String vId) {
+		ArrayList<InvoiceDTO> vList = new ArrayList<InvoiceDTO>();
+		conn = DBManager.getConnection();
+		String sql = "select v.vId, v.vShopName, v.vName, v.vTel, v.vAddress, v.vDate, v.vPrice, vState, a.aName, a.aId, p.ipProductId, p.ipQuantity, s.pName, s.pState "
+				+ "from invoice as v " 
+				+ "inner join invoiceproduct as p "
+				+ "on v.vId=p.pInvoiceId "
+				+ "inner join storage as s "
+				+ "on s.pId=p.ipProductId " 
+				+ "inner join admins as a "
+				+ "on a.aId =v.vlogisId "
+				+ "where v.vId=?;";
+		try {
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setString(1, vId);
+			rs = pstmt.executeQuery();
+			while(rs.next()) {
+				InvoiceDTO vDto = new InvoiceDTO();
+				vDto.setvId(rs.getString(1));
+				vDto.setvShopName(rs.getString(2));
+				vDto.setvName(rs.getString(3));
+				vDto.setvTel(rs.getString(4));
+				vDto.setvAddress(rs.getString(5));
+				vDto.setvDate(rs.getString(6));
+				vDto.setvPrice(rs.getInt(7));
+				vDto.setvState(rs.getString(8));
+				vDto.setvTransportName(rs.getString(9));
+				vDto.setVlogisId(rs.getInt(10));
+				vDto.setvProductId(rs.getInt(11));
+				vDto.setvQuantity(rs.getInt(12));
+				vDto.setvProductName(rs.getString(13));
+				vDto.setvProductState(rs.getString(14));
+				vList.add(vDto);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+			LOG.info("getAllInvoiceListsById(): Error Code : {}", e.getErrorCode());
+			return null;
+		} finally {
+			try {
+				pstmt.close();
+				conn.close();
+				rs.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+		return vList;
+	}
+	
 	// 송장에 있는 제품번호와 수량을 주어서 제품상태 변경
 	public void changeProductState(int pId, int pQuantity) {
 		StorageDAO sDao = new StorageDAO();
@@ -77,7 +171,7 @@ public class InvoiceDAO {
 		sDto = sDao.getOneProductById(pId);
 		if(sDto.getpQuantity() < pQuantity) {
 			sDao.updateProductState("재고부족", pId);
-		} else if((sDto.getpQuantity() >= pQuantity) && (pQuantity < 10)) {
+		} else if((sDto.getpQuantity() >= pQuantity) && (sDto.getpQuantity() < 10)) {
 			sDao.updateProductState("재고부족예상", pId);
 		} else sDao.updateProductState("P", pId);
 	}

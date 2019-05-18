@@ -20,12 +20,13 @@
 			<h3>
 				<i class="glyphicon glyphicon-list-alt"></i>&nbsp;상세 내역 조회
 			</h3>
+			<c:set var="vList" value="${requestScope.vList}" />
 			<c:set var="ivto" value="${requestScope.ivto}" />
 			<div class="row">
 				<div class="col-md-12">
 					<div class="content-panel">
 			<h4>
-				<a href="#"><i class="fa fa-angle-right"></i>  송장번호 :  ${ivto.vId}</a>
+				<a href="/FulfillmentService/control/adminServlet?action=invoiceList&page=1"><i class="fa fa-angle-right"></i>  송장번호 :  ${ivto.vId}</a>
 			</h4>
 			<hr>
 			<ul class="nav nav-tabs">
@@ -39,19 +40,58 @@
 						<th>주문자</th>
 						<th>운송처</th>
 						<th>상태</th>
+						<th>물품</th>
 						<th>수량</th>
-						<th>총액</th>
 					</tr>
 				</thead>
 				<tbody>
+				<c:forEach var="vDto" items="${vList}">
 					<tr>
-						<th>${ivto.vId}</th>
-						<th>${ivto.vShopName}</th>
-						<th>${ivto.vName}</th>
-						<th>${ivto.vTransportName}</th>
-						<th>${ivto.vState}</th>
-						<th>${ivto.vQuantity}</th>
-						<th>${ivto.vPrice}</th>
+					<c:set var="count" value="0" />
+					<c:choose>
+					<c:when test="${count eq 0}" >
+						<th>${vDto.vId}</th>
+						<th>${vDto.vShopName}</th>
+						<th>${vDto.vName}</th>
+						<th>${vDto.vTransportName}</th>
+						<th>${vDto.vState}</th>
+						<th>${vDto.vProductName}</th>
+						<th>${vDto.vQuantity}</th>
+						<c:set var="count" value="${count + 1}" />
+					</c:when>
+					<c:otherwise>
+						<th>&nbsp;</th>
+						<th>&nbsp;</th>
+						<th>&nbsp;</th>
+						<th>&nbsp;</th>
+						<th>&nbsp;</th>
+						<th>${vDto.vProductName}</th>
+						<th>${vDto.vQuantity}</th>
+					</c:otherwise>
+					</c:choose>
+					</tr>
+				</c:forEach>
+				</tbody>
+				<thead>
+				<tr>
+					<th>&nbsp;</th>
+					<th>&nbsp;</th>
+					<th>&nbsp;</th>
+					<th>&nbsp;</th>
+					<th>&nbsp;</th>
+					<th>&nbsp;</th>
+					<th>총액</th>
+				</tr>
+				</thead>
+				<tbody>
+					<tr>
+					<th>&nbsp;</th>
+					<th>&nbsp;</th>
+					<th>&nbsp;</th>
+					<th>&nbsp;</th>
+					<th>&nbsp;</th>
+					<th>&nbsp;</th>
+					<th>${ivto.vPrice}</th>
 					</tr>
 				</tbody>
 			</table>
