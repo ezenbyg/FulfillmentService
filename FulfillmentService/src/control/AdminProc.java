@@ -29,6 +29,8 @@ import release.ReleaseDAO;
 import release.ReleaseDTO;
 import storage.StorageDAO;
 import storage.StorageDTO;
+import util.DateController;
+import util.InvoiceController;
 
 /**
  * Servlet implementation class AdminProc
@@ -68,11 +70,13 @@ public class AdminProc extends HttpServlet {
 		ReleaseDAO rDao = null;
 		ReleaseDTO release = null;
 		RequestDispatcher rd = null;
+		DateController dc = null;
 
 		String name = null;
 		String title = null;
 		String page = null;
 		String message = null;
+		String date = null;
 		
 		int curPage = 1;
 		int categoryNum = 0;
@@ -355,8 +359,8 @@ public class AdminProc extends HttpServlet {
 				rd.forward(request, response);
 				break;
 			}
-			
-			order = new OrderDTO(admins.getaId(), oProductId, oQuantity, oPrice, oTotalPrice, vDao.currentTime());
+
+			order = new OrderDTO(admins.getaId(), oProductId, oQuantity, oPrice, oTotalPrice, dc.currentTime());
 			oDao = new OrderDAO();
 			oDao.addOrderProducts(order);
 			
@@ -371,35 +375,68 @@ public class AdminProc extends HttpServlet {
 			
 		case "releasePage" : // 출고를 위한 페이지
 			vDao = new InvoiceDAO();
+			dc = new DateController();
+			String[] dateFormat = null;
+			
+			// 네비에서 타고올때는 초기값이 null
+			if(request.getParameter("date") != null) {
+				date = request.getParameter("date"); // 초기에는 오늘 날짜에 해당하는 송장 내역을 보여줌
+				LOG.debug(String.valueOf(date.length()));
+				if(date.length() > 10) {
+					dateFormat = date.split(" ");
+					date = dateFormat[0];
+					LOG.debug(date);
+				}
+			} else date = dc.getToday();
+		
+			vDetailList = vDao.getAllInvoiceLists();
+			vList = vDao.getInvoiceListsForRelease(date); // 일별 출력
+	
 			// 송장에 있는 수량에 따라 제품 상태를 변경
 			List<InvoiceDTO> testList = vDao.getAllInvoiceLists();
 			for(InvoiceDTO ivto : testList) {
 				vDao.changeProductState(ivto.getvProductId(), ivto.getvQuantity());
 			}
-			// 변경한 상태와 정보를 화면에 뿌림
-			vList = vDao.getInvoiceListsForRelease();
-			vDetailList = vDao.getAllInvoiceLists();
+			
+			// 송장번호에 해당하는 제품 출력
+			if (request.getParameter("vId") != null) {
+				vId = request.getParameter("vId");
+			} 
+			List<InvoiceDTO> invList = vDao.getAllInvoiceListsById(vId);
+			
+			request.setAttribute("invList", invList);
 			request.setAttribute("vList", vList);
 			request.setAttribute("vDetailList", vDetailList);
 			rd = request.getRequestDispatcher("/view/storage/storageRelease.jsp");
 	        rd.forward(request, response);
 			break;
 			
+		case "invoiceDaily" : // 출고 페이지에서 송장 내역을 일별로 정리
+			date = request.getParameter("dateInvoice");
+			
+			if (date == null) {
+				dc = new DateController();
+				date = dc.getToday();
+			}
+			rd = request.getRequestDispatcher("/control/adminServlet?action=releasePage&date="+date);
+	        rd.forward(request, response);
+			break;
+			
 		case "release" : // 출고 버튼 클릭 시
+			// 조건 : 시간별 & 제품 상태
 			rInvoiceId = Integer.parseInt(request.getParameter("rInvoiceId")); // 송장번호
 			rTransportName = request.getParameter("rTransportName"); // 운송회사 이름
-			
+			vDao = new InvoiceDAO();
 			rDao = new ReleaseDAO();
 			
-			if(rDao.isPossibleRelease(pState) == false) {
-				message = "출고할 수 없습니다!!!";
-				request.setAttribute("message", message);
-				request.setAttribute("url", "/view/storage/XXX.jsp");
-				rd = request.getRequestDispatcher("/view/alertMsg.jsp");
-				rd.forward(request, response);
-				break;
-			} 
+			vList = vDao.getAllInvoiceLists();
 			
+			
+/*			for(InvoiceDTO ivto : vList) {
+				if(rDao.isPossibleRelease(ivto.getvs) == true) {
+					
+				} 
+			}*/
 			
 	        
 		default : break;

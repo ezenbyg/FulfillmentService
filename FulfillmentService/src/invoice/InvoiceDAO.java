@@ -71,7 +71,7 @@ public class InvoiceDAO {
 	}
 	
 	// 출고 메인 페이지에 출력할 내용
-	public ArrayList<InvoiceDTO> getInvoiceListsForRelease() {
+	public ArrayList<InvoiceDTO> getInvoiceListsForRelease(String date) {
 		ArrayList<InvoiceDTO> vList = new ArrayList<InvoiceDTO>();
 		conn = DBManager.getConnection();
 		String sql = "select distinct v.vId, v.vShopName, v.vName, v.vTel, v.vAddress, v.vDate, vState, a.aName "
@@ -81,9 +81,11 @@ public class InvoiceDAO {
 				+ "inner join storage as s "
 				+ "on s.pId=p.ipProductId " 
 				+ "inner join admins as a "
-				+ "on a.aId =v.vlogisId;";
+				+ "on a.aId =v.vlogisId " 
+				+ "where date_format(v.vDate, '%Y-%m-%d')=?;";
 		try {
 			pstmt = conn.prepareStatement(sql);
+			pstmt.setString(1, date);
 			rs = pstmt.executeQuery();
 			while(rs.next()) {
 				InvoiceDTO vDto = new InvoiceDTO();
@@ -295,21 +297,6 @@ public class InvoiceDAO {
 				e.printStackTrace();
 			}
 		}
-	}
-	
-	// 어제 날짜
-	public String yesterday() {
-		LocalDateTime yesterday = LocalDateTime.now();
-		yesterday = yesterday.minusDays(1);
-    	DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd");	
-    	return yesterday.format(dtf);
-	}
-	
-	// 현재 시간
-	public String currentTime() {
-		LocalDateTime cTime = LocalDateTime.now();	
-    	DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-    	return cTime.format(dtf);
 	}
 	
 	// 송장에 해당하는 제품들 가져오기 
