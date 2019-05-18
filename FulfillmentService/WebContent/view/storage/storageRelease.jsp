@@ -23,13 +23,13 @@
 						<h4>
 							<i class="fa fa-angle-right"></i> 창고 관리 (출고)	
 						</h4>
-							<div class="col-md-offset-9" style="margin-bottom: -15px; margin-top: 10px;">
+						<div class="col-md-offset-9" style="margin-bottom: -15px; margin-top: 10px;">
 							<a class="btn btn-primary btn-xs" href ="/FulfillmentService/control/adminServlet?action=release" role="button">출고</a>
 							<form action="/FulfillmentService/control/adminServlet?action=invoiceDaily" class="form-horizontal" method="post">
 								<input type="date" name="dateInvoice" id="datepicker1">&nbsp;
 								<input type="submit" class="btn btn-info btn-xs" value="조회">
 							</form>
-							</div>
+						</div>
 						<hr>
 						<ul class="nav nav-tabs">
 							<li role="presentation"><a

@@ -11,6 +11,7 @@ import org.slf4j.LoggerFactory;
 
 import invoice.InvoiceDTO;
 import util.DBManager;
+import util.DateController;
 import util.ProductState;
 
 public class ReleaseDAO {
@@ -266,8 +267,8 @@ public class ReleaseDAO {
 		return vList;
 	}
 	
-	// 출고 가능 여부 판단 메소드
-	public boolean isPossibleRelease(String pState) {
+	// 제품 상태에 따른 출고 가능 여부 판단 메소드
+	public boolean isPossibleReleaseByState(String pState) {
 		ProductState state = ProductState.valueOf(pState);
 		switch(state) {
 		case P : 
@@ -277,6 +278,15 @@ public class ReleaseDAO {
 		case 제품부족예상 :
 			return true;
 		}
+		return true;
+	}
+	
+	// 시간에 따른 출고 가능 여부 판단 메소드 
+	public boolean isPossibleReleaseByDate(String date) {
+		LOG.debug("isPossibleReleaseByDate() : " + date);
+		DateController dc = new DateController();
+		dc.transStringToDate(date); // 송장에 적혀있는 시간 
+		
 		return true;
 	}
 	

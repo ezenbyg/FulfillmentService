@@ -424,13 +424,26 @@ public class AdminProc extends HttpServlet {
 			
 		case "release" : // 출고 버튼 클릭 시
 			// 조건 : 시간별 & 제품 상태
+			boolean stateFlag = false;
+			boolean timeFlag = false; 
+			
 			rInvoiceId = Integer.parseInt(request.getParameter("rInvoiceId")); // 송장번호
 			rTransportName = request.getParameter("rTransportName"); // 운송회사 이름
 			vDao = new InvoiceDAO();
 			rDao = new ReleaseDAO();
 			
-			vList = vDao.getAllInvoiceLists();
-			
+			vDetailList = vDao.getAllInvoiceLists();
+			for(InvoiceDTO vDto : vDetailList) {
+				invList = vDao.getAllInvoiceListsById(vDto.getvId()); // 해당 아이디의 송장상세 얻어오기
+				for(InvoiceDTO ivto : invList) {
+					if(rDao.isPossibleReleaseByState(ivto.getvProductState()) == true) {
+						stateFlag = true;
+					}
+					if(rDao.isPossibleReleaseByDate(ivto.getvDate()) == true) {
+						
+					}
+				}
+			}
 			
 /*			for(InvoiceDTO ivto : vList) {
 				if(rDao.isPossibleRelease(ivto.getvs) == true) {

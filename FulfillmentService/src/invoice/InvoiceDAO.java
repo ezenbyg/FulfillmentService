@@ -74,7 +74,7 @@ public class InvoiceDAO {
 	public ArrayList<InvoiceDTO> getInvoiceListsForRelease(String date) {
 		ArrayList<InvoiceDTO> vList = new ArrayList<InvoiceDTO>();
 		conn = DBManager.getConnection();
-		String sql = "select distinct v.vId, v.vShopName, v.vName, v.vTel, v.vAddress, v.vDate, vState, a.aName "
+		String sql = "select distinct v.vId, v.vShopName, v.vName, v.vTel, v.vAddress, v.vDate, v.vState, a.aName "
 				+ "from invoice as v " 
 				+ "inner join invoiceproduct as p "
 				+ "on v.vId=p.pInvoiceId "
@@ -82,7 +82,8 @@ public class InvoiceDAO {
 				+ "on s.pId=p.ipProductId " 
 				+ "inner join admins as a "
 				+ "on a.aId =v.vlogisId " 
-				+ "where date_format(v.vDate, '%Y-%m-%d')=?;";
+				+ "where date_format(v.vDate, '%Y-%m-%d')=? "
+				+ "order by v.vDate, v.vState desc;";
 		try {
 			pstmt = conn.prepareStatement(sql);
 			pstmt.setString(1, date);
