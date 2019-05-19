@@ -288,7 +288,7 @@ public class AdminProc extends HttpServlet {
 				curPage = Integer.parseInt(request.getParameter("page"));
 			}
 			vDao = new InvoiceDAO();
-			LOG.debug("vDao.getCount() : " + vDao.getCount()); 
+			// LOG.debug("vDao.getCount() : " + vDao.getCount()); 
 			count = vDao.getCount();
 			if (count == 0)			// 데이터가 없을 때 대비
 				count = 1;

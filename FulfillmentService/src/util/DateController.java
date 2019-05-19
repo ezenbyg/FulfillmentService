@@ -3,6 +3,7 @@ package util;
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Calendar;
 import java.util.Date;
 
 public class DateController {
@@ -53,10 +54,24 @@ public class DateController {
 		return time;
 	}
 	
-	// 시간 비교 
-	public boolean compareDate(Date date) {
-		if(date)
-		return true;
+	// 오전 오후 구하기 
+	public String getAmPm(Date time) {
+		Calendar cal = Calendar.getInstance();
+		cal.setTime(time);
+		if (cal.get(Calendar.AM_PM) == Calendar.AM)
+			return "am";
+		else if(cal.get(Calendar.AM_PM) == Calendar.PM)
+			return "pm";
+		return null;
 	}
 	
+	// 오전 오후 시간
+	public String getNumericTime(String amPm) {
+		String timeStr = null;
+		if (amPm.equals("am"))
+			timeStr = " 09:00:00";
+		if (amPm.equals("pm"))
+			timeStr = " 18:00:00";
+		return timeStr;
+	}
 }

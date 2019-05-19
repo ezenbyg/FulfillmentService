@@ -74,7 +74,7 @@ public class InvoiceDAO {
 	public ArrayList<InvoiceDTO> getInvoiceListsForRelease(String date) {
 		ArrayList<InvoiceDTO> vList = new ArrayList<InvoiceDTO>();
 		conn = DBManager.getConnection();
-		String sql = "select distinct v.vId, v.vShopName, v.vName, v.vTel, v.vAddress, v.vDate, v.vState, a.aName "
+		String sql = "select distinct v.vId, v.vShopName, v.vName, v.vTel, v.vAddress, v.vDate, v.vState, a.aName, v.vlogisId "
 				+ "from invoice as v " 
 				+ "inner join invoiceproduct as p "
 				+ "on v.vId=p.pInvoiceId "
@@ -98,6 +98,7 @@ public class InvoiceDAO {
 				vDto.setvDate(rs.getString(6));
 				vDto.setvState(rs.getString(7));
 				vDto.setvTransportName(rs.getString(7));
+				vDto.setVlogisId(rs.getInt(8));
 				vList.add(vDto);
 			}
 		} catch (SQLException e) {
@@ -275,7 +276,7 @@ public class InvoiceDAO {
 		return vDto;
 	}
 	
-	public void updateInvoiceState(String vState, int vId) {
+	public void updateInvoiceState(String vState, String vId) {
 		LOG.debug("");
 		PreparedStatement pStmt = null;
 		conn = DBManager.getConnection();
@@ -284,12 +285,37 @@ public class InvoiceDAO {
 		try {
 			pStmt = conn.prepareStatement(sql);
 			pStmt.setString(1, vState);
-			pStmt.setInt(2, vId);
+			pStmt.setString(2, vId);
 			pStmt.executeUpdate();
 			LOG.trace(sql);
 		} catch (SQLException e) {
 			e.printStackTrace();
 			LOG.info("updateInvoiceState() Error Code : {}", e.getErrorCode());
+		} finally {
+			try {
+				pstmt.close();
+				conn.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+	}
+	
+	public void updateInvoicePrice(String vId, int totalPrice) {
+		LOG.debug("");
+		PreparedStatement pStmt = null;
+		conn = DBManager.getConnection();
+		String sql = "update invoice set vPrice=? where vId=?;";
+		pStmt = null;
+		try {
+			pStmt = conn.prepareStatement(sql);
+			pStmt.setInt(1, totalPrice);
+			pStmt.setString(2, vId);
+			pStmt.executeUpdate();
+			LOG.trace(sql);
+		} catch (SQLException e) {
+			e.printStackTrace();
+			LOG.info("updateInvoicePrice() Error Code : {}", e.getErrorCode());
 		} finally {
 			try {
 				pstmt.close();

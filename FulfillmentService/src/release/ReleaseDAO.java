@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import invoice.InvoiceDAO;
 import invoice.InvoiceDTO;
 import util.DBManager;
 import util.DateController;
@@ -31,7 +32,7 @@ public class ReleaseDAO {
 				ReleaseDTO rDto = new ReleaseDTO();
 				rDto.setrId(rs.getInt(1));
 				rDto.setrInvoiceId(rs.getString(2));
-				rDto.setrTransportName(rs.getString(3));
+				rDto.setrTransportId(rs.getInt(3));
 				rDto.setrDate(rs.getString(4));
 				rDto.setrState(rs.getString(5));
 				rList.add(rDto);
@@ -55,12 +56,12 @@ public class ReleaseDAO {
 	public void addReleaseList(ReleaseDTO rDto) {
 		LOG.trace("addReleaseList(): " + rDto.toString());
 		conn = DBManager.getConnection();
-		String sql = "insert into p_release(rInvoiceId, rTransportName, rDate)"
+		String sql = "insert into p_release(rInvoiceId, rTransportId, rDate)"
 				+ " values(?, ?, ?)";
 		try {
 			pstmt = conn.prepareStatement(sql);
 			pstmt.setString(1, rDto.getrInvoiceId());
-			pstmt.setString(2, rDto.getrTransportName());
+			pstmt.setInt(2, rDto.getrTransportId());
 			pstmt.setString(9, rDto.getrDate());
 			
 			pstmt.executeUpdate();
@@ -77,7 +78,7 @@ public class ReleaseDAO {
 		}
 	}
 	
-	public ReleaseDTO getOneReleaseList(int rInvoiceId) { // 운송 번호에 해당하는 배송비 등 조회
+	public ReleaseDTO getOneReleaseList(int rInvoiceId) { 
 		ReleaseDTO rDto = new ReleaseDTO();
 		conn = DBManager.getConnection();
 		String sql = "select * from p_release where rInvoiceId=?;";
@@ -88,7 +89,7 @@ public class ReleaseDAO {
 			while(rs.next()) {
 				rDto.setrId(rs.getInt(1));
 				rDto.setrInvoiceId(rs.getString(2));
-				rDto.setrTransportName(rs.getString(3));
+				rDto.setrTransportId(rs.getInt(3));
 				rDto.setrDate(rs.getString(4));
 				rDto.setrState(rs.getString(5));
 			}
@@ -191,7 +192,7 @@ public class ReleaseDAO {
 				ReleaseDTO rDto = new ReleaseDTO();
 				rDto.setrId(rs.getInt(1));
 				rDto.setrInvoiceId(rs.getString(2));
-				rDto.setrTransportName(rs.getString(3));
+				rDto.setrTransportId(rs.getInt(3));
 				rDto.setrDate(rs.getString(4));
 				rDto.setrState(rs.getString(5));
 				rList.add(rDto);
@@ -266,28 +267,4 @@ public class ReleaseDAO {
 		}
 		return vList;
 	}
-	
-	// 제품 상태에 따른 출고 가능 여부 판단 메소드
-	public boolean isPossibleReleaseByState(String pState) {
-		ProductState state = ProductState.valueOf(pState);
-		switch(state) {
-		case P : 
-			return true;
-		case 제품부족 : 
-			return false;
-		case 제품부족예상 :
-			return true;
-		}
-		return true;
-	}
-	
-	// 시간에 따른 출고 가능 여부 판단 메소드 
-	public boolean isPossibleReleaseByDate(String date) {
-		LOG.debug("isPossibleReleaseByDate() : " + date);
-		DateController dc = new DateController();
-		dc.transStringToDate(date); // 송장에 적혀있는 시간 
-		
-		return true;
-	}
-	
 }

@@ -3,11 +3,18 @@ package release;
 public class ReleaseDTO {
 	private int rId;
 	private String rInvoiceId;
-	private String rTransportName;
+	private int rTransportId;
 	private String rDate;
 	private String rState;
 	
 	public ReleaseDTO() {}
+
+	public ReleaseDTO(String rInvoiceId, int rTransportId, String rDate) {
+		super();
+		this.rInvoiceId = rInvoiceId;
+		this.rTransportId = rTransportId;
+		this.rDate = rDate;
+	}
 
 	public int getrId() {
 		return rId;
@@ -25,12 +32,12 @@ public class ReleaseDTO {
 		this.rInvoiceId = rInvoiceId;
 	}
 
-	public String getrTransportName() {
-		return rTransportName;
+	public int getrTransportId() {
+		return rTransportId;
 	}
 
-	public void setrTransportName(String rTransportName) {
-		this.rTransportName = rTransportName;
+	public void setrTransportId(int rTransportId) {
+		this.rTransportId = rTransportId;
 	}
 
 	public String getrDate() {
@@ -51,7 +58,7 @@ public class ReleaseDTO {
 
 	@Override
 	public String toString() {
-		return "ReleaseDTO [rId=" + rId + ", rInvoiceId=" + rInvoiceId + ", rTransportName=" + rTransportName
-				+ ", rDate=" + rDate + ", rState=" + rState + "]";
+		return "ReleaseDTO [rId=" + rId + ", rInvoiceId=" + rInvoiceId + ", rTransportId=" + rTransportId + ", rDate="
+				+ rDate + ", rState=" + rState + "]";
 	}
 }

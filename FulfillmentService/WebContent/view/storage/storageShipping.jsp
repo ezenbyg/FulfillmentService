@@ -60,6 +60,12 @@
 						</table>
 					</div>
 				</div>
+			<div>
+			<c:set var="pageList" value="${requestScope.invoicePageList}" />
+			<c:forEach var="pageNo" items="${pageList}">
+				${pageNo}
+			</c:forEach>
+			</div>
 		</section>
 		<%@ include file="../common/_bottom.jspf"%>
 	</section>

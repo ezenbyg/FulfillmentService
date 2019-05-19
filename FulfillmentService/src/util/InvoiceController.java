@@ -68,6 +68,7 @@ public class InvoiceController {
 				BufferedReader br = new BufferedReader(new InputStreamReader(
 	                    new FileInputStream(filePath.get(number)), "euc-kr"));
 	            String line = "";
+	            int totalPrice = 0;
 	            while ((line = br.readLine()) != null) { // 파일 읽기
 	            	product.setpInvoiceId(invoice.getvId());
 	                String[] token = line.split(",");
@@ -87,7 +88,7 @@ public class InvoiceController {
 							}
 							if(p==4) {
 								product.setIpQuantity(Integer.parseInt(token[p]));
-								invoice.setvPrice(pDto.getpPrice()*product.getIpQuantity());
+								totalPrice += pDto.getpPrice()*product.getIpQuantity();
 							}
 	                	}
 	                }
@@ -97,6 +98,7 @@ public class InvoiceController {
 	                	count++;
 	                	LOG.debug("count : " + count);
 	                }
+	                vDao.updateInvoicePrice(invoice.getvId(), totalPrice);
 	                vDao.addInvoiceProduct(product);
 	                count++;
 	            }
