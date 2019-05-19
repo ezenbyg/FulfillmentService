@@ -28,37 +28,26 @@
 							<i class="fa fa-angle-right"></i> 창고 관리 (운송내역조회)
 						</h4>
 						<hr>
+						<c:set var="vList" value="${requestScope.vList}" />
 						<table class="table table-striped">
 							<thead>
 								<tr>
 									<th>출고번호</th>
 									<th>송장ID</th>
-									<th>이름</th>
-									<th>번호</th>
-									<th>주소</th>
+									<th>운송회사</th>
 									<th>날짜</th>
 									<th>배송상태</th>
 								</tr>
 							</thead>
 							<tbody>
 								<tr>
-									<th>출고번호</th>
-									<th>송장ID</th>
-									<th>이름</th>
-									<th>번호</th>
-									<th>배송상태</th>
-									<th>날짜</th>
-									<td style="margin-right: 10px"><select>
-											<option value="출고">출고</option>
-											<option value="배송전">배송전</option>
-											<option value="배송중">배송중</option>
-											<option value="배송완료">배송완료</option>
-									</select></td>
-									<!-- Modal
-								<th><input type="button" value="배송실행"></th>
-								<th><input type="button" value="배송확인요청"></th>
-								<th><input type="button" value="취소"></th> 
-								-->
+									<th>#</th>
+									<th>#</th>
+									<th>#</th>
+									<th>#</th>
+									<th>#</th>
+									<th>#</th>			
+									<th><a class="btn btn-primary btn-xs" href ="/FulfillmentService/control/adminServlet?action=completeDelivery" role="button">배송확정</a></th>
 							</tbody>
 						</table>
 					</div>

@@ -29,9 +29,7 @@
 								<tr>
 									<th>출고번호</th>
 									<th>송장ID</th>
-									<th>이름</th>
-									<th>번호</th>
-									<th>주소</th>
+									<th>운송회사</th>
 									<th>날짜</th>
 									<th>배송상태</th>
 								</tr>
@@ -90,13 +88,4 @@
 	</section>
 	<!-- ==================================================================== -->
 </body>
-<script>
-//데이터 가져올때 여기서 가져오세요
-// https://api.jqueryui.com/1.12/dialog/
-function modal(){
-	$("#dialog").dialog({
-		  dialogClass: "alert",
-		});
-}
-</script>
 </html>

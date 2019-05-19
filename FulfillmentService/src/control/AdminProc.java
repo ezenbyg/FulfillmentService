@@ -414,7 +414,6 @@ public class AdminProc extends HttpServlet {
 			
 		case "invoiceDaily" : // 출고 페이지에서 송장 내역을 일별로 정리
 			date = request.getParameter("dateInvoice");
-			
 			if (date == null) {
 				dc = new DateController();
 				date = dc.getToday();
@@ -426,12 +425,17 @@ public class AdminProc extends HttpServlet {
 		case "release" : // 출고 버튼 클릭 시
 			dc = new DateController();
 			rc = new ReleaseController();
-			
 			rc.processRelease(dc.getToday());
 			rd = request.getRequestDispatcher("/control/adminServlet?action=releasePage&date="+dc.getToday());
 	        rd.forward(request, response);
 			break;
 			
+		case "completeDelivery" : // 배송확정버튼 클릭 시
+			break;
+			
+		case "transportHistory" : // 운송내역조회 페이지
+			
+			break;
 		default : break;
 		}
 	}
