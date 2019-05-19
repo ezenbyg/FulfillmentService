@@ -60,9 +60,9 @@ public class InvoiceDAO {
 			return null;
 		} finally {
 			try {
-				pstmt.close();
-				conn.close();
-				rs.close();
+				if(pstmt != null) pstmt.close();
+				if(conn != null) conn.close();
+				if(rs != null) rs.close();
 			} catch (SQLException e) {
 				e.printStackTrace();
 			}
@@ -97,8 +97,8 @@ public class InvoiceDAO {
 				vDto.setvAddress(rs.getString(5));
 				vDto.setvDate(rs.getString(6));
 				vDto.setvState(rs.getString(7));
-				vDto.setvTransportName(rs.getString(7));
-				vDto.setVlogisId(rs.getInt(8));
+				vDto.setvTransportName(rs.getString(8));
+				vDto.setVlogisId(rs.getInt(9));
 				vList.add(vDto);
 			}
 		} catch (SQLException e) {
@@ -175,7 +175,7 @@ public class InvoiceDAO {
 		sDto = sDao.getOneProductById(pId);
 		if(sDto.getpQuantity() < pQuantity) {
 			sDao.updateProductState("재고부족", pId);
-		} else if((sDto.getpQuantity() >= pQuantity) && (sDto.getpQuantity() < 10)) {
+		} else if((sDto.getpQuantity() >= pQuantity) && (sDto.getpQuantity()-pQuantity < 10)) {
 			sDao.updateProductState("재고부족예상", pId);
 		} else sDao.updateProductState("P", pId);
 	}

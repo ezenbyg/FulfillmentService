@@ -6,7 +6,11 @@ import java.time.format.DateTimeFormatter;
 import java.util.Calendar;
 import java.util.Date;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 public class DateController {
+	private static final Logger LOG = LoggerFactory.getLogger(DateController.class);
 	// 어제 시간
 	public String beforeTime() {
 		LocalDateTime yTime = LocalDateTime.now();
@@ -39,10 +43,12 @@ public class DateController {
 	
 	// 문자열을 날짜로 변환
 	public Date transStringToDate(String date) {
+		LOG.debug(date);
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
 		Date cpDate = null;
 		try {
 			cpDate = sdf.parse(date);
+			LOG.debug("cpDate : " + String.valueOf(cpDate));
 		} catch(Exception e) {}
 		return cpDate;
 	}
@@ -58,6 +64,7 @@ public class DateController {
 	public String getAmPm(Date time) {
 		Calendar cal = Calendar.getInstance();
 		cal.setTime(time);
+		LOG.debug("getAmPm() : " + String.valueOf(cal.getTime()));
 		if (cal.get(Calendar.AM_PM) == Calendar.AM)
 			return "am";
 		else if(cal.get(Calendar.AM_PM) == Calendar.PM)

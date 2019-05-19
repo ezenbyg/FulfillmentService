@@ -31,6 +31,7 @@ import storage.StorageDAO;
 import storage.StorageDTO;
 import util.DateController;
 import util.InvoiceController;
+import util.ReleaseController;
 
 /**
  * Servlet implementation class AdminProc
@@ -70,8 +71,10 @@ public class AdminProc extends HttpServlet {
 		ReleaseDAO rDao = null;
 		ReleaseDTO release = null;
 		RequestDispatcher rd = null;
+		
 		DateController dc = null;
-
+		ReleaseController rc = null;
+		
 		String name = null;
 		String title = null;
 		String page = null;
@@ -380,7 +383,7 @@ public class AdminProc extends HttpServlet {
 			
 			// 네비에서 타고올때는 초기값이 null
 			if(request.getParameter("date") != null) {
-				date = request.getParameter("date"); // 초기에는 오늘 날짜에 해당하는 송장 내역을 보여줌
+				date = request.getParameter("date"); 
 				LOG.debug(String.valueOf(date.length()));
 				if(date.length() > 10) {
 					dateFormat = date.split(" ");
@@ -389,7 +392,6 @@ public class AdminProc extends HttpServlet {
 				}
 			} else date = dc.getToday();
 		
-			vDetailList = vDao.getAllInvoiceLists();
 			vList = vDao.getInvoiceListsForRelease(date); // 일별 출력
 	
 			// 송장에 있는 수량에 따라 제품 상태를 변경
@@ -406,7 +408,6 @@ public class AdminProc extends HttpServlet {
 			
 			request.setAttribute("invList", invList);
 			request.setAttribute("vList", vList);
-			request.setAttribute("vDetailList", vDetailList);
 			rd = request.getRequestDispatcher("/view/storage/storageRelease.jsp");
 	        rd.forward(request, response);
 			break;
@@ -423,35 +424,14 @@ public class AdminProc extends HttpServlet {
 			break;
 			
 		case "release" : // 출고 버튼 클릭 시
-			// 조건 : 시간별 & 제품 상태
-			boolean stateFlag = false;
-			boolean timeFlag = false; 
+			dc = new DateController();
+			rc = new ReleaseController();
 			
-			rInvoiceId = Integer.parseInt(request.getParameter("rInvoiceId")); // 송장번호
-			rTransportName = request.getParameter("rTransportName"); // 운송회사 이름
-			vDao = new InvoiceDAO();
-			rDao = new ReleaseDAO();
+			rc.processRelease(dc.getToday());
+			rd = request.getRequestDispatcher("/control/adminServlet?action=releasePage&date="+dc.getToday());
+	        rd.forward(request, response);
+			break;
 			
-			vDetailList = vDao.getAllInvoiceLists();
-			for(InvoiceDTO vDto : vDetailList) {
-				invList = vDao.getAllInvoiceListsById(vDto.getvId()); // 해당 아이디의 송장상세 얻어오기
-				for(InvoiceDTO ivto : invList) {
-					if(rDao.isPossibleReleaseByState(ivto.getvProductState()) == true) {
-						stateFlag = true;
-					}
-					if(rDao.isPossibleReleaseByDate(ivto.getvDate()) == true) {
-						
-					}
-				}
-			}
-			
-/*			for(InvoiceDTO ivto : vList) {
-				if(rDao.isPossibleRelease(ivto.getvs) == true) {
-					
-				} 
-			}*/
-			
-	        
 		default : break;
 		}
 	}

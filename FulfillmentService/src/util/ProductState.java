@@ -1,5 +1,5 @@
 package util;
 
 public enum ProductState {
-	P, 제품부족, 제품부족예상
+	P, 재고부족, 재고부족예상
 }

@@ -62,7 +62,7 @@ public class ReleaseDAO {
 			pstmt = conn.prepareStatement(sql);
 			pstmt.setString(1, rDto.getrInvoiceId());
 			pstmt.setInt(2, rDto.getrTransportId());
-			pstmt.setString(9, rDto.getrDate());
+			pstmt.setString(3, rDto.getrDate());
 			
 			pstmt.executeUpdate();
 		} catch (SQLException e) {

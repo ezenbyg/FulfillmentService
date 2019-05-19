@@ -22,22 +22,24 @@ public class ReleaseController {
 	// 제품 상태에 따른 출고 가능 여부 판단 메소드
 	public boolean isPossibleReleaseByState(String pState) {
 		ProductState state = ProductState.valueOf(pState);
+		LOG.debug(String.valueOf(state));
 		switch(state) {
 		case P : 
 			return true;
-		case 제품부족 : 
+		case 재고부족 : 
 			return false;
-		case 제품부족예상 :
+		case 재고부족예상 :
 			return true;
 		}
-		return true;
+		return false;
 	}
 	
 	// 시간에 따른 출고 가능 여부 판단 메소드 
 	public boolean isPossibleReleaseByDate(String date) {
-		LOG.debug("isPossibleReleaseByDate() : " + date);
+		LOG.debug(date);
 		String strDate = dc.getToday();
-		strDate += dc.getNumericTime(dc.getAmPm(dc.transStringToDate(strDate)));
+		strDate += dc.getNumericTime(dc.getAmPm(dc.transStringToDate(date)));
+		LOG.debug("strDate : " + strDate);
 		if(date.compareTo(strDate) >= 0) return false;
 		else return true;
 	}
@@ -52,13 +54,16 @@ public class ReleaseController {
 				for(InvoiceDTO vDto : stateList) { 
 					if(isPossibleReleaseByState(vDto.getvProductState()) == true) {
 						releaseFlag = true;
-					} else releaseFlag = false;
+					} else {
+						releaseFlag = false;
+						break;
+					}
 				}
 			}
 			if(releaseFlag == true) { // 출고 조건을 만족할 때 -> 출고DB에 삽입 & 송장상태 변경
 				release = new ReleaseDTO(ivto.getvId(), ivto.getVlogisId(), dc.currentTime());
 				rDao.addReleaseList(release);
-				LOG.debug(String.valueOf(InvoiceState.출고완료));
+				LOG.debug("출고상태 : " + String.valueOf(InvoiceState.출고완료));
 				vDao.updateInvoiceState(String.valueOf(InvoiceState.출고완료), ivto.getvId());
 			} else vDao.updateInvoiceState(String.valueOf(InvoiceState.출고보류), ivto.getvId());
 		}

@@ -37,7 +37,6 @@
 							<li role="presentation" class="active"><a href="#">출고</a></li>
 						</ul>
 						<c:set var="vList" value="${requestScope.vList}" />
-						<c:set var="vDetailList" value="${requestScope.vDetailList}" />
 						<table class="table table-striped">
 							<thead>
 								<tr>
@@ -101,44 +100,6 @@
 					</div>
 				</div>
 			</div>
-		<%-- <!-- modal -->
-		<div class="row">
-		<c:forEach var="vDetailList" items="${vDetailList}">
-			<div class="modal" id="modal${vDetailList.vId}" tabindex="-1">
-				<div class="modal-dialog modal-md">
-					<div class="modal-content">
-						<div class="modal-header">
-							<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-							<h4 class="modal-title">출고</h4>
-						</div>
-						<div class="modal-body" style="text-align:center;">
-							<table class="table table-default">
-							<tr>
-								<td>송장번호</td>
-								<td>제품명</td>
-								<td>수량</td>
-								<td>제품상태</td>
-							</tr>
-							<tr>
-								<td>${vDetailList.vId}</td>
-								<td>${vDetailList.vProductName}</td>
-								<td>${vDetailList.vQuantity}</td>
-								<td>${vDetailList.vProductState}</td>
-							</tr>
-							<tr>
-								<td colspan="4">
-								<input type="button" class="btn btn-round btn-primary btn-sm" value="출고">&nbsp;&nbsp;
-								<input type="button" class="btn btn-round btn-success btn-sm" value="발주">&nbsp;&nbsp;
-								<input type="button" class="btn btn-round btn-warning btn-sm" value="보류">
-								</td>
-							</tr>
-							</table>
-						</div>
-					</div>
-				</div>
-			</div>
-		</c:forEach>
-		</div> --%>
 		</section>
 		<%@ include file="../common/_bottom.jspf"%>
 	</section>
