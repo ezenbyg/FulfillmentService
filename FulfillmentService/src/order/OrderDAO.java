@@ -56,9 +56,9 @@ public class OrderDAO {
 				oDto.setoAdminId(rs.getInt(2));
 				oDto.setoProductId(rs.getInt(3));
 				oDto.setoQuantity(rs.getInt(4));
-				oDto.setoPrice(rs.getInt(5));
-				oDto.setoTotalPrice(rs.getInt(6));
-				oDto.setoDate(rs.getString(7));
+				oDto.setoTotalPrice(rs.getInt(5));
+				oDto.setoDate(rs.getString(6));
+				oDto.setoState(rs.getString(7));
 				oList.add(oDto);
 			}
 		} catch (SQLException e) {
@@ -91,9 +91,9 @@ public class OrderDAO {
 				oDto.setoAdminId(rs.getInt(2));
 				oDto.setoProductId(rs.getInt(3));
 				oDto.setoQuantity(rs.getInt(4));
-				oDto.setoPrice(rs.getInt(5));
-				oDto.setoTotalPrice(rs.getInt(6));
-				oDto.setoDate(rs.getString(7));
+				oDto.setoTotalPrice(rs.getInt(5));
+				oDto.setoDate(rs.getString(6));
+				oDto.setoState(rs.getString(7));
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -101,9 +101,9 @@ public class OrderDAO {
 			return null;
 		} finally {
 			try {
-				pstmt.close();
-				conn.close();
-				rs.close();
+				if(pstmt != null) pstmt.close();
+				if(conn != null) conn.close();
+				if(rs != null) rs.close();
 			} catch (SQLException e) {
 				e.printStackTrace();
 			}
@@ -129,9 +129,9 @@ public class OrderDAO {
 			LOG.info("getCount(): Error Code : {}", e.getErrorCode());
 		} finally {
 			try {
-				pstmt.close();
-				conn.close();
-				rs.close();
+				if(pstmt != null) pstmt.close();
+				if(conn != null) conn.close();
+				if(rs != null) rs.close();
 			} catch (SQLException e) {
 				e.printStackTrace();
 			}
@@ -139,19 +139,20 @@ public class OrderDAO {
 		return count;
 	}
     
-	public ArrayList<OrderDTO> selectJoinAllbyId(int page, int oAdminId) {
+	public ArrayList<OrderDTO> selectJoinAllbyId(int page, int oAdminId, String date) {
 		conn = DBManager.getConnection();
 		int offset = 0;
 		String sql = null;
 		if (page == 0) {	// page가 0이면 모든 데이터를 보냄
-			sql = "select oId, oAdminId, oPrdouctId, oQuantity, oPrice, oTotalPrice, oDate, oState"
-					+ " from p_order "
-					+ "where oAdminId=?"
-					+ " order by id desc;"; 
+			sql = "select oId, oAdminId, oPrdouctId, oQuantity, oTotalPrice, oDate, oState "
+					+ "from p_order "
+					+ "where oAdminId=? AND date_format(oDate, '%Y-%m-%d')=? "
+					+ "order by id desc;"; 
 		} else {			// page가 0이 아니면 해당 페이지 데이터만 보냄
-			sql = "select oId, oAdminId, oPrdouctId, oQuantity, oPrice, oTotalPrice, oDate, oState"
-					+ " from p_order where oAdminid=?"
-					+ " order by id desc limit ?, 10;";  
+			sql = "select oId, oAdminId, oPrdouctId, oQuantity, oTotalPrice, oDate, oState "
+					+ "from p_order "
+					+ "where oAdminId=? AND date_format(oDate, '%Y-%m-%d')=? "
+					+ "order by id desc limit ?, 10;"; 
 			offset = (page - 1) * 10;
 		}
 		ArrayList<OrderDTO> oList = new ArrayList<OrderDTO>();
@@ -160,9 +161,11 @@ public class OrderDAO {
 			LOG.trace(sql);
 			if (page == 0) {
 				pstmt.setInt(1, oAdminId);
+				pstmt.setString(2, date);
 			} else if(page != 0) {
 				pstmt.setInt(1, oAdminId);
-				pstmt.setInt(2, offset);
+				pstmt.setString(2, date);
+				pstmt.setInt(3, offset);
 			}
 			ResultSet rs = pstmt.executeQuery();
 			while (rs.next()) {	
@@ -171,10 +174,9 @@ public class OrderDAO {
 				oDto.setoAdminId(rs.getInt(2));
 				oDto.setoProductId(rs.getInt(3));
 				oDto.setoQuantity(rs.getInt(4));
-				oDto.setoPrice(rs.getInt(5));
-				oDto.setoTotalPrice(rs.getInt(6));
-				oDto.setoDate(rs.getString(7));
-				oDto.setoState(rs.getString(8));
+				oDto.setoTotalPrice(rs.getInt(5));
+				oDto.setoDate(rs.getString(6));
+				oDto.setoState(rs.getString(7));
 				oList.add(oDto);
 				LOG.trace(sql);
 			}
@@ -184,60 +186,9 @@ public class OrderDAO {
 			return null;
 		} finally {
 			try {
-				pstmt.close();
-				conn.close();
-				rs.close();
-			} catch (SQLException e) {
-				e.printStackTrace();
-			}
-		}
-		return oList;
-	}
-	
-	public ArrayList<OrderDTO> selectJoinAll(int page) {
-		conn = DBManager.getConnection();
-		int offset = 0;
-		String sql = null;
-		if (page == 0) {	// page가 0이면 모든 데이터를 보냄
-			sql = "select oId, oAdminId, oPrdouctId, oQuantity, oPrice, oTotalPrice, oDate, oState"
-					+ " from p_order "
-					+ " order by id desc;"; 
-		} else {			// page가 0이 아니면 해당 페이지 데이터만 보냄
-			sql = "select oId, oAdminId, oPrdouctId, oQuantity, oPrice, oTotalPrice, oDate, oState"
-					+ " from p_order"
-					+ " order by id desc limit ?, 10;";  
-			offset = (page - 1) * 10;
-		}
-		ArrayList<OrderDTO> oList = new ArrayList<OrderDTO>();
-		try {
-			pstmt = conn.prepareStatement(sql);
-			LOG.trace(sql);
-			if (page != 0) {
-				pstmt.setInt(1, offset);
-			}
-			ResultSet rs = pstmt.executeQuery();
-			while (rs.next()) {	
-				OrderDTO oDto = new OrderDTO();
-				oDto.setoId(rs.getInt(1));
-				oDto.setoAdminId(rs.getInt(2));
-				oDto.setoProductId(rs.getInt(3));
-				oDto.setoQuantity(rs.getInt(4));
-				oDto.setoPrice(rs.getInt(5));
-				oDto.setoTotalPrice(rs.getInt(6));
-				oDto.setoDate(rs.getString(7));
-				oDto.setoState(rs.getString(8));
-				oList.add(oDto);
-				LOG.trace(sql);
-			}
-		} catch (SQLException e) {
-			e.printStackTrace();
-			LOG.info("selectJoinAll(): Error Code : {}", e.getErrorCode());
-			return null;
-		} finally {
-			try {
-				pstmt.close();
-				conn.close();
-				rs.close();
+				if(pstmt != null) pstmt.close();
+				if(conn != null) conn.close();
+				if(rs != null) rs.close();
 			} catch (SQLException e) {
 				e.printStackTrace();
 			}

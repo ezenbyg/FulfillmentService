@@ -10,6 +10,12 @@
 <!-- ==================================================================== -->
 <title>창고 발주 / 출고 (발주)</title>
 <jsp:include page="../common/resource.jspf"></jsp:include>
+<script type="text/javascript">
+	function onloadPage(i) {
+		location.href = i;
+		//console.log(i.value);
+	}
+</script>
 </head>
 <body>
 	<%@ include file="../common/_admin_top.jspf"%>
@@ -28,16 +34,17 @@
 							<select id="menu" onChange="onloadPage(this.value);"
 								style="border: 5px;">
 								<option
-									value="/FulfillmentService/control/adminServlet?action=orderPage&page=1&name=P">P</option>
+									value="/FulfillmentService/control/adminServlet?action=orderPage&page=1&state=P">P</option>
 								<option
-									value="/FulfillmentService/control/adminServlet?action=orderPage&page=1&name=재고부족">재고부족</option>
+									value="/FulfillmentService/control/adminServlet?action=orderPage&page=1&state=재고부족">재고부족</option>
 								<option
-									value="/FulfillmentService/control/adminServlet?action=orderPage&page=1&name=재고부족예상">재고부족예상</option>
+									value="/FulfillmentService/control/adminServlet?action=orderPage&page=1&state=재고부족예상">재고부족예상</option>
 							</select>
 						</form>
 						</div>
 						<hr>
 						<c:set var="pList" value="${requestScope.pList}" />
+						<c:set var="cList" value="${requestScope.countList}" />
 						<table class="table table-striped">
 							<thead>
 								<tr>
@@ -58,7 +65,8 @@
 									<th>${pDto.pPrice}</th>
 									<th>${pDto.pState}</th>
 									<th class="col-md-3">
-									<form action="/FulfillmentService/control/adminServlet?action=order" class="form-horizontal" method="post">
+									<form action="/FulfillmentService/control/adminServlet?action=order&pId=${pDto.pId}&pSupplierId=${pDto.pSupplierId}&pState=${pDto.pState}&pPrice=${pDto.pPrice}" 
+									class="form-horizontal" method="post">
 									<input type="text" name="oQuantity" size="15">&nbsp;&nbsp;&nbsp;
 									<input type="submit" value="발주" name="W1">
 									</form>

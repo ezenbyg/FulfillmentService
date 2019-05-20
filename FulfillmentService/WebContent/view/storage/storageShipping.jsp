@@ -54,7 +54,7 @@
 											<th>${vDto.vDate}</th>
 											<th>${vDto.vShopName}</th>
 											<th>${vDto.vState}</th>
-								</tr>
+										</tr>
 								</c:forEach>
 							</tbody>
 						</table>

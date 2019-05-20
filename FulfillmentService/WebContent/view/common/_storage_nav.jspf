@@ -27,7 +27,7 @@
 			<li class="sub-menu"><a href="javascript:;"> <i class="fa fa-retweet"></i>
 			<span>발주/출고</span>&nbsp;<i class="fa fa-caret-down"></i></a>
 				<ul class="sub">
-					<li><a href="/FulfillmentService/control/adminServlet?action=orderPage&page=1">
+					<li><a href="/FulfillmentService/control/adminServlet?action=orderPage&page=1&state=P">
 					<span>발주</span></a></li>
 					<li><a href="/FulfillmentService/control/adminServlet?action=releasePage">
 					<span>출고</span></a>

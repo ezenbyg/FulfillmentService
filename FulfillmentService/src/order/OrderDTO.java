@@ -10,7 +10,7 @@ public class OrderDTO {
 	private String oDate;
 	private String oState;
 	
-	public OrderDTO(int oAdminId, int oProductId, int oQuantity, int oPrice, int oTotalPrice, String oDate) {
+	public OrderDTO(int oAdminId, int oProductId, int oQuantity, int oTotalPrice, String oDate) {
 		super();
 		this.oAdminId = oAdminId;
 		this.oProductId = oProductId;

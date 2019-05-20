@@ -10,6 +10,8 @@ public class StorageDTO {
 	private String pState;
 	private String pSupplierName;
 	private int pSupplierId;
+	private int reqQuantity;
+	private String pSupplierState;
 	
 	public StorageDTO() {}
 
@@ -101,10 +103,27 @@ public class StorageDTO {
 		this.pSupplierId = pSupplierId;
 	}
 
+	public int getReqQuantity() {
+		return reqQuantity;
+	}
+
+	public void setReqQuantity(int reqQuantity) {
+		this.reqQuantity = reqQuantity;
+	}
+
+	public String getpSupplierState() {
+		return pSupplierState;
+	}
+
+	public void setpSupplierState(String pSupplierState) {
+		this.pSupplierState = pSupplierState;
+	}
+
 	@Override
 	public String toString() {
 		return "StorageDTO [pId=" + pId + ", pName=" + pName + ", pImgName=" + pImgName + ", pPrice=" + pPrice
 				+ ", pQuantity=" + pQuantity + ", pAdminId=" + pAdminId + ", pState=" + pState + ", pSupplierName="
-				+ pSupplierName + ", pSupplierId=" + pSupplierId + "]";
+				+ pSupplierName + ", pSupplierId=" + pSupplierId + ", reqQuantity=" + reqQuantity + ", pSupplierState="
+				+ pSupplierState + "]";
 	}
 }

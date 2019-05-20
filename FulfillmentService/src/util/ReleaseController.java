@@ -10,6 +10,8 @@ import invoice.InvoiceDAO;
 import invoice.InvoiceDTO;
 import release.ReleaseDAO;
 import release.ReleaseDTO;
+import state.InvoiceState;
+import state.ProductState;
 import storage.StorageDAO;
 import storage.StorageDTO;
 

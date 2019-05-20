@@ -27,14 +27,15 @@ import order.OrderDAO;
 import order.OrderDTO;
 import release.ReleaseDAO;
 import release.ReleaseDTO;
+import state.ReleaseState;
 import storage.SoldProductDAO;
 import storage.SoldProductDTO;
 import storage.StorageDAO;
 import storage.StorageDTO;
 import util.DateController;
 import util.InvoiceController;
+import util.OrderController;
 import util.ReleaseController;
-import util.ReleaseState;
 
 /**
  * Servlet implementation class AdminProc
@@ -79,6 +80,7 @@ public class AdminProc extends HttpServlet {
 		
 		DateController dc = null;
 		ReleaseController rc = null;
+		OrderController oc = null;
 		
 		String name = null;
 		String title = null;
@@ -92,11 +94,10 @@ public class AdminProc extends HttpServlet {
 		int pageNo = 0;
 		int pathNum = 0;
 		int vAdminId = 0;
-		int oId = 0;
-		int oAdminId = 0;
-		int oProductId = 0;
+		int pId = 0;
+		int pSupplierId = 0;
 		int oQuantity = 0;
-		int oPrice = 0;
+		int pPrice = 0;
 		int oTotalPrice = 0;
 	
 		String rInvoiceId = null;
@@ -113,6 +114,7 @@ public class AdminProc extends HttpServlet {
 		List<InvoiceProductDTO> ipList = null;
 		List<ReleaseDTO> rList = null;
 		List<StorageDTO> pList = null;
+		List<Integer> countList = null;
 		ArrayList<String> pageList = new ArrayList<String>();
 		
 		switch (action) {
@@ -286,7 +288,7 @@ public class AdminProc extends HttpServlet {
 			pDao = new StorageDAO();
 			StorageDTO modal = new StorageDTO();
 			
-			int pId = Integer.parseInt(request.getParameter("pId"));
+			pId = Integer.parseInt(request.getParameter("pId"));
 			modal = pDao.getModal(pId); // pId, pName, pPrice, pQuantity  get
 			LOG.debug(title);
 			request.setAttribute("modal", modal);
@@ -352,10 +354,16 @@ public class AdminProc extends HttpServlet {
 			if (!request.getParameter("page").equals("")) {
 				curPage = Integer.parseInt(request.getParameter("page"));
 			}
-			pState = request.getParameter("name");
+			// 드롭다운으로 상태 선택
+			if(request.getParameter("state") != null) {
+				pState = request.getParameter("state");
+			} else pState = "P";
+			
+			LOG.debug(pState);
+			
 			pDao = new StorageDAO();
 			// LOG.debug("vDao.getCount() : " + vDao.getCount()); 
-			count = pDao.getCount();
+			count = pDao.getCountByState(pState);
 			if (count == 0)			// 데이터가 없을 때 대비
 				count = 1;
 			pageNo = (int)Math.ceil(count/10.0);
@@ -373,8 +381,8 @@ public class AdminProc extends HttpServlet {
 			page = "&nbsp;<a href=#>&raquo;</a>";
 			pageList.add(page);
 			
-			pList = pDao.getAllProductsForOrder(curPage);
-			for (StorageDTO pDto: pList)
+			pList = pDao.getAllProductsForOrder(curPage, pState);
+			for (StorageDTO pDto: pList) 
 				LOG.debug("pDto : " + pDto.toString());
 
 			request.setAttribute("pList", pList);
@@ -383,38 +391,26 @@ public class AdminProc extends HttpServlet {
 	        rd.forward(request, response);
 	        break;
 	        
-		case "order" : // 발주(창고 -> 구매처), 발주 상태 : 구매요청, 공급실행, 구매확인요청, 구매확정
+		case "order" : // 발주 버튼 클릭 시
+			oc = new OrderController();
 			vDao = new InvoiceDAO();
-			oProductId = Integer.parseInt(request.getParameter("oProductId"));
 			oQuantity = Integer.parseInt(request.getParameter("oQuantity"));
-			oPrice = Integer.parseInt(request.getParameter("oPrice"));
-			oTotalPrice = Integer.parseInt(request.getParameter("oTotalPrice"));
-			
-			aDao = new AdminDAO();
-			admins = aDao.getOneAdminByName(request.getParameter("oName"));
-			pDao = new StorageDAO();
-			product = pDao.getOneProductById(oProductId);
-		
-			// 제품 상태가 P이면 발주 불가능, (재고부족, 재고부족예상 인 경우에 가능)
-			if(product.getpState().equals("P")) {
-				message = "재고가 많습니다.";
+			pId = Integer.parseInt(request.getParameter("pId"));
+			pPrice = Integer.parseInt(request.getParameter("pPrice"));
+			pSupplierId = Integer.parseInt(request.getParameter("pSupplierId"));
+			pState = request.getParameter("pState");
+			oTotalPrice = oQuantity * pPrice;
+			if(pState.equals("P")) { 
+				message = "제품 수량이 충분 합니다!";
 				request.setAttribute("message", message);
-				request.setAttribute("url", "/view/storage/storageStocktaking.jsp");
-				rd = request.getRequestDispatcher("/view/alertMsg.jsp");
+				request.setAttribute("url", "/FulfillmentService/control/adminServlet?action=orderPage&page=1");
+				rd = request.getRequestDispatcher("../view/alertMsg.jsp");
 				rd.forward(request, response);
 				break;
 			}
-
-			order = new OrderDTO(admins.getaId(), oProductId, oQuantity, oPrice, oTotalPrice, dc.currentTime());
-			oDao = new OrderDAO();
-			oDao.addOrderProducts(order);
 			
-			order = oDao.getOneOrderList(admins.getaId(), oProductId);
-			message = "발주번호는 " + order.getoId() + " 입니다.";
-			request.setAttribute("message", message);
-			
-			LOG.debug("/view/storage/storageStocktaking.jsp");
-			rd = request.getRequestDispatcher("/view/storage/storageStocktaking.jsp");
+			oc.processOrder(pSupplierId, pId, oQuantity, oTotalPrice, pState);
+			rd = request.getRequestDispatcher("/control/adminServlet?action=orderPage&page=1&state="+pState);
 	        rd.forward(request, response);
 			break;
 			
@@ -471,7 +467,7 @@ public class AdminProc extends HttpServlet {
 	        rd.forward(request, response);
 			break;
 			
-		case "completeDelivery" : // 배송확정버튼 클릭 시
+		case "completeDelivery" : // 배송확정 버튼 클릭 시
 			rState = request.getParameter("rState");
 			rInvoiceId = request.getParameter("rInvoiceId");
 			if(!(rState.equals(String.valueOf(ReleaseState.배송확인요청)))) {

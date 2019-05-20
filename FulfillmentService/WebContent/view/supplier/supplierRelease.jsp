@@ -24,18 +24,22 @@
 				<div class="col-md-12">
 					<div class="content-panel">
 						<h4>
-							<i class="fa fa-angle-right"></i> 구매처 관리 (상품 출고)
+							<i class="fa fa-angle-right"></i> 납품
 						</h4>
 						<hr>
+						<div style="margin-left: 90%;">
+							<a class="btn btn-primary" href ="/FulfillmentService/control/adminServlet?action=download" role="button">납품</a>
+						</div>
 						<table class="table table-striped">
 							<thead>
 								<tr>
-									<th>구매처ID</th>
-									<th>제품ID</th>
+									<th>발주번호</th>
+									<th>구매처</th>
+									<th>제품명</th>
 									<th>수량</th>
-									<th>물품 가격</th>
 									<th>총 가격</th>
 									<th>날짜</th>
+									<th>발주상태</th>
 									<th></th>
 								</tr>
 							</thead>
@@ -47,7 +51,7 @@
 									<th>?</th>
 									<th>?</th>
 									<th>?</th>
-									<th><input type="button" class="btn btn-success" value="출고"></th>
+									<th><a class="btn btn-primary" href ="/FulfillmentService/control/adminServlet?action=download" role="button">구매확인요청</a></th>
 								</tr>
 							</tbody>
 						</table>

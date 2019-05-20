@@ -5,6 +5,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -247,12 +248,15 @@ public class StorageDAO {
 		}
 		try {
 			pstmt = conn.prepareStatement(sql);
-			if (page != 0) {
-				pstmt.setInt(1, offset);
+			if (page == 0) {
+				pstmt.setString(1, pState);
+			} else if(page != 0) {
+				pstmt.setString(1, pState);
+				pstmt.setInt(2, offset);
 			}
 			rs = pstmt.executeQuery();
 
-			while (rs.next()) { // 쿼리문 넣고, 읽어드리기
+			while (rs.next()) { 
 				StorageDTO pDto = new StorageDTO();
 				pDto.setpId(rs.getInt(1));
 				pDto.setpName(rs.getString(2));
@@ -324,6 +328,35 @@ public class StorageDAO {
 			e.printStackTrace();
 			LOG.info(e.getMessage());
 			LOG.info("getCount(): Error Code : {}", e.getErrorCode());
+		} finally {
+			try {
+				if(pstmt != null) pstmt.close();
+				if(conn != null) conn.close();
+				if(rs != null) rs.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+		return 0;
+	}
+	
+	// 제품 상태에 따른 개수
+	public int getCountByState(String pState) {
+		String sql = "select count(*) from storage where pState=?;" ;
+		conn = DBManager.getConnection();
+		int count = 0;
+		try {
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setString(1, pState);
+			rs = pstmt.executeQuery();
+			while (rs.next()) {
+				count = rs.getInt(1);
+			}
+			return count;
+		} catch (SQLException e) {
+			e.printStackTrace();
+			LOG.info(e.getMessage());
+			LOG.info("getCountByState(): Error Code : {}", e.getErrorCode());
 		} finally {
 			try {
 				if(pstmt != null) pstmt.close();

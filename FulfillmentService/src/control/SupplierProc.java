@@ -17,14 +17,14 @@ import org.slf4j.LoggerFactory;
 
 import release.ReleaseDAO;
 import release.ReleaseDTO;
-import state.ReleaseState;
 import util.DateController;
 
-@WebServlet("/control/transportServlet")
-public class TransportProc extends HttpServlet {
+@WebServlet("/control/supplierServlet")
+public class SupplierProc extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-	private static final Logger LOG = LoggerFactory.getLogger(TransportProc.class);
-    public TransportProc() {
+	private static final Logger LOG = LoggerFactory.getLogger(SupplierProc.class);
+       
+    public SupplierProc() {
         super();
     }
 
@@ -41,34 +41,33 @@ public class TransportProc extends HttpServlet {
 		HttpSession session = request.getSession();
 		RequestDispatcher rd = null;
 		
-		String rState = null;
-		String rInvoiceId = null;
 		String message = null;
 		String date = null;
 		String page = null;
 		String[] dateFormat = null;
+		
 		int count = 0;
 		int pageNo = 0;
 		int curPage = 1;
+		int oAdminId = 0;
 		
-		ReleaseDAO rDao = null;
 		DateController dc = null;
 		String action = request.getParameter("action");
-		List<ReleaseDTO> rList = null;
 		ArrayList<String> pageList = new ArrayList<String>();
 		
 		switch(action) {
-		case "transportHistory" : // 운송내역조회 페이지
+		case "orderHistory" : // 발주 내역 조회 페이지
+			oAdminId = (Integer)session.getAttribute("sessionAdminId");
 			dc = new DateController();
-		
+			
 			if (!request.getParameter("page").equals("")) {
 				curPage = Integer.parseInt(request.getParameter("page"));
 				LOG.debug("curPage : " + curPage);
 			}
 			
 			// 네비에서 타고올때는 초기값이 null
-			if(request.getParameter("dateRelease") != null) {
-				date = request.getParameter("dateRelease"); 
+			if(request.getParameter("dateOrder") != null) {
+				date = request.getParameter("dateOrder"); 
 				LOG.debug(String.valueOf(date.length()));
 				if(date.length() > 10) {
 					dateFormat = date.split(" ");
@@ -106,44 +105,7 @@ public class TransportProc extends HttpServlet {
 			rd = request.getRequestDispatcher("/view/transport/transportHistory.jsp");
 	        rd.forward(request, response);
 			break; 
-		
-		case "startDelivery" : // 배송실행 버튼 클릭 시
-			rState = request.getParameter("rState");
-			rInvoiceId = request.getParameter("rInvoiceId");
-			if(!(rState.equals(String.valueOf(ReleaseState.배송요청)))) {
-				message = "아직 배송실행을 누를 수 없습니다!!";
-				request.setAttribute("message", message);
-				request.setAttribute("url", "/FulfillmentService/control/transportServlet?action=transportHistory&page=1");
-				rd = request.getRequestDispatcher("../view/alertMsg.jsp");
-				rd.forward(request, response);
-				break;
-			}
-			
-			rDao = new ReleaseDAO();
-			rDao.updateReleaseState(String.valueOf(ReleaseState.배송실행), rInvoiceId);
-			rd = request.getRequestDispatcher("/control/transportServlet?action=transportHistory&page=1");
-	        rd.forward(request, response);
-			break;
-			
-		case "requestConfirm" : // 배송확인요청 버튼 클릭 시
-			rState = request.getParameter("rState");
-			rInvoiceId = request.getParameter("rInvoiceId");
-			if(!(rState.equals(String.valueOf(ReleaseState.배송실행)))) {
-				message = "아직 배송확인요청을 누를 수 없습니다!!";
-				request.setAttribute("message", message);
-				request.setAttribute("url", "/FulfillmentService/control/transportServlet?action=transportHistory&page=1");
-				rd = request.getRequestDispatcher("../view/alertMsg.jsp");
-				rd.forward(request, response);
-				break;
-			}
-			
-			rDao = new ReleaseDAO();
-			rDao.updateReleaseState(String.valueOf(ReleaseState.배송확인요청), rInvoiceId);
-			rd = request.getRequestDispatcher("/control/transportServlet?action=transportHistory&page=1");
-	        rd.forward(request, response);
-			break;
-			
-		default : break;
 		}
 	}
+
 }
