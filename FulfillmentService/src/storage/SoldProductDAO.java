@@ -19,16 +19,16 @@ public class SoldProductDAO {
 	public void addSoldProducts(SoldProductDTO sDto) { 
 		LOG.trace("addSoldProducts(): " + sDto.toString());
 		conn = DBManager.getConnection();
-		String sql = "insert into p_order(soldAdminId, soldId, soldName, soldPrice, soldTotalPrice, soldQuantity, soldDate)"
+		String sql = "insert into soldproduct(soldInvId, soldShopId, soldTransportId, soldId, soldQuantity, soldTotalPrice, soldDate)"
 				+ " values(?, ?, ?, ?, ?, ?, ?)";
 		try {
 			pstmt = conn.prepareStatement(sql);
-			pstmt.setInt(1, sDto.getSoldAdminId());
-			pstmt.setInt(2, sDto.getSoldId());
-			pstmt.setString(3, sDto.getSoldName());
-			pstmt.setInt(4, sDto.getSoldPrice());
-			pstmt.setInt(5, sDto.getSoldTotalPrice());
-			pstmt.setInt(6, sDto.getSoldQuantity());
+			pstmt.setString(1, sDto.getSoldInvId());
+			pstmt.setInt(2, sDto.getSoldShopId());
+			pstmt.setInt(3, sDto.getSoldTransportId());
+			pstmt.setInt(4, sDto.getSoldId());
+			pstmt.setInt(5, sDto.getSoldQuantity());
+			pstmt.setInt(6, sDto.getSoldTotalPrice());
 			pstmt.setString(7, sDto.getSoldDate());
 			pstmt.executeUpdate();
 		} catch (SQLException e) {
@@ -75,11 +75,9 @@ public class SoldProductDAO {
 				SoldProductDTO sDto = new SoldProductDTO();
 				sDto.setSoldAdminId(rs.getInt(1));
 				sDto.setSoldId(rs.getInt(2));
-				sDto.setSoldName(rs.getString(3));
-				sDto.setSoldPrice(rs.getInt(4));
-				sDto.setSoldTotalPrice(rs.getInt(5));
-				sDto.setSoldQuantity(rs.getInt(6));
-				sDto.setSoldDate(rs.getString(7));
+				sDto.setSoldQuantity(rs.getInt(3));
+				sDto.setSoldTotalPrice(rs.getInt(4));
+				sDto.setSoldDate(rs.getString(5));
 				LOG.trace(sDto.toString());
 				soldList.add(sDto);
 			}
@@ -155,11 +153,9 @@ public class SoldProductDAO {
 				SoldProductDTO sDto = new SoldProductDTO();
 				sDto.setSoldAdminId(rs.getInt(1));
 				sDto.setSoldId(rs.getInt(2));
-				sDto.setSoldName(rs.getString(3));
-				sDto.setSoldPrice(rs.getInt(4));
-				sDto.setSoldTotalPrice(rs.getInt(5));
-				sDto.setSoldQuantity(rs.getInt(6));
-				sDto.setSoldDate(rs.getString(7));
+				sDto.setSoldQuantity(rs.getInt(3));
+				sDto.setSoldTotalPrice(rs.getInt(4));
+				sDto.setSoldDate(rs.getString(5));
 				LOG.trace(sDto.toString());
 				soldList.add(sDto);
 			}
@@ -178,7 +174,7 @@ public class SoldProductDAO {
 		return soldList;
 	}
 	
-	public int getAllAdminIdCount() {
+	public int getCount() {
 		String sql = "select count(*) from soldproduct;" ;
 		conn = DBManager.getConnection();
 		int count = 0;

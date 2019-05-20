@@ -27,8 +27,12 @@
 						<h4>
 							<i class="fa fa-angle-right"></i> 창고 관리 (운송내역조회)
 						</h4>
+							<form action="/FulfillmentService/control/adminServlet?action=transportHistory&page=1" class="form-horizontal" method="post">
+								<input type="date" name="dateRelease" id="datepicker1">&nbsp;
+								<input type="submit" class="btn btn-info btn-xs" value="조회">
+							</form>
 						<hr>
-						<c:set var="vList" value="${requestScope.vList}" />
+						<c:set var="rList" value="${requestScope.rList}" />
 						<table class="table table-striped">
 							<thead>
 								<tr>
@@ -40,19 +44,27 @@
 								</tr>
 							</thead>
 							<tbody>
+							<c:forEach var="rDto" items="${rList}">
 								<tr>
-									<th>#</th>
-									<th>#</th>
-									<th>#</th>
-									<th>#</th>
-									<th>#</th>
-									<th>#</th>			
-									<th><a class="btn btn-primary btn-xs" href ="/FulfillmentService/control/adminServlet?action=completeDelivery" role="button">배송확정</a></th>
+									<th>${rDto.rId}</th>
+									<th>${rDto.rInvoiceId}</th>
+									<th>${rDto.rTransportName}</th>
+									<th>${rDto.rDate}</th>
+									<th>${rDto.rState}</th>		
+									<th><a class="btn btn-primary btn-xs" href ="/FulfillmentService/control/adminServlet?action=completeDelivery&rState=${rDto.rState}&rInvoiceId=${rDto.rInvoiceId}" role="button">배송확정</a></th>
+								</tr>
+							</c:forEach>
 							</tbody>
 						</table>
 					</div>
 					<div class="col-md-3"></div>
 				</div>
+			</div>
+			<div>
+			<c:set var="pageList" value="${requestScope.transportHistoryPageList}" />
+			<c:forEach var="pageNo" items="${pageList}">
+				${pageNo}
+			</c:forEach>
 			</div>
 		</section>
 		<%@ include file="../common/_bottom.jspf"%>

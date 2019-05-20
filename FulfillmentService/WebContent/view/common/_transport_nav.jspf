@@ -5,7 +5,7 @@
 	<div id="sidebar" class="nav-collapse ">
 		<ul class="sidebar-menu" id="nav-accordion">
 			<li class="sub-menu"><a href="/FulfillmentService/view/transport/transportPayList.jsp"> <i class="fa fa-list"></i> <span>대금지급리스트</span></a>
-			<li class="sub-menu"><a href="/FulfillmentService/view/transport/transportHistory.jsp"> <i class="fa fa-search"></i> <span>운송 내역 조회</span></a>
+			<li class="sub-menu"><a href="/FulfillmentService/control/transportServlet?action=transportHistory&page=1"> <i class="fa fa-search"></i> <span>운송 내역 조회</span></a>
 			</li>
 		<li class="sub-menu"><a href="javascript:;"> <i class="fa fa-cogs"></i><span>관리자</span>&nbsp;&nbsp;<i class="fa fa-caret-down"></i></a>
 				<ul class="sub">

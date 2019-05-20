@@ -13,7 +13,8 @@
 </head>
 <body>
 	<%@ include file="../common/_admin_top.jspf"%>
-	<%@ include file="../common/_transport_nav.jspf"%>
+	<%@ include file="../common/_storage_nav.jspf"%>
+
 	<section id="main-content">
 		<section class="wrapper">
 			<h3>운송내역조회</h3>
@@ -21,9 +22,14 @@
 				<div class="col-md-12">
 					<div class="content-panel">
 						<h4>
-							<i class="fa fa-angle-right"></i> 운송회사 관리 (운송내역조회)
+							<i class="fa fa-angle-right"></i> 운송내역조회
 						</h4>
+							<form action="/FulfillmentService/control/transportServlet?action=transportHistory&page=1" class="form-horizontal" method="post">
+								<input type="date" name="dateRelease" id="datepicker1">&nbsp;
+								<input type="submit" class="btn btn-info btn-xs" value="조회">
+							</form>
 						<hr>
+						<c:set var="rList" value="${requestScope.rList}" />
 						<table class="table table-striped">
 							<thead>
 								<tr>
@@ -34,58 +40,32 @@
 									<th>배송상태</th>
 								</tr>
 							</thead>
-							<!-- Modal -->
 							<tbody>
+							<c:forEach var="rDto" items="${rList}">
 								<tr>
-									<th onclick="modal();">출고번호</th>
-									<th>송장ID</th>
-									<th>이름</th>
-									<th>번호</th>
-									<th>주소</th>
-									<th>날짜</th>
-									<td style="margin-right: 10px"><select
-										style="text-align: center;">
-											<option value="출고">출고</option>
-											<option value="배송전">배송전</option>
-											<option value="배송중">배송중</option>
-											<option value="배송완료">배송완료</option>
-									</select></td>
+									<th>${rDto.rId}</th>
+									<th>${rDto.rInvoiceId}</th>
+									<th>${rDto.rTransportName}</th>
+									<th>${rDto.rDate}</th>
+									<th>${rDto.rState}</th>		
+									<th><a class="btn btn-primary btn-xs" href ="/FulfillmentService/control/transportServlet?action=startDelivery&rState=${rDto.rState}&rInvoiceId=${rDto.rInvoiceId}" role="button">배송실행</a></th>
+									<th><a class="btn btn-primary btn-xs" href ="/FulfillmentService/control/transportServlet?action=requestConfirm&rState=${rDto.rState}&rInvoiceId=${rDto.rInvoiceId}" role="button">배송확인요청</a></th>
 								</tr>
+							</c:forEach>
 							</tbody>
 						</table>
 					</div>
+					<div class="col-md-3"></div>
 				</div>
 			</div>
-			<!-- 여기에 글 쓰씨면 됩니다. -->
-				<div class="row" id="dialog" style="width: auto; height: auto; display: none;">
-					<div class="col-md-12">
-						<table class="table table-bordered table-striped table-condensed">
-							<tr>
-								<th>출고번호</th>
-								<th>송장</th>
-								<th>이름</th>
-								<th>번호</th>
-								<th>배송상태</th>
-							</tr>
-							<tr>
-								<th>#</th>
-								<th>#</th>
-								<th><input type="text" size="5px"></th>
-								<th>#</th>
-								<th>#</th>
-							</tr>
-							<tr>
-								<th colspan="5">
-									<button type="button" class="btn btn-primary">배송</button>
-									<button type="button" class="btn btn-primary">배송확인요청</button>
-								</th>
-							</tr>
-						</table>
-					</div>
-				</div>
+			<div>
+			<c:set var="pageList" value="${requestScope.transportHistoryPageList}" />
+			<c:forEach var="pageNo" items="${pageList}">
+				${pageNo}
+			</c:forEach>
+			</div>
 		</section>
 		<%@ include file="../common/_bottom.jspf"%>
 	</section>
-	<!-- ==================================================================== -->
 </body>
 </html>

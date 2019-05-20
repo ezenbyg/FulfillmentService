@@ -27,11 +27,14 @@ import order.OrderDAO;
 import order.OrderDTO;
 import release.ReleaseDAO;
 import release.ReleaseDTO;
+import storage.SoldProductDAO;
+import storage.SoldProductDTO;
 import storage.StorageDAO;
 import storage.StorageDTO;
 import util.DateController;
 import util.InvoiceController;
 import util.ReleaseController;
+import util.ReleaseState;
 
 /**
  * Servlet implementation class AdminProc
@@ -70,6 +73,8 @@ public class AdminProc extends HttpServlet {
 		InvoiceDAO vDao = null;
 		ReleaseDAO rDao = null;
 		ReleaseDTO release = null;
+		SoldProductDAO spDao = null;
+		SoldProductDTO soldProduct = null;
 		RequestDispatcher rd = null;
 		
 		DateController dc = null;
@@ -94,18 +99,21 @@ public class AdminProc extends HttpServlet {
 		int oPrice = 0;
 		int oTotalPrice = 0;
 	
-		int rInvoiceId = 0;
+		String rInvoiceId = null;
 		String rTransportName = null;
 	
+		String rState = null;
 		String pState = null;
 		String rDate = null;
 		String vId = null;
-		
+		String[] dateFormat = null;
 		String action = request.getParameter("action");
 		List<InvoiceDTO> vList = null;
 		List<InvoiceDTO> vDetailList = null;
 		List<OrderDTO> oList = null;
 		List<InvoiceProductDTO> ipList = null;
+		List<ReleaseDTO> rList = null;
+		List<StorageDTO> pList = null;
 		ArrayList<String> pageList = new ArrayList<String>();
 		
 		switch (action) {
@@ -379,7 +387,6 @@ public class AdminProc extends HttpServlet {
 		case "releasePage" : // 출고를 위한 페이지
 			vDao = new InvoiceDAO();
 			dc = new DateController();
-			String[] dateFormat = null;
 			
 			// 네비에서 타고올때는 초기값이 null
 			if(request.getParameter("date") != null) {
@@ -431,11 +438,86 @@ public class AdminProc extends HttpServlet {
 			break;
 			
 		case "completeDelivery" : // 배송확정버튼 클릭 시
+			rState = request.getParameter("rState");
+			rInvoiceId = request.getParameter("rInvoiceId");
+			if(!(rState.equals(String.valueOf(ReleaseState.배송확인요청)))) {
+				message = "아직 배송확정을 누를 수 없습니다!!";
+				request.setAttribute("message", message);
+				request.setAttribute("url", "/FulfillmentService/control/adminServlet?action=transportHistory&page=1");
+				rd = request.getRequestDispatcher("../view/alertMsg.jsp");
+				rd.forward(request, response);
+				break;
+			}
+			
+			dc = new DateController();
+			rDao = new ReleaseDAO();
+			rDao.updateReleaseState(String.valueOf(ReleaseState.배송확정), rInvoiceId);
+			
+			// soldProduct 테이블에 판매된 정보를 삽입
+			vDao = new InvoiceDAO();
+			pDao = new StorageDAO();
+			spDao = new SoldProductDAO();
+			product = new StorageDTO();
+			vList = vDao.getAllInvoiceListsById(rInvoiceId);
+			for(InvoiceDTO ivto : vList) {
+				soldProduct = new SoldProductDTO(rInvoiceId, ivto.getvAdminId(), ivto.getVlogisId(), 
+						ivto.getvProductId(), ivto.getvQuantity(), ivto.getvPrice(), dc.currentTime());
+				spDao.addSoldProducts(soldProduct);
+			}
+			
+			rd = request.getRequestDispatcher("/control/adminServlet?action=transportHistory&page=1");
+	        rd.forward(request, response);
 			break;
 			
 		case "transportHistory" : // 운송내역조회 페이지
+			dc = new DateController();
+		
+			if (!request.getParameter("page").equals("")) {
+				curPage = Integer.parseInt(request.getParameter("page"));
+				LOG.debug("curPage : " + curPage);
+			}
 			
-			break;
+			// 네비에서 타고올때는 초기값이 null
+			if(request.getParameter("dateRelease") != null) {
+				date = request.getParameter("dateRelease"); 
+				LOG.debug(String.valueOf(date.length()));
+				if(date.length() > 10) {
+					dateFormat = date.split(" ");
+					date = dateFormat[0];
+					LOG.debug(date);
+				}
+			} else date = dc.getToday();
+			
+			rDao = new ReleaseDAO();
+			LOG.debug("vDao.getCount() : " + rDao.getCount()); 
+			count = rDao.getCount();
+			if (count == 0)			// 데이터가 없을 때 대비
+				count = 1;
+			pageNo = (int)Math.ceil(count/10.0);
+			if (curPage > pageNo)	// 경계선에 걸렸을 때 대비
+				curPage--;
+			session.setAttribute("transportHistoryPage", curPage);
+			// 리스트 페이지의 하단 페이지 데이터 만들어 주기
+			page = "<a href=#>&laquo;</a>&nbsp;";
+			pageList.add(page);
+			for (int i=1; i<=pageNo; i++) {
+				page = "&nbsp;<a href=/FulfillmentService/control/adminServlet?action=transportHistory&page=" + i + ">" + i + "</a>&nbsp;";
+				pageList.add(page);
+				LOG.trace("");
+			}
+			page = "&nbsp;<a href=#>&raquo;</a>";
+			pageList.add(page);
+			
+			rList = rDao.selectdailyToRelease(curPage, date);
+			for (ReleaseDTO rDto: rList)
+				LOG.debug("RDTO : " + rDto.toString());
+			
+			request.setAttribute("rList", rList);
+			request.setAttribute("transportHistoryPageList", pageList);
+			rd = request.getRequestDispatcher("/view/storage/storageTransportHistory.jsp");
+	        rd.forward(request, response);
+			break; 
+
 		default : break;
 		}
 	}

@@ -9,11 +9,8 @@ import java.util.ArrayList;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import invoice.InvoiceDAO;
-import invoice.InvoiceDTO;
 import util.DBManager;
-import util.DateController;
-import util.ProductState;
+
 
 public class ReleaseDAO {
 	private static final Logger LOG = LoggerFactory.getLogger(ReleaseDAO.class);
@@ -109,7 +106,7 @@ public class ReleaseDAO {
 		return rDto;
 	}
 	
-	public void updateReleaseState(String rState, int rInvoiceId) {
+	public void updateReleaseState(String rState, String rInvoiceId) {
 		LOG.debug("");
 		PreparedStatement pStmt = null;
 		conn = DBManager.getConnection();
@@ -118,7 +115,7 @@ public class ReleaseDAO {
 		try {
 			pStmt = conn.prepareStatement(sql);
 			pStmt.setString(1, rState);
-			pStmt.setInt(2, rInvoiceId);
+			pStmt.setString(2, rInvoiceId);
 			pStmt.executeUpdate();
 			LOG.trace(sql);
 		} catch (SQLException e) {
@@ -126,8 +123,8 @@ public class ReleaseDAO {
 			LOG.info("updateReleaseState() Error Code : {}", e.getErrorCode());
 		} finally {
 			try {
-				pstmt.close();
-				conn.close();
+				if(pstmt != null) pstmt.close();
+				if(conn != null) conn.close();
 			} catch (SQLException e) {
 				e.printStackTrace();
 			}
@@ -152,9 +149,9 @@ public class ReleaseDAO {
 			LOG.info("getCount(): Error Code : {}", e.getErrorCode());
 		} finally {
 			try {
-				pstmt.close();
-				conn.close();
-				rs.close();
+				if(pstmt != null) pstmt.close();
+				if(conn != null) conn.close();
+				if(rs != null) rs.close();
 			} catch (SQLException e) {
 				e.printStackTrace();
 			}
@@ -214,22 +211,28 @@ public class ReleaseDAO {
 		return rList;
 	}
 	
-	public ArrayList<InvoiceDTO> selectdailyToRelease(int page, String date) {
+	public ArrayList<ReleaseDTO> selectdailyToRelease(int page, String date) {
 		conn = DBManager.getConnection();
 		int offset = 0;
 		String sql = null;
 		if (page == 0) {	// page가 0이면 모든 데이터를 보냄
-			sql = 	"select vId, vName, vTel, vAddress, vProductName, vQuantity, vDate "
-					+ "from invoice where vDate=? " 
-					+ "order by vDate desc;";
+			sql = 	"select r.rId, r.rInvoiceId, r.rTransportId, a.aName, r.rDate, r.rState "
+					+ "from p_release as r "
+					+ "inner join admins as a "
+					+ "on r.rTransportId=a.aId "
+					+ "where date_format(r.rDate, '%Y-%m-%d')=? "
+					+ "order by r.rDate desc;";
 			
 		} else {			// page가 0이 아니면 해당 페이지 데이터만 보냄
-			sql = "select vId, vName, vTel, vAddress, vProductName, vQuantity, vDate "
-					+ "from invoice where vDate=? " 
-					+ "order by vDate desc limit ?, 10;";
+			sql = "select r.rId, r.rInvoiceId, r.rTransportId, a.aName, r.rDate, r.rState "
+					+ "from p_release as r "
+					+ "inner join admins as a "
+					+ "on r.rTransportId=a.aId "
+					+ "where date_format(r.rDate, '%Y-%m-%d')=? "
+					+ "order by r.rDate desc limit ?, 10;";
 			offset = (page - 1) * 10;
 		}
-		ArrayList<InvoiceDTO> vList = new ArrayList<InvoiceDTO>();
+		ArrayList<ReleaseDTO> rList = new ArrayList<ReleaseDTO>();
 		try {
 			pstmt = conn.prepareStatement(sql);
 			LOG.trace(sql);
@@ -241,15 +244,14 @@ public class ReleaseDAO {
 			}
 			ResultSet rs = pstmt.executeQuery();
 			while (rs.next()) {	
-				InvoiceDTO vDto = new InvoiceDTO();
-				vDto.setvId(rs.getString(1));
-				vDto.setvName(rs.getString(2));
-				vDto.setvTel(rs.getString(3));
-				vDto.setvAddress(rs.getString(4));
-				vDto.setvProductName(rs.getString(5));
-				vDto.setvQuantity(rs.getInt(6));
-				vDto.setvDate(rs.getString(7));
-				vList.add(vDto);
+				ReleaseDTO rDto = new ReleaseDTO();
+				rDto.setrId(rs.getInt(1));
+				rDto.setrInvoiceId(rs.getString(2));
+				rDto.setrTransportId(rs.getInt(3));
+				rDto.setrTransportName(rs.getString(4));
+				rDto.setrDate(rs.getString(5));
+				rDto.setrState(rs.getString(6));
+				rList.add(rDto);
 				LOG.trace(sql);
 			}
 		} catch (SQLException e) {
@@ -258,13 +260,13 @@ public class ReleaseDAO {
 			return null;
 		} finally {
 			try {
-				pstmt.close();
-				conn.close();
-				rs.close();
+				if(pstmt != null) pstmt.close();
+				if(conn != null) conn.close();
+				if(rs != null) rs.close();
 			} catch (SQLException e) {
 				e.printStackTrace();
 			}
 		}
-		return vList;
+		return rList;
 	}
 }

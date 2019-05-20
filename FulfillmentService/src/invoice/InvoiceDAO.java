@@ -83,7 +83,7 @@ public class InvoiceDAO {
 				+ "inner join admins as a "
 				+ "on a.aId =v.vlogisId " 
 				+ "where date_format(v.vDate, '%Y-%m-%d')=? "
-				+ "order by v.vDate, v.vState desc;";
+				+ "order by v.vDate, v.vState;";
 		try {
 			pstmt = conn.prepareStatement(sql);
 			pstmt.setString(1, date);
@@ -107,9 +107,9 @@ public class InvoiceDAO {
 			return null;
 		} finally {
 			try {
-				pstmt.close();
-				conn.close();
-				rs.close();
+				if(pstmt != null) pstmt.close();
+				if(conn != null) conn.close();
+				if(rs != null) rs.close();
 			} catch (SQLException e) {
 				e.printStackTrace();
 			}
@@ -121,14 +121,14 @@ public class InvoiceDAO {
 	public ArrayList<InvoiceDTO> getAllInvoiceListsById(String vId) {
 		ArrayList<InvoiceDTO> vList = new ArrayList<InvoiceDTO>();
 		conn = DBManager.getConnection();
-		String sql = "select v.vId, v.vShopName, v.vName, v.vTel, v.vAddress, v.vDate, v.vPrice, vState, a.aName, a.aId, p.ipProductId, p.ipQuantity, s.pName, s.pState "
+		String sql = "select v.vId, v.vAdminId, v.vShopName, v.vName, v.vTel, v.vAddress, v.vDate, v.vPrice, vState, a.aName, a.aId, p.ipProductId, p.ipQuantity, s.pName, s.pState "
 				+ "from invoice as v " 
 				+ "inner join invoiceproduct as p "
 				+ "on v.vId=p.pInvoiceId "
 				+ "inner join storage as s "
 				+ "on s.pId=p.ipProductId " 
 				+ "inner join admins as a "
-				+ "on a.aId =v.vlogisId "
+				+ "on a.aId=v.vlogisId "
 				+ "where v.vId=?;";
 		try {
 			pstmt = conn.prepareStatement(sql);
@@ -137,19 +137,20 @@ public class InvoiceDAO {
 			while(rs.next()) {
 				InvoiceDTO vDto = new InvoiceDTO();
 				vDto.setvId(rs.getString(1));
-				vDto.setvShopName(rs.getString(2));
-				vDto.setvName(rs.getString(3));
-				vDto.setvTel(rs.getString(4));
-				vDto.setvAddress(rs.getString(5));
-				vDto.setvDate(rs.getString(6));
-				vDto.setvPrice(rs.getInt(7));
-				vDto.setvState(rs.getString(8));
-				vDto.setvTransportName(rs.getString(9));
-				vDto.setVlogisId(rs.getInt(10));
-				vDto.setvProductId(rs.getInt(11));
-				vDto.setvQuantity(rs.getInt(12));
-				vDto.setvProductName(rs.getString(13));
-				vDto.setvProductState(rs.getString(14));
+				vDto.setvAdminId(rs.getInt(2));
+				vDto.setvShopName(rs.getString(3));
+				vDto.setvName(rs.getString(4));
+				vDto.setvTel(rs.getString(5));
+				vDto.setvAddress(rs.getString(6));
+				vDto.setvDate(rs.getString(7));
+				vDto.setvPrice(rs.getInt(8));
+				vDto.setvState(rs.getString(9));
+				vDto.setvTransportName(rs.getString(10));
+				vDto.setVlogisId(rs.getInt(11));
+				vDto.setvProductId(rs.getInt(12));
+				vDto.setvQuantity(rs.getInt(13));
+				vDto.setvProductName(rs.getString(14));
+				vDto.setvProductState(rs.getString(15));
 				vList.add(vDto);
 			}
 		} catch (SQLException e) {

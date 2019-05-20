@@ -2,41 +2,50 @@ package storage;
 
 public class SoldProductDTO {
 	private int serial;
-	private int soldAdminId;
+	private String soldInvId;
+	private int soldShopId;
+	private int soldTransportId;
 	private int soldId;
-	private String soldName;
-	private int soldPrice;
-	private int soldTotalPrice;
 	private int soldQuantity;
+	private int soldTotalPrice;
 	private String soldDate;
 	
 	public SoldProductDTO() {}
 
-	public SoldProductDTO(int soldAdminId, int soldId, String soldName, int soldPrice, int soldTotalPrice, int soldQuantity, String soldDate) {
+	public SoldProductDTO(String soldInvId, int soldShopId, int soldTransportId, int soldId, int soldQuantity,
+			int soldTotalPrice, String soldDate) {
 		super();
-		this.soldAdminId = soldAdminId;
+		this.soldInvId = soldInvId;
+		this.soldShopId = soldShopId;
+		this.soldTransportId = soldTransportId;
 		this.soldId = soldId;
-		this.soldName = soldName;
-		this.soldPrice = soldPrice;
-		this.soldTotalPrice = soldTotalPrice;
 		this.soldQuantity = soldQuantity;
+		this.soldTotalPrice = soldTotalPrice;
 		this.soldDate = soldDate;
 	}
 
-	public int getSerial() {
-		return serial;
+	public String getSoldInvId() {
+		return soldInvId;
 	}
 
-	public void setSerial(int serial) {
-		this.serial = serial;
+	public void setSoldInvId(String soldInvId) {
+		this.soldInvId = soldInvId;
 	}
 
-	public int getSoldAdminId() {
-		return soldAdminId;
+	public int getSoldShopId() {
+		return soldShopId;
 	}
 
-	public void setSoldAdminId(int soldAdminId) {
-		this.soldAdminId = soldAdminId;
+	public void setSoldShopId(int soldShopId) {
+		this.soldShopId = soldShopId;
+	}
+
+	public int getSoldTransportId() {
+		return soldTransportId;
+	}
+
+	public void setSoldTransportId(int soldTransportId) {
+		this.soldTransportId = soldTransportId;
 	}
 
 	public int getSoldId() {
@@ -47,20 +56,12 @@ public class SoldProductDTO {
 		this.soldId = soldId;
 	}
 
-	public String getSoldName() {
-		return soldName;
+	public int getSoldQuantity() {
+		return soldQuantity;
 	}
 
-	public void setSoldName(String soldName) {
-		this.soldName = soldName;
-	}
-
-	public int getSoldPrice() {
-		return soldPrice;
-	}
-
-	public void setSoldPrice(int soldPrice) {
-		this.soldPrice = soldPrice;
+	public void setSoldQuantity(int soldQuantity) {
+		this.soldQuantity = soldQuantity;
 	}
 
 	public int getSoldTotalPrice() {
@@ -69,14 +70,6 @@ public class SoldProductDTO {
 
 	public void setSoldTotalPrice(int soldTotalPrice) {
 		this.soldTotalPrice = soldTotalPrice;
-	}
-
-	public int getSoldQuantity() {
-		return soldQuantity;
-	}
-
-	public void setSoldQuantity(int soldQuantity) {
-		this.soldQuantity = soldQuantity;
 	}
 
 	public String getSoldDate() {
@@ -89,8 +82,8 @@ public class SoldProductDTO {
 
 	@Override
 	public String toString() {
-		return "SoldProductDTO [serial=" + serial + ", soldAdminId=" + soldAdminId + ", soldId=" + soldId
-				+ ", soldName=" + soldName + ", soldPrice=" + soldPrice + ", soldTotalPrice=" + soldTotalPrice
-				+ ", soldQuantity=" + soldQuantity + ", soldDate=" + soldDate + "]";
+		return "SoldProductDTO [serial=" + serial + ", soldInvId=" + soldInvId + ", soldShopId=" + soldShopId
+				+ ", soldTransportId=" + soldTransportId + ", soldId=" + soldId + ", soldQuantity=" + soldQuantity
+				+ ", soldTotalPrice=" + soldTotalPrice + ", soldDate=" + soldDate + "]";
 	}
 }

@@ -6,7 +6,7 @@ public class ReleaseDTO {
 	private int rTransportId;
 	private String rDate;
 	private String rState;
-	
+	private String rTransportName;
 	public ReleaseDTO() {}
 
 	public ReleaseDTO(String rInvoiceId, int rTransportId, String rDate) {
@@ -56,9 +56,17 @@ public class ReleaseDTO {
 		this.rState = rState;
 	}
 
+	public String getrTransportName() {
+		return rTransportName;
+	}
+
+	public void setrTransportName(String rTransportName) {
+		this.rTransportName = rTransportName;
+	}
+
 	@Override
 	public String toString() {
 		return "ReleaseDTO [rId=" + rId + ", rInvoiceId=" + rInvoiceId + ", rTransportId=" + rTransportId + ", rDate="
-				+ rDate + ", rState=" + rState + "]";
+				+ rDate + ", rState=" + rState + ", rTransportName=" + rTransportName + "]";
 	}
 }
