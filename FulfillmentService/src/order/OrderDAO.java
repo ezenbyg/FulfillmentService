@@ -20,15 +20,14 @@ public class OrderDAO {
 	public void addOrderProducts(OrderDTO oDto) { 
 		LOG.trace("orderProducts(): " + oDto.toString());
 		conn = DBManager.getConnection();
-		String sql = "insert into p_order(oAdminId, oProductId, oQuantity, oPrice, oTotalPrice, oDate) values(?, ?, ?, ?, ?, ?)";
+		String sql = "insert into p_order(oAdminId, oProductId, oQuantity, oTotalPrice, oDate) values(?, ?, ?, ?, ?)";
 		try {
 			pstmt = conn.prepareStatement(sql);
 			pstmt.setInt(1, oDto.getoAdminId());
 			pstmt.setInt(2, oDto.getoProductId());
 			pstmt.setInt(3, oDto.getoQuantity());
-			pstmt.setInt(4, oDto.getoPrice());
-			pstmt.setInt(5, oDto.getoTotalPrice());
-			pstmt.setString(6, oDto.getoDate());
+			pstmt.setInt(4, oDto.getoTotalPrice());
+			pstmt.setString(5, oDto.getoDate());
 			pstmt.executeUpdate();
 		} catch (SQLException e) {
 			e.printStackTrace();

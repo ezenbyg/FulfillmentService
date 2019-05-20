@@ -23,41 +23,59 @@
 						<h4>
 							<i class="fa fa-angle-right"></i> 창고 관리 (발주)
 						</h4>
+						<div class="col-md-offset-10">
+						<form name="move" method="post">
+							<select id="menu" onChange="onloadPage(this.value);"
+								style="border: 5px;">
+								<option
+									value="/FulfillmentService/control/adminServlet?action=orderPage&page=1&name=P">P</option>
+								<option
+									value="/FulfillmentService/control/adminServlet?action=orderPage&page=1&name=재고부족">재고부족</option>
+								<option
+									value="/FulfillmentService/control/adminServlet?action=orderPage&page=1&name=재고부족예상">재고부족예상</option>
+							</select>
+						</form>
+						</div>
 						<hr>
-						<ul class="nav nav-tabs">
-							<li role="presentation" class="active"><a href="#">발주</a></li>
-							<li role="presentation"><a href="../storage/storageRelease.jsp">출고</a></li>
-						</ul>
+						<c:set var="pList" value="${requestScope.pList}" />
 						<table class="table table-striped">
 							<thead>
 								<tr>
-									<th>날짜</th>
-									<th>구매처ID</th>
-									<th>제품ID</th>
-									<th>수량</th>
-									<th>물품가격</th>
-									<th>총가격</th>
+									<th>구매처</th>
+									<th>제품명</th>
+									<th>보유수량</th>
+									<th>제품가격</th>
+									<th>제품상태</th>
+									<th>발주수량</th>
 								</tr>
 							</thead>
 							<tbody>
+							<c:forEach var="pDto" items="${pList}">
 								<tr>
-									<th>#</th>
-									<th>#</th>
-									<th>#</th>
-									<th>#</th>
-									<th>#</th>
-									<th>#</th>
+									<th>${pDto.pSupplierName}</th>
+									<th>${pDto.pName}</th>
+									<th>${pDto.pQuantity}</th>
+									<th>${pDto.pPrice}</th>
+									<th>${pDto.pState}</th>
 									<th class="col-md-3">
-									<input class="btn btn-primary btn-sm" type="button" value="발주하기"> &nbsp;&nbsp;
-									<input class="btn btn-primary btn-sm" type="reset" value="취소">
+									<form action="/FulfillmentService/control/adminServlet?action=order" class="form-horizontal" method="post">
+									<input type="text" name="oQuantity" size="15">&nbsp;&nbsp;&nbsp;
+									<input type="submit" value="발주" name="W1">
+									</form>
 									</th>
 								</tr>
-
+							</c:forEach>
 							</tbody>
 						</table>
 					</div>
 					<div class="col-md-3"></div>
 				</div>
+			</div>
+			<div>
+			<c:set var="pageList" value="${requestScope.orderPageList}" />
+			<c:forEach var="pageNo" items="${pageList}">
+				${pageNo}
+			</c:forEach>
 			</div>
 		</section>
 		<%@ include file="../common/_bottom.jspf"%>

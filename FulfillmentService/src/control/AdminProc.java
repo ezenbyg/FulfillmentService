@@ -101,7 +101,6 @@ public class AdminProc extends HttpServlet {
 	
 		String rInvoiceId = null;
 		String rTransportName = null;
-	
 		String rState = null;
 		String pState = null;
 		String rDate = null;
@@ -207,7 +206,7 @@ public class AdminProc extends HttpServlet {
 				curPage = Integer.parseInt(request.getParameter("page"));
 			}
 			pDao = new StorageDAO();
-			count = pDao.getAllAdminIdCount(); // 모든 리스트 카운트.
+			count = pDao.getCount(); // 모든 리스트 카운트.
 			if (count == 0) // 데이터가 없을 때 대비
 				count = 1;
 			pageNo = (int) Math.ceil(count / 10.0);
@@ -347,6 +346,41 @@ public class AdminProc extends HttpServlet {
 			ic.readCSV(); 
 			ic.moveFile();
 			response.sendRedirect("/FulfillmentService/control/adminServlet?action=invoiceList&page=1");
+	        break;
+	        
+		case "orderPage" : // 발주를 위한 페이지
+			if (!request.getParameter("page").equals("")) {
+				curPage = Integer.parseInt(request.getParameter("page"));
+			}
+			pState = request.getParameter("name");
+			pDao = new StorageDAO();
+			// LOG.debug("vDao.getCount() : " + vDao.getCount()); 
+			count = pDao.getCount();
+			if (count == 0)			// 데이터가 없을 때 대비
+				count = 1;
+			pageNo = (int)Math.ceil(count/10.0);
+			if (curPage > pageNo)	// 경계선에 걸렸을 때 대비
+				curPage--;
+			session.setAttribute("currentOrderPage", curPage);
+			// 리스트 페이지의 하단 페이지 데이터 만들어 주기
+			page = "<a href=#>&laquo;</a>&nbsp;";
+			pageList.add(page);
+			for (int i=1; i<=pageNo; i++) {
+				page = "&nbsp;<a href=/FulfillmentService/control/adminServlet?action=orderPage&page=" + i + ">" + i + "</a>&nbsp;";
+				pageList.add(page);
+				LOG.trace("");
+			}
+			page = "&nbsp;<a href=#>&raquo;</a>";
+			pageList.add(page);
+			
+			pList = pDao.getAllProductsForOrder(curPage);
+			for (StorageDTO pDto: pList)
+				LOG.debug("pDto : " + pDto.toString());
+
+			request.setAttribute("pList", pList);
+			request.setAttribute("orderPageList", pageList);
+			rd = request.getRequestDispatcher("/view/storage/storageOrder.jsp");
+	        rd.forward(request, response);
 	        break;
 	        
 		case "order" : // 발주(창고 -> 구매처), 발주 상태 : 구매요청, 공급실행, 구매확인요청, 구매확정

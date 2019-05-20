@@ -6,7 +6,6 @@ public class OrderDTO {
 	private int oAdminId;
 	private int oProductId;
 	private int oQuantity;
-	private int oPrice;
 	private int oTotalPrice;
 	private String oDate;
 	private String oState;
@@ -16,7 +15,6 @@ public class OrderDTO {
 		this.oAdminId = oAdminId;
 		this.oProductId = oProductId;
 		this.oQuantity = oQuantity;
-		this.oPrice = oPrice;
 		this.oTotalPrice = oTotalPrice;
 		this.oDate = oDate;
 	}
@@ -55,14 +53,6 @@ public class OrderDTO {
 		this.oQuantity = oQuantity;
 	}
 
-	public int getoPrice() {
-		return oPrice;
-	}
-
-	public void setoPrice(int oPrice) {
-		this.oPrice = oPrice;
-	}
-
 	public int getoTotalPrice() {
 		return oTotalPrice;
 	}
@@ -90,7 +80,6 @@ public class OrderDTO {
 	@Override
 	public String toString() {
 		return "OrderDTO [oId=" + oId + ", oAdminId=" + oAdminId + ", oProductId=" + oProductId + ", oQuantity="
-				+ oQuantity + ", oPrice=" + oPrice + ", oTotalPrice=" + oTotalPrice + ", oDate=" + oDate + ", oState="
-				+ oState + "]";
+				+ oQuantity + ", oTotalPrice=" + oTotalPrice + ", oDate=" + oDate + ", oState=" + oState + "]";
 	}
 }

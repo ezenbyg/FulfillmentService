@@ -3,7 +3,6 @@ CREATE TABLE p_order (
 	oAdminId int(5) unsigned NOT NULL,
 	oProductId int(5) unsigned NOT NULL,
   	oQuantity int(200) unsigned NOT NULL,
-	oPrice int(10) unsigned NOT NULL,
 	oTotalPrice int(10) unsigned NOT NULL,
 	oDate datetime NOT NULL DEFAULT current_timestamp,
 	oState varchar(10) DEFAULT "구매요청",

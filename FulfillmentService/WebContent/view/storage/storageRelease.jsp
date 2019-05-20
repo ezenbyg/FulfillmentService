@@ -31,11 +31,6 @@
 							</form>
 						</div>
 						<hr>
-						<ul class="nav nav-tabs">
-							<li role="presentation"><a
-								href="../storage/storageOrder.jsp">발주</a></li>
-							<li role="presentation" class="active"><a href="#">출고</a></li>
-						</ul>
 						<c:set var="vList" value="${requestScope.vList}" />
 						<table class="table table-striped">
 							<thead>

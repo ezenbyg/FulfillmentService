@@ -217,6 +217,67 @@ public class StorageDAO {
 		}
 		return productList;
 	}
+	
+	// 발주를 위한 페이지
+	public ArrayList<StorageDTO> getAllProductsForOrder(int page, String pState) {
+		int offset = 0;
+		String sql = null;
+		ArrayList<StorageDTO> productList = new ArrayList<StorageDTO>();
+		conn = DBManager.getConnection();
+		
+		if (page == 0) {
+			sql = "select p.pId, p.pName, s.sAdminId, a.aName, p.pQuantity, p.pPrice, p.pState "
+					+ "from storage as p " 
+					+ "inner join supplier as s "
+					+ "on p.pId=s.sProductId "
+					+ "inner join admins as a "
+					+ "on a.aId=s.sAdminId "
+					+ "where p.pState=? "
+					+ "order by p.pId desc;";
+		} else {
+			sql = "select p.pId, p.pName, s.sAdminId, a.aName, p.pQuantity, p.pPrice, p.pState "
+					+ "from storage as p " 
+					+ "inner join supplier as s "
+					+ "on p.pId=s.sProductId "
+					+ "inner join admins as a "
+					+ "on a.aId=s.sAdminId "
+					+ "where p.pState=? "
+					+ "order by p.pId desc limit ?, 10;";
+			offset = (page - 1) * 10;
+		}
+		try {
+			pstmt = conn.prepareStatement(sql);
+			if (page != 0) {
+				pstmt.setInt(1, offset);
+			}
+			rs = pstmt.executeQuery();
+
+			while (rs.next()) { // 쿼리문 넣고, 읽어드리기
+				StorageDTO pDto = new StorageDTO();
+				pDto.setpId(rs.getInt(1));
+				pDto.setpName(rs.getString(2));
+				pDto.setpSupplierId(rs.getInt(3));
+				pDto.setpSupplierName(rs.getString(4));
+				pDto.setpQuantity(rs.getInt(5));
+				pDto.setpPrice(rs.getInt(6));
+				pDto.setpState(rs.getString(7));
+				LOG.trace(pDto.toString());
+				productList.add(pDto);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+			LOG.info("getAllProductsForOrder(): Error Code : {}", e.getErrorCode());
+		} finally {
+			try {
+				if(pstmt != null) pstmt.close();
+				if(conn != null) conn.close();
+				if(rs != null) rs.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+		return productList;
+	}
 
 	// 각 물품(구매처)에 따른 창고 리스트 카운트
 	public int getEachAdminIdCount(int category) {
@@ -248,7 +309,7 @@ public class StorageDAO {
 	}
 	
 	// 모든 창고 리스트 카운트
-	public int getAllAdminIdCount() {
+	public int getCount() {
 		String sql = "select count(*) from storage;" ;
 		conn = DBManager.getConnection();
 		int count = 0;
@@ -262,7 +323,7 @@ public class StorageDAO {
 		} catch (SQLException e) {
 			e.printStackTrace();
 			LOG.info(e.getMessage());
-			LOG.info("getAllAdminIdCount(): Error Code : {}", e.getErrorCode());
+			LOG.info("getCount(): Error Code : {}", e.getErrorCode());
 		} finally {
 			try {
 				if(pstmt != null) pstmt.close();

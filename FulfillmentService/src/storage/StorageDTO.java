@@ -8,6 +8,8 @@ public class StorageDTO {
 	private int pQuantity;
 	private int pAdminId;
 	private String pState;
+	private String pSupplierName;
+	private int pSupplierId;
 	
 	public StorageDTO() {}
 
@@ -83,9 +85,26 @@ public class StorageDTO {
 		this.pState = pState;
 	}
 
+	public String getpSupplierName() {
+		return pSupplierName;
+	}
+
+	public void setpSupplierName(String pSupplierName) {
+		this.pSupplierName = pSupplierName;
+	}
+
+	public int getpSupplierId() {
+		return pSupplierId;
+	}
+
+	public void setpSupplierId(int pSupplierId) {
+		this.pSupplierId = pSupplierId;
+	}
+
 	@Override
 	public String toString() {
 		return "StorageDTO [pId=" + pId + ", pName=" + pName + ", pImgName=" + pImgName + ", pPrice=" + pPrice
-				+ ", pQuantity=" + pQuantity + ", pAdminId=" + pAdminId + ", pState=" + pState + "]";
+				+ ", pQuantity=" + pQuantity + ", pAdminId=" + pAdminId + ", pState=" + pState + ", pSupplierName="
+				+ pSupplierName + ", pSupplierId=" + pSupplierId + "]";
 	}
 }
