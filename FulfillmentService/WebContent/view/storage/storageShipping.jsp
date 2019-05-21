@@ -24,10 +24,6 @@
 							<i class="fa fa-angle-right"></i> 창고 관리 (송장처리)
 						</h4>
 						<hr>
-						<ul class="nav nav-tabs">
-							<li role="presentation" class="active"><a href="#">송장처리</a></li>
-							<li role="presentation"><a href="../storage/storageStocktaking.jsp">재고조사</a></li>
-						</ul>
 						<div style="margin-left: 90%;">
 							<a class="btn btn-primary" href ="/FulfillmentService/control/adminServlet?action=download" role="button">다운로드</a>
 						</div>

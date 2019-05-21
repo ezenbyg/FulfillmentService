@@ -621,7 +621,7 @@ public class AdminProc extends HttpServlet {
 			pDao = new StorageDAO();
 			product = new StorageDTO();
 			product = pDao.getOneProductById(oProductId);
-			pDao.updateStorage(oQuantity, product.getpQuantity(), String.valueOf(ProductState.P), oProductId);
+			pDao.updateStorage(oQuantity+product.getpQuantity(), String.valueOf(ProductState.P), oProductId);
 			
 			rd = request.getRequestDispatcher("/control/adminServlet?action=orderHistory&page=1");
 	        rd.forward(request, response);

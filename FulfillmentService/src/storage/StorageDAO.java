@@ -122,13 +122,13 @@ public class StorageDAO {
 	}
 	
 	// 재고 수량 변경
-	public void updateStorage(int oQuantity, int pQuantity, String pState, int pId) {
+	public void updateStorage(int oQuantity, String pState, int pId) {
 		LOG.debug("");
 		conn = DBManager.getConnection();
 		String sql = "update storage set pQuantity=?, pState=? where pId=?;";
 		try {
 			pstmt = conn.prepareStatement(sql);
-			pstmt.setInt(1, oQuantity+pQuantity);
+			pstmt.setInt(1, oQuantity);
 			pstmt.setString(2, pState);
 			pstmt.setInt(3, pId);
 			pstmt.executeUpdate();

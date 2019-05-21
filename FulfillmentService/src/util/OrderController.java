@@ -18,7 +18,7 @@ public class OrderController {
 	ArrayList<OrderDTO> oList = new ArrayList<OrderDTO>();
 	
 	// 제품 상태에 따른 발주 가능 여부 판단 메소드
-	public boolean isPossibleOrderByState(String pState) {
+	public boolean isPossibleOrderByProductState(String pState) {
 		ProductState state = ProductState.valueOf(pState);
 		LOG.debug(String.valueOf(state));
 		switch(state) {
@@ -32,6 +32,23 @@ public class OrderController {
 		return false;
 	}
 	
+	// 발주 상태에 따른 납품 가능 여부 판단 메소드
+	public boolean isPossibleOrderByOrderState(String oState) {
+		OrderState state = OrderState.valueOf(oState);
+		LOG.debug(String.valueOf(state));
+		switch(state) {
+		case 구매요청 : 
+			return true;
+		case 공급실행 : 
+			return false;
+		case 구매확인요청 :
+			return false;
+		case 구매확정 :
+			return false;
+		}
+		return false;
+	}
+	
 	// 납품 가능시간 여부 판단 메소드
 	public boolean isPossibleReleaseByDate(String date) {
 		String strDate = dc.getReleaseTime(date.substring(0, 10));
@@ -41,7 +58,7 @@ public class OrderController {
 	
 	// 발주 
 	public void processOrder(int pSupplierId, int pId, int oQuantity, int oTotalPrice, String pState) {
-		if(isPossibleOrderByState(pState) == true) {
+		if(isPossibleOrderByProductState(pState) == true) {
 			order = new OrderDTO(pSupplierId, pId, oQuantity, oTotalPrice, dc.currentTime());
 			LOG.debug(order.toString());
 			oDao.addOrderProducts(order);
@@ -53,7 +70,8 @@ public class OrderController {
 		oList = oDao.getAllOrderLists(oAdminId, date);
 		for(OrderDTO order : oList) {
 			if(isPossibleReleaseByDate(order.getoDate())) {
-				oDao.updateOrderState(String.valueOf(OrderState.공급실행), order.getoId(), dc.currentTime());
+				if(isPossibleOrderByOrderState(order.getoState()))
+					oDao.updateOrderState(String.valueOf(OrderState.공급실행), order.getoId(), dc.currentTime());
 			}
 		}
 	}
