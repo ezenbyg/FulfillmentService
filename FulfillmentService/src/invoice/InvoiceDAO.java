@@ -83,7 +83,7 @@ public class InvoiceDAO {
 				+ "inner join admins as a "
 				+ "on a.aId =v.vlogisId " 
 				+ "where date_format(v.vDate, '%Y-%m-%d')=? "
-				+ "order by v.vDate, v.vState;";
+				+ "order by v.vState ASC, v.vDate ASC;";
 		try {
 			pstmt = conn.prepareStatement(sql);
 			pstmt.setString(1, date);

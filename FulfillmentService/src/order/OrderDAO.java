@@ -360,7 +360,7 @@ public class OrderDAO {
 			pstmt = conn.prepareStatement(sql);
 			pstmt.setString(1, oState);
 			pstmt.setString(2, date);
-			pstmt.setInt(2, oId);
+			pstmt.setInt(3, oId);
 			pstmt.executeUpdate();
 			LOG.trace(sql);
 		} catch (SQLException e) {

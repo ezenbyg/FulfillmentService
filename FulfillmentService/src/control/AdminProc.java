@@ -28,6 +28,7 @@ import order.OrderDTO;
 import release.ReleaseDAO;
 import release.ReleaseDTO;
 import state.OrderState;
+import state.ProductState;
 import state.ReleaseState;
 import storage.SoldProductDAO;
 import storage.SoldProductDTO;
@@ -601,7 +602,7 @@ public class AdminProc extends HttpServlet {
 			oState = request.getParameter("oState");
 			oId = Integer.parseInt(request.getParameter("oId"));
 			oProductId = Integer.parseInt(request.getParameter("oProductId"));
-			o
+			oQuantity = Integer.parseInt(request.getParameter("oQuantity"));
 			
 			if(!(oState.equals(String.valueOf(OrderState.구매확인요청)))) {
 				message = "아직 구매확정을 누를 수 없습니다!!";
@@ -619,14 +620,10 @@ public class AdminProc extends HttpServlet {
 			// storage 테이블 업데이트(재고수량, 재고상태)
 			pDao = new StorageDAO();
 			product = new StorageDTO();
-			vList = Dao.getAllInvoiceListsById(rInvoiceId);
-			for(InvoiceDTO ivto : vList) {
-				soldProduct = new SoldProductDTO(rInvoiceId, ivto.getvAdminId(), ivto.getVlogisId(), 
-						ivto.getvProductId(), ivto.getvQuantity(), ivto.getvPrice(), dc.currentTime());
-				spDao.addSoldProducts(soldProduct);
-			}
+			product = pDao.getOneProductById(oProductId);
+			pDao.updateStorage(oQuantity, product.getpQuantity(), String.valueOf(ProductState.P), oProductId);
 			
-			rd = request.getRequestDispatcher("/control/adminServlet?action=transportHistory&page=1");
+			rd = request.getRequestDispatcher("/control/adminServlet?action=orderHistory&page=1");
 	        rd.forward(request, response);
 			break;
 

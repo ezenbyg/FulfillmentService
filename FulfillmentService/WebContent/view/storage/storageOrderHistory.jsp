@@ -79,6 +79,10 @@
 	<script src="../js/bootstrap.min.js"></script>
 	<script src="../js/jquery-ui.min.js"></script>
 	<script src="../js/jquery.mtz.monthpicker.js"></script>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+	<script src="../js/bootstrap.min.js"></script>
+	<script src="../js/jquery-ui.min.js"></script>
+	<script src="../js/jquery.mtz.monthpicker.js"></script>
 	<script>
 	    /* MonthPicker 옵션 */
 	    var currentYear = (new Date()).getFullYear();
