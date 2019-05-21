@@ -9,6 +9,10 @@ public class SoldProductDTO {
 	private int soldQuantity;
 	private int soldTotalPrice;
 	private String soldDate;
+	private String chargeState;
+	private String supplierState;
+	private String transportState;
+	private String soldShopName;
 	
 	public SoldProductDTO() {}
 
@@ -80,10 +84,44 @@ public class SoldProductDTO {
 		this.soldDate = soldDate;
 	}
 
+	public String getChargeState() {
+		return chargeState;
+	}
+
+	public void setChargeState(String chargeState) {
+		this.chargeState = chargeState;
+	}
+
+	public String getSupplierState() {
+		return supplierState;
+	}
+
+	public void setSupplierState(String supplierState) {
+		this.supplierState = supplierState;
+	}
+
+	public String getTransportState() {
+		return transportState;
+	}
+
+	public void setTransportState(String transportState) {
+		this.transportState = transportState;
+	}
+
+	public String getSoldShopName() {
+		return soldShopName;
+	}
+
+	public void setSoldShopName(String soldShopName) {
+		this.soldShopName = soldShopName;
+	}
+
 	@Override
 	public String toString() {
 		return "SoldProductDTO [serial=" + serial + ", soldInvId=" + soldInvId + ", soldShopId=" + soldShopId
 				+ ", soldTransportId=" + soldTransportId + ", soldId=" + soldId + ", soldQuantity=" + soldQuantity
-				+ ", soldTotalPrice=" + soldTotalPrice + ", soldDate=" + soldDate + "]";
+				+ ", soldTotalPrice=" + soldTotalPrice + ", soldDate=" + soldDate + ", chargeState=" + chargeState
+				+ ", supplierState=" + supplierState + ", transportState=" + transportState + ", soldShopName="
+				+ soldShopName + "]";
 	}
 }

@@ -33,6 +33,7 @@ import pay.PayDAO;
 import pay.PayDTO;
 import release.ReleaseDAO;
 import release.ReleaseDTO;
+import state.ChargeState;
 import state.OrderState;
 import state.ProductState;
 import state.ReleaseState;
@@ -40,6 +41,7 @@ import storage.SoldProductDAO;
 import storage.SoldProductDTO;
 import storage.StorageDAO;
 import storage.StorageDTO;
+import util.ChargeController;
 import util.DateController;
 import util.InvoiceController;
 import util.OrderController;
@@ -95,6 +97,7 @@ public class AdminProc extends HttpServlet {
 		DateController dc = null;
 		ReleaseController rc = null;
 		OrderController oc = null;
+		ChargeController cc = null;
 		
 		String name = null;
 		String title = null;
@@ -135,6 +138,7 @@ public class AdminProc extends HttpServlet {
 		List<ReleaseDTO> rList = null;
 		List<StorageDTO> pList = null;
 		List<OrderDTO> oList = null;
+		List<SoldProductDTO> spList = null;
 		ArrayList<String> pageList = new ArrayList<String>();
 		
 		switch (action) {
@@ -627,7 +631,7 @@ public class AdminProc extends HttpServlet {
 	        rd.forward(request, response);
 			break; 
 			
-		case "purchaseConfirm" : 
+		case "purchaseConfirm" : // 구매 확정 버튼 클릭 시
 			oState = request.getParameter("oState");
 			oId = Integer.parseInt(request.getParameter("oId"));
 			oProductId = Integer.parseInt(request.getParameter("oProductId"));
@@ -877,6 +881,67 @@ public class AdminProc extends HttpServlet {
 			gDao.updateChargeState("지급완료", charge.getgId());
 			rd = request.getRequestDispatcher("/control/chargeServlet?action=payList&page=1");
 			rd.forward(request, response);
+			break;
+			
+		case "chargePage" : // 청구를 위한 페이지
+			dc = new DateController();
+			
+			if (!request.getParameter("page").equals("")) {
+				curPage = Integer.parseInt(request.getParameter("page"));
+				LOG.debug("curPage : " + curPage);
+			}
+			
+			// 네비에서 타고올때는 초기값이 null
+			if(request.getParameter("monthCharge") != null) {
+				date = request.getParameter("monthCharge"); 
+				LOG.debug(String.valueOf(date.length()));
+				if(date.length() > 10) {
+					dateFormat = date.split(" ");
+					date = dateFormat[0];
+					LOG.debug(date);
+				}
+			} else date = dc.getToday();
+			
+			spDao = new SoldProductDAO();
+			LOG.debug("gDao.getCount() : " + spDao.getCount()); 
+			count = spDao.getCount();
+			if (count == 0)			// 데이터가 없을 때 대비
+				count = 1;
+			pageNo = (int)Math.ceil(count/10.0);
+			if (curPage > pageNo)	// 경계선에 걸렸을 때 대비
+				curPage--;
+			session.setAttribute("chargePageList", curPage);
+			// 리스트 페이지의 하단 페이지 데이터 만들어 주기
+			page = "<a href=#>&laquo;</a>&nbsp;";
+			pageList.add(page);
+			for (int i=1; i<=pageNo; i++) {
+				page = "&nbsp;<a href=/FulfillmentService/control/adminServlet?action=chargePage&page=" + i + ">" + i + "</a>&nbsp;";
+				pageList.add(page);
+				LOG.trace("");
+			}
+			page = "&nbsp;<a href=#>&raquo;</a>";
+			pageList.add(page);
+			
+			spList = spDao.selectAllForCharge(curPage, date);
+			
+			for (SoldProductDTO spDto: spList)
+				LOG.debug("SPDTO : " + spDto.toString());
+			
+			request.setAttribute("spList", spList);
+			request.setAttribute("chargePageList", pageList);
+			rd = request.getRequestDispatcher("/view/storage/storageCharge.jsp");
+	        rd.forward(request, response);
+			break; 
+			
+		case "charge" : // 청구 버튼 클릭 시
+			spDao = new SoldProductDAO();
+			cc = new ChargeController();
+			spList = spDao.selectAllLists();
+			for(SoldProductDTO spDto : spList) {
+				cc.processRequestCharge(spDto.getSoldShopId());
+			}
+			rd = request.getRequestDispatcher("/control/adminServlet?action=orderHistory&page=1");
+	        rd.forward(request, response);
 			break;
 
 		default : break;

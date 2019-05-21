@@ -55,6 +55,7 @@
 									<th>${oDto.oAdminName}</th>
 									<th>${oDto.oProductName}</th>
 									<th>${oDto.oQuantity}</th>
+									<th>${oDto.oTotalPrice}</th>
 									<th>${oDto.oDate}</th>
 									<th>${oDto.oState}</th>
 									<th><a class="btn btn-primary btn-xs"

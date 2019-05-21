@@ -15,6 +15,7 @@ public class OrderController {
 	DateController dc = new DateController();
 	OrderDAO oDao = new OrderDAO();
 	OrderDTO order = new OrderDTO();
+	
 	ArrayList<OrderDTO> oList = new ArrayList<OrderDTO>();
 	
 	// 제품 상태에 따른 발주 가능 여부 판단 메소드

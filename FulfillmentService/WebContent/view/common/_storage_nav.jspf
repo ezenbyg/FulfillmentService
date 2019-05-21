@@ -18,7 +18,7 @@
 			<li class="sub-menu"><a href="javascript:;"> <i
 					class="fa fa-won"></i> <span>청구/지급</span>&nbsp;<i class="fa fa-caret-down"></i></a>
 				<ul class="sub">
-					<li><a href="/FulfillmentService/view/storage/storageCharge.jsp"> 
+					<li><a href="/FulfillmentService/control/adminServlet?action=chargePage&page=1"> 
 						대금 청구</a></li>
 					<li><a href="/FulfillmentService//control/adminServlet?action=payList&page=1&firstAdminId=3">
 						대금 지급</a></li>
@@ -29,7 +29,7 @@
 				<ul class="sub">
 					<li><a href="/FulfillmentService/control/adminServlet?action=orderPage&page=1&state=P">
 					<span>발주</span></a></li>
-					<li><a href="/FulfillmentService/control/adminServlet?action=releasePage">
+					<li><a href="/FulfillmentService/control/adminServlet?action=releasePage&page=1">
 					<span>출고</span></a>
 				</ul>
 			</li>

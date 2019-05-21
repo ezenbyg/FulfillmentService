@@ -15,8 +15,16 @@ public class DateController {
 	public String beforeTime() {
 		LocalDateTime yTime = LocalDateTime.now();
 		yTime = yTime.minusDays(1);
-    	DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd");	
+    	DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");	
     	return yTime.format(dtf);
+	}
+	
+	// 전 달
+	public String beforeMonth() {
+		LocalDateTime yMonth = LocalDateTime.now();
+		yMonth = yMonth.minusMonths(1);
+    	DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM");	
+    	return yMonth.format(dtf);
 	}
 	
 	// 어제 날짜
@@ -39,6 +47,13 @@ public class DateController {
 		LocalDateTime today = LocalDateTime.now();	
     	DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd");
     	return today.format(dtf);
+	}
+	
+	// 현재 달
+	public String getCurrentMonth() {
+		LocalDateTime curMonth = LocalDateTime.now();	
+    	DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM");
+    	return curMonth.format(dtf);
 	}
 	
 	// 문자열을 날짜로 변환
@@ -107,6 +122,16 @@ public class DateController {
 		if(time.compareTo(beforeTime()) == 0) {
 			releaseTime = getToday() + " 10:00:00";
 			return releaseTime;
+		}
+		return null;
+	}
+	
+	// 청구 전용 시간
+	public String getChargeTime(String time) {
+		String chargeTime = null;
+		if(time.equals(beforeMonth())) {
+			chargeTime = getCurrentMonth() + "-01";
+			return chargeTime;
 		}
 		return null;
 	}

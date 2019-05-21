@@ -1,7 +1,6 @@
 CREATE TABLE charge (
   	gId int(8) unsigned NOT NULL AUTO_INCREMENT,
 	gAdminId int(5) unsigned NOT NULL,
-  	gShopName varchar(15) NOT NULL DEFAULT "",
 	gBankId varchar(30) NOT NULL DEFAULT "",
 	gTotalPrice int(10) unsigned NOT NULL,
 	gDate datetime NOT NULL DEFAULT current_timestamp,
