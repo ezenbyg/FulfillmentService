@@ -26,22 +26,20 @@
 
 	<section id="main-content">
 		<section class="wrapper">
-			<h3>청구 / 지급 조회 (창고)</h3>
+			<i class="fa fa-angle-right"></i>
+			<h3>지급 조회</h3>
 			<div class="row">
 				<div class="col-md-12">
 					<div class="content-panel">
 						<h4>
-							<i class="fa fa-angle-right"></i> 창고 관리 (청구리스트)
+							<i class="fa fa-angle-right"></i> 지급
 						</h4>
 						<hr>
-						<ul class="nav nav-tabs">
-							<li role="presentation"><a href="../storage/storageCharge.jsp">청구</a></li>
-							<li role="presentation" class="active"><a href="#">지급</a></li>
-						</ul>
 						<div class="col-md-8"></div>
-						<div class="col-md-offset-10" style="margin-bottom: -15px; margin-top: 10px;">
-							<input type="date" id="datepicker1">&nbsp;
-							<input type="button" class="btn btn-info btn-xs" value="조회">
+						<div class="col-md-offset-3">
+							기간 조회 : <input id="monthpicker" type="text" /> <input
+								type="button" class="btn btn-primary" id="btn_monthpicker"
+								value="조회" />
 						</div>
 						<hr>
 						<table class="table">
@@ -49,12 +47,16 @@
 								<tr>
 									<th>
 										<form name="move" method="post">
-											<select id="Payment" onChange="onloadPage(this.value);" style="border: 5px;">
-												<option value="/FulfillmentService/control/payServlet?action=payList&page=1&firstAdminId=3">구매처</option>
-												<option value="/FulfillmentService/control/payServlet?action=payList&page=1&firstAdminId=4">운송회사</option>
+											<select id="Payment" onChange="onloadPage(this.value);"
+												style="border: 5px;">
+												<option selected>-업체선택-</option>
+												<option
+													value="/FulfillmentService//control/adminServlet?action=payList&page=1&firstAdminId=3">구매처</option>
+												<option
+													value="/FulfillmentService//control/adminServlet?action=payList&page=1&firstAdminId=4">운송회사</option>
 											</select>
-										</form>
 									</th>
+									</form>
 									<th>지급번호</th>
 									<th>회사이름</th>
 									<th>가격</th>
@@ -63,48 +65,86 @@
 								</tr>
 							</thead>
 							<tbody>
-								<c:set var="payList" value="${requestScope.payList}" />
-								<c:forEach var="yDto" items="${payList}">
+								<c:set var="PayList" value="${requestScope.PayList}" />
+
+								<c:forEach var="yDto" items="${PayList}">
 									<tr>
-										<td onclick="modal();">${yDto.pId}</td>
-										<td>${yDto.pName}</td>
-										<td>${yDto.pPrice}</td>
-										<td>${yDto.pQuantity}</td>
-										<td>${yDto.pState}</td>
+										<td></td>
+										<td onclick="modal();">${yDto.yId}</td>
+										<td>${yDto.aName}</td>
+										<td>${yDto.yPrice}</td>
+										<td>${yDto.yDate}</td>
+										<td>${yDto.yState}</td>
+
 									</tr>
 								</c:forEach>
 								<!--  style="font-size: 14px"><input type="date" id="datepicker1">&nbsp;&nbsp; -->
 							</tbody>
 						</table>
-						<div align="center">
-							<table class="table table-striped">
-								<thead>
-									<tr>
-										<th>회사이름</th>
-										<th>계좌</th>
-										<th>총가격</th>
-										<th></th>
-									</tr>
-								</thead>
-								<tbody>
-									<c:set var="payList" value="${requestScope.payList}" />
-									<c:forEach var="yDto" items="${payList}">
+						<table class="table table-striped">
+							<thead>
+								<tr>
+									<th>
+										<form name="move" method="post">
+											<select id="Payment" onChange="onloadPage(this.value);"
+												style="border: 5px;">
+												<option
+													value="/FulfillmentService/control/adminServlet?action=supplierCategory&adminId=30001&param=1">무신사</option>
+												<option
+													value="/FulfillmentService/control/adminServlet?action=supplierCategory&adminId=30002&param=1">와구와구</option>
+												<option
+													value="/FulfillmentService/control/adminServlet?action=supplierCategory&adminId=30003&param=1">하이마트</option>
+												<option
+													value="/FulfillmentService/control/adminServlet?action=supplierCategory&adminId=30004&param=1">언더아머</option>
+												<option
+													value="/FulfillmentService/control/adminServlet?action=supplierCategory&adminId=30005&param=1">이케아</option>
+												</option>
+											</select>
+										</form>
+									</th>
+									
+									<th>계좌</th>
+									<th>총가격</th>
+									<th></th>
+								</tr>
+							</thead>
+							<tbody>
+							
+							<!-- if -->
+								<c:choose>
+									<c:when test="${requestScope.num == 2}">
+											<tr>
+												<td>${requestScope.title}</td>
+												<td>${requestScope.bankId}</td>
+												<td>${requestScope.totalPrice}</td>
+											</tr>
+									</c:when>
+									<c:when test="${requestScope.num == 1 }">
 										<tr>
-											<th>${yDto.pName}</th>
-											<th>${yDto.pBankId}</th>
-											<th>${yDto.pTotalPrice}</th>
+											<td>#</td>
+											<td>#</td>
+											<td>#</td>
+										</tr>
+									</c:when>
+									<c:otherwise>
+										<tr>
+											<td>오류입니다.${requestScope.num}</td>
+										</tr>
+									</c:otherwise>
+								</c:choose>
+										<tr>
 											<th><input type="submit" class="btn btn-primary" value="지급"></th>
 										</tr>
-									</c:forEach>
-								</tbody>
-							</table>
-						</div>
+							</tbody>
+						</table>
 					</div>
 				</div>
+			</div>
 			</div>
 		</section>
 		<%@ include file="../common/_bottom.jspf"%>
 	</section>
+	<!-- ==================================================================== -->
 	<script>
 		/* MonthPicker 옵션 */
 		options = {
@@ -131,23 +171,23 @@
 				});
 	</script>
 	<!-- <script>
-	$.datepicker.setDefaults({
-		dateFormat : 'yy-mm-dd',
-		prevText : '이전 달',
-		nextText : '다음 달',
-		monthNames : [ '1월', '2월', '3월', '4월', '5월', '6월', '7월', '8월',
-				'9월', '10월', '11월', '12월' ],
-		monthNamesShort : [ '1월', '2월', '3월', '4월', '5월', '6월', '7월', '8월',
-				'9월', '10월', '11월', '12월' ],
-		dayNames : [ '일', '월', '화', '수', '목', '금', '토' ],
-		dayNamesShort : [ '일', '월', '화', '수', '목', '금', '토' ],
-		dayNamesMin : [ '일', '월', '화', '수', '목', '금', '토' ],
-		showMonthAfterYear : true,
-		yearSuffix : '년'
-	});
-	$(function() {
-		$("#datepicker1").datepicker();
-	});
-</script> -->
+		$.datepicker.setDefaults({
+			dateFormat : 'yy-mm-dd',
+			prevText : '이전 달',
+			nextText : '다음 달',
+			monthNames : [ '1월', '2월', '3월', '4월', '5월', '6월', '7월', '8월',
+					'9월', '10월', '11월', '12월' ],
+			monthNamesShort : [ '1월', '2월', '3월', '4월', '5월', '6월', '7월', '8월',
+					'9월', '10월', '11월', '12월' ],
+			dayNames : [ '일', '월', '화', '수', '목', '금', '토' ],
+			dayNamesShort : [ '일', '월', '화', '수', '목', '금', '토' ],
+			dayNamesMin : [ '일', '월', '화', '수', '목', '금', '토' ],
+			showMonthAfterYear : true,
+			yearSuffix : '년'
+		});
+		$(function() {
+			$("#datepicker1").datepicker();
+		});
+	</script> -->
 </body>
 </html>

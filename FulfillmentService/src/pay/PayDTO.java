@@ -11,6 +11,8 @@ public class PayDTO {
 	private String rDate;
 	private String bId;
 	private int bBalance;
+	private String aName;
+	private int sum;
 	
 	public PayDTO(int yId, String yBankId, int yAdminId, int yPrice, String yDate, String yState) {
 		super();
@@ -38,6 +40,14 @@ public class PayDTO {
 	
 	public PayDTO() {}
 	
+	public String getaName() {
+		return aName;
+	}
+
+	public void setaName(String aName) {
+		this.aName = aName;
+	}
+
 	public String getbId() {
 		return bId;
 	}
@@ -118,9 +128,18 @@ public class PayDTO {
 		this.rDate = rDate;
 	}
 
+	public int getSum() {
+		return sum;
+	}
+
+	public void setSum(int sum) {
+		this.sum = sum;
+	}
+
 	@Override
 	public String toString() {
-		return "PayDTO [yId=" + yId + "yBankId=" + yBankId + ", yAdminId=" + yAdminId + ", yPrice=" + yPrice + ", yDate=" + yDate
-				+ ", yState=" + yState + "]";
+		return "PayDTO [yId=" + yId + ", yBankId=" + yBankId + ", yAdminId=" + yAdminId + ", yPrice=" + yPrice
+				+ ", yDate=" + yDate + ", yState=" + yState + ", rTransportId=" + rTransportId + ", rDate=" + rDate
+				+ ", bId=" + bId + ", bBalance=" + bBalance + ", aName=" + aName + ", sum=" + sum + "]";
 	}
 }

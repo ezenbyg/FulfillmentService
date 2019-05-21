@@ -15,17 +15,13 @@
 	<%@ include file="../common/_storage_nav.jspf"%>
 	<section id="main-content">
       <section class="wrapper">
-			<i class="fa fa-angle-right"></i><h3>청구 / 지급 조회</h3>
+			<i class="fa fa-angle-right"></i><h3>청구 조회</h3>
 			 <div class="row">
           <div class="col-md-12">
             <div class="content-panel">
-              <h4><i class="fa fa-angle-right"></i> 창고 관리 (청구리스트)
+              <h4><i class="fa fa-angle-right"></i> 청구
 						</h4>
 						<hr>
-						<ul class="nav nav-tabs">
-							<li role="presentation" class="active"><a href="#">청구</a></li>
-							<li role="presentation"><a href="../storage/storagePay.jsp">지급</a></li>
-						</ul>
 						<div class="col-md-8"></div>
 						<div class="col-md-offset-10" style="margin-bottom: -15px; margin-top: 10px;">
 							<input type="date" id="datepicker1">&nbsp;

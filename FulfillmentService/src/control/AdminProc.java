@@ -20,11 +20,17 @@ import org.slf4j.LoggerFactory;
 
 import admin.AdminDAO;
 import admin.AdminDTO;
+import bank.BankDAO;
+import bank.BankDTO;
+import charge.ChargeDAO;
+import charge.ChargeDTO;
 import invoice.InvoiceDAO;
 import invoice.InvoiceDTO;
 import invoice.InvoiceProductDTO;
 import order.OrderDAO;
 import order.OrderDTO;
+import pay.PayDAO;
+import pay.PayDTO;
 import release.ReleaseDAO;
 import release.ReleaseDTO;
 import state.OrderState;
@@ -68,14 +74,20 @@ public class AdminProc extends HttpServlet {
 		
 		StorageDAO pDao = null;
 		StorageDTO product = null;
+		PayDAO yDao = null;
+		PayDTO yDto = null;
 		OrderDAO oDao = null;
 		OrderDTO order = null;
 		AdminDAO aDao = null;
 		AdminDTO admins = null;
+		BankDAO bDao = null;
+		BankDTO bank = null;
 		InvoiceDTO invoice = null;
 		InvoiceDAO vDao = null;
 		ReleaseDAO rDao = null;
 		ReleaseDTO release = null;
+		ChargeDAO gDao = null;
+		ChargeDTO charge = null;
 		SoldProductDAO spDao = null;
 		SoldProductDTO soldProduct = null;
 		RequestDispatcher rd = null;
@@ -103,13 +115,21 @@ public class AdminProc extends HttpServlet {
 		int oTotalPrice = 0;
 		int oId = 0;
 		int oProductId = 0;
-	
+		int gAdminId = 0;
+		int category = 0;
+		int gTotalPrice = 0;
+		String shopName = null;
+		String account = null;
+		String gShopName = null;
+		String gDate = null;
+		
 		String rInvoiceId = null;
 		String rState = null;
 		String pState = null;
 		String vId = null;
 		String[] dateFormat = null;
 		String action = request.getParameter("action");
+		List<ChargeDTO> gList = null;
 		List<InvoiceDTO> vList = null;
 		List<InvoiceProductDTO> ipList = null;
 		List<ReleaseDTO> rList = null;
@@ -165,45 +185,50 @@ public class AdminProc extends HttpServlet {
 	        rd.forward(request, response);
 			break;
 			
-		case "category" : // 상품 목록 출력을 위한 카테고리 구분
+		case "category": // ★ 재고 조사
 			name = request.getParameter("name");
 			categoryNum = Integer.parseInt(request.getParameter("categoryNum")); // 목록에서 category 제공할 것
-			
+			System.out.println(categoryNum);
 			switch (categoryNum) {
-			case AdminDAO.무신사 :
+			case AdminDAO.무신사:
 				title = "무신사 Store";
 				break;
-			case AdminDAO.와구와구 :
+			case AdminDAO.와구와구:
 				title = "와구와구 Store";
 				break;
-			case AdminDAO.하이마트 :
+			case AdminDAO.하이마트:
 				title = "하이마트 Store";
 				break;
-			case AdminDAO.언더아머 :
+			case AdminDAO.언더아머:
 				title = "언더아머 Store";
 				break;
-			case AdminDAO.이케아 :
+			case AdminDAO.이케아:
 				title = "이케아 Store";
 				break;
 			}
-			
-			System.out.println(title);
+
+			LOG.debug("130-title" + title);
 			pathNum = Integer.parseInt(request.getParameter("pathNum"));
-			if(pathNum == 1) {
+			if (pathNum == 1) {
 				request.setAttribute("title", title);
-				rd = request.getRequestDispatcher("/control/adminServlet?action=productList&page=1&categoryNum="+categoryNum+"&name="+name);
-			} else if(pathNum == 2) {
+				rd = request.getRequestDispatcher("/control/productServlet?action=productList&page=1&categoryNum="
+						+ categoryNum + "&name=" + name);
+			} else if (pathNum == 2) {
 				request.setAttribute("title", title);
-				rd = request.getRequestDispatcher("/control/adminServlet?action=supplierSearch&page=1&categoryNum="+categoryNum);
-			} else if(pathNum ==3) {
+				rd = request.getRequestDispatcher(
+						"/control/productServlet?action=supplierSearch&page=1&categoryNum=" + categoryNum);
+				LOG.debug("/control/productServlet?action=supplierSearch&page=1&categoryNum=" + categoryNum);
+			} else if (pathNum == 3) {
+				String compareId = request.getParameter("compareId");
 				request.setAttribute("title", title);
-				rd = request.getRequestDispatcher("/control/adminServlet?action=modal");
+				rd = request.getRequestDispatcher(
+						"/control/productServlet?action=stockList&page=1&categoryNum=" + categoryNum);
 			}
-	        rd.forward(request, response);
+			rd.forward(request, response);
 			break;
-			
-		case "stockList" : // 재고조사 
-			LOG.debug("여기");
+
+		case "stockList": // ★ 재고 조사
+			LOG.debug("535-여기");
 			if (!request.getParameter("page").equals("")) {
 				curPage = Integer.parseInt(request.getParameter("page"));
 			}
@@ -223,38 +248,51 @@ public class AdminProc extends HttpServlet {
 				if (curPage == i)
 					page = "&nbsp;" + i + "&nbsp;";
 				else
-					page = "&nbsp;<a href=/FulfillmentService/control/adminServlet?action=stockList&page=" + i + ">" + i + "</a>&nbsp;";
+					page = "&nbsp;<a href=/FulfillmentService/control/adminServlet?action=stockList&page=" + i + ">" + i
+							+ "</a>&nbsp;";
 				pageList.add(page);
 			}
 			page = "&nbsp;<a href=#>&raquo;</a>";
 			pageList.add(page);
-			
-			ArrayList<StorageDTO> stockList = pDao.getAllProducts();
-			request.setAttribute("stockList", stockList);
+
+			int compareId = Integer.parseInt(request.getParameter("compareId"));
+			LOG.debug("175-compareId: " + compareId);
+			if (compareId == 1) {
+				ArrayList<StorageDTO> stockList = pDao.getAllProducts();
+				request.setAttribute("stockList", stockList);
+			} else if (compareId == 2) {
+				categoryNum = Integer.parseInt(request.getParameter("categoryNum"));
+				ArrayList<StorageDTO> stockList = pDao.getTitleProducts(categoryNum, curPage);
+				request.setAttribute("stockList", stockList);
+			}
+
 			request.setAttribute("pageList", pageList);
-			LOG.debug("/view/storage/storageStocktaking.jsp");
+			LOG.debug("574-/view/storage/storageStocktaking.jsp");
 			rd = request.getRequestDispatcher("/view/storage/storageStocktaking.jsp");
 			rd.forward(request, response);
 			break;
-			
-		case "search" : // 상품 이름 일부 검색 리스트 출력
+
+		case "search": // 상품 이름 일부 검색 리스트 출력 // ★ 재고 조사
 			String word = request.getParameter("searchWord");
+			LOG.debug("653-word: " + word);
 			pDao = new StorageDAO();
-			ArrayList<StorageDTO> searchList = pDao.getSearchProduct(word);
-			request.setAttribute("searchList", searchList);
-			
+			ArrayList<StorageDTO> stockList = pDao.getSearchProduct(word);
+			request.setAttribute("stockList", stockList);
+
 			rd = request.getRequestDispatcher("/view/storage/storageStocktaking.jsp");
 			rd.forward(request, response);
 			break;
-			
-		case "supplierSearch" : // 구매처별 리스트 출력 // ★case 추가 5.14
+		case "supplierSearch": // 구매처별 리스트 출력 // ★ 재고 조사
 			pDao = new StorageDAO();
-			
+			categoryNum = Integer.parseInt(request.getParameter("categoryNum"));
+			title = (String) request.getAttribute("title");
+			LOG.debug("categoryNum:" + categoryNum + "  title : " + title);
 			if (!request.getParameter("page").equals("")) {
 				curPage = Integer.parseInt(request.getParameter("page"));
 			}
 			pDao = new StorageDAO();
-			LOG.debug(String.valueOf(categoryNum));
+			LOG.debug(title);
+			LOG.debug("categoryNum: " + String.valueOf(categoryNum));
 			count = pDao.getEachAdminIdCount(categoryNum); // 해당 관리자의 잔고 리스트 카운트.
 			if (count == 0) // 데이터가 없을 때 대비
 				count = 1;
@@ -270,28 +308,19 @@ public class AdminProc extends HttpServlet {
 				if (curPage == i)
 					page = "&nbsp;" + i + "&nbsp;";
 				else
-					page = "&nbsp;<a href=/FulfillmentService/control/adminServlet?action=supplierSearch&page=" + i + ">" + i + "</a>&nbsp;";
+					page = "&nbsp;<a href=/FulfillmentService/control/productServlet?action=supplierSearch&page=" + i
+							+ ">" + i + "</a>&nbsp;";
 				pageList.add(page);
 			}
 			page = "&nbsp;<a href=#>&raquo;</a>";
 			pageList.add(page);
-			
-			ArrayList<StorageDTO> supplierSearchList = pDao.getTitleProducts(categoryNum,curPage);
+
+			ArrayList<StorageDTO> supplierSearchList = pDao.getTitleProducts(categoryNum, curPage);
 			request.setAttribute("supplierSearchList", supplierSearchList);
 			request.setAttribute("pageList", pageList);
 			LOG.debug("/view/storage/storageStocktaking.jsp");
 			rd = request.getRequestDispatcher("/view/storage/storageStocktaking.jsp");
 			rd.forward(request, response);
-			break;
-			
-		case "modal" : // 상품id 클릭시 세부사항 출력 // ★case 추가 5.14
-			pDao = new StorageDAO();
-			StorageDTO modal = new StorageDTO();
-			
-			pId = Integer.parseInt(request.getParameter("pId"));
-			modal = pDao.getModal(pId); // pId, pName, pPrice, pQuantity  get
-			LOG.debug(title);
-			request.setAttribute("modal", modal);
 			break;
 		
 		case "invoiceList" : // 송장목록출력
@@ -625,6 +654,229 @@ public class AdminProc extends HttpServlet {
 			
 			rd = request.getRequestDispatcher("/control/adminServlet?action=orderHistory&page=1");
 	        rd.forward(request, response);
+			break;
+			
+		case "transportList": // 운송회사 클릭 시 배송 내역 출력 // ★지급
+			if (!request.getParameter("page").equals("")) {
+				curPage = Integer.parseInt(request.getParameter("page"));
+				LOG.trace("");
+			}
+			yDao = new PayDAO();
+			count = yDao.getCount();
+			if (count == 0) // 데이터가 없을 때 대비
+				count = 1;
+			pageNo = (int) Math.ceil(count / 10.0);
+			if (curPage > pageNo) // 경계선에 걸렸을 때 대비
+				curPage--;
+			session.setAttribute("currentTransportPayPage", curPage);
+			// 리스트 페이지의 하단 페이지 데이터 만들어 주기
+
+			page = "<a href=#>&laquo;</a>&nbsp;";
+			pageList.add(page);
+			for (int i = 1; i <= pageNo; i++) {
+				if (curPage == i)
+					page = "&nbsp;" + i + "&nbsp;";
+				else
+					page = "&nbsp;<a href=/control/payServlet?action=transportList&page=" + i + ">" + i + "</a>&nbsp;";
+				pageList.add(page);
+			}
+			page = "&nbsp;<a href=#>&raquo;</a>";
+			pageList.add(page);
+
+			ArrayList<PayDTO> payList = yDao.getTransportList();
+			request.setAttribute("payList", payList);
+			request.setAttribute("pageList", pageList);
+			rd = request.getRequestDispatcher("/view/storage/storagePay.jsp");
+			rd.forward(request, response);
+			break;
+
+		case "payList": // 구매처, 운송회사 클릭 시 구매 내역 출력 // ★지급
+			LOG.debug("328- payList");
+			yDao = new PayDAO();
+			int firstAdminId = Integer.parseInt(request.getParameter("firstAdminId"));
+			LOG.debug("135 - firstAdminId: " + firstAdminId);
+			request.setAttribute("num", 1);
+			ArrayList<PayDTO> PayList = yDao.getPayList(firstAdminId);
+			if(firstAdminId==3) {
+				request.setAttribute("PayList", PayList);
+				rd = request.getRequestDispatcher("/view/storage/storagePay.jsp");
+			} else if (firstAdminId==4) {
+				request.setAttribute("PayList", PayList);
+				rd = request.getRequestDispatcher("/view/storage/storagePay_T.jsp");
+			}
+			rd.forward(request, response);
+			break;
+
+		case "transportSearchList": // 운송회사 검색 할 때 // ★지급
+			if (!request.getParameter("page").equals("")) {
+				curPage = Integer.parseInt(request.getParameter("page"));
+				LOG.trace("");
+			}
+			yDao = new PayDAO();
+			count = yDao.getCount();
+			if (count == 0) // 데이터가 없을 때 대비
+				count = 1;
+			pageNo = (int) Math.ceil(count / 10.0);
+			if (curPage > pageNo) // 경계선에 걸렸을 때 대비 // ★지급
+				curPage--;
+			session.setAttribute("currentTransportPaySearchPage", curPage);
+			// 리스트 페이지의 하단 페이지 데이터 만들어 주기
+
+			page = "<a href=#>&laquo;</a>&nbsp;";
+			pageList.add(page);
+			for (int i = 1; i <= pageNo; i++) {
+				if (curPage == i)
+					page = "&nbsp;" + i + "&nbsp;";
+				else
+					page = "&nbsp;<a href=/control/payServlet?action=transportSearchList&page=" + i + ">" + i
+							+ "</a>&nbsp;";
+				pageList.add(page);
+			}
+			page = "&nbsp;<a href=#>&raquo;</a>";
+			pageList.add(page);
+
+			int transportSearchId = Integer.parseInt(request.getParameter("transportSearchId")); // rTransportId 운송회사 id
+																									// 검색
+			ArrayList<PayDTO> transportSearchList = yDao.searchTransprotList(transportSearchId);
+
+			int totalTransportPay = yDao.totalTransportPay(transportSearchId); // 운송 비용 값.( 운송장 수 * 5000 )
+			bDao = new BankDAO();
+			BankDTO bDto = bDao.getOneBankList(transportSearchId); // 검색한 운송사 id에 따른 정보 얻음
+
+			request.setAttribute("totalTransportPay", totalTransportPay);
+			request.setAttribute("transportSearchList", transportSearchList);
+			request.setAttribute("pageList", pageList);
+			request.setAttribute("transportSearchId", transportSearchId);
+			rd = request.getRequestDispatcher("xxx.jsp");
+			rd.forward(request, response);
+			break;
+
+
+		case "transportCategory": // ★지급
+			int adminId = Integer.parseInt(request.getParameter("adminId")); // 목록에서 category 제공할 것
+			switch (adminId) {
+			case AdminDAO.경기물류:
+				title = "경기 물류";
+				break;
+			case AdminDAO.중부물류:
+				title = "중부 물류";
+				break;
+			case AdminDAO.영남물류:
+				title = "영남 물류";
+				break;
+			case AdminDAO.서부물류:
+				title = "서부 물류";
+				break;
+			}
+			LOG.debug("209-title : " + title);
+			int param = Integer.parseInt(request.getParameter("param"));
+			LOG.debug("211-param : " +param);
+			if (param == 1) {
+				request.setAttribute("title", title);
+				rd = request.getRequestDispatcher("/FulfillmentService/control/adminServlet?action=supplierTotalPrice&adminId="+adminId);
+			} else if (param == 2) {
+				rd = request.getRequestDispatcher("/FulfillmentService/control/adminServlet?action=supplierTotalPricet&page=1");
+				rd.forward(request, response);
+			}// 나중에 사용 시 param 2로 사용
+			break;
+
+		case "supplierTotalPrice": // 구매처 검색 할 때 // ★지급
+			yDao = new PayDAO();
+			adminId = Integer.parseInt(request.getParameter("adminId"));
+			int totalPrice = yDao.totalSupplierPay(adminId);
+			LOG.debug("221- adminId, totalPrice: " + adminId +","+ totalPrice);
+			bDao = new BankDAO();
+			bank = new BankDTO();
+			bank = bDao.getOneBankList(adminId);
+			String bankId = bank.getbId();
+			request.setAttribute("num", 2);
+			request.setAttribute("bankId", bankId);
+			request.setAttribute("totalPrice",totalPrice);
+			String adminIdString = String.valueOf(adminId);
+			String first = adminIdString.substring(0, 1);
+			LOG.debug("235- adminIdString, first :" + adminIdString +"," + first);
+			if(first.equals("3")) {
+				rd = request.getRequestDispatcher("/FulfillmentService/view/storage/storagePay.jsp");
+				rd.forward(request, response);
+			} else if(first.equals("4")) {
+				rd = request.getRequestDispatcher("/FulfillmentService/view/storage/storagePay_T.jsp");
+				rd.forward(request, response);
+			}
+			break;
+			
+		case "supplierCategory": // ★지급
+			adminId = Integer.parseInt(request.getParameter("adminId")); // 목록에서 category 제공할 것
+			LOG.debug("234-adminId : " +String.valueOf(adminId));
+			switch (adminId) {
+			case AdminDAO.무신사:
+				title = "무신사";
+				break;
+			case AdminDAO.와구와구:
+				title = "와구와구";
+				break;
+			case AdminDAO.하이마트:
+				title = "하이마트";
+				break;
+			case AdminDAO.언더아머:
+				title = "언더아머";
+				break;
+			case AdminDAO.이케아:
+				title = "이케아";
+				break;
+			}
+			LOG.debug("280-title : " + title);
+			param = Integer.parseInt(request.getParameter("param"));
+			LOG.debug("254-param : " +param);
+			if (param == 1) {
+				request.setAttribute("title", title);
+				rd = request.getRequestDispatcher("/FulfillmentService/control/adminServlet?action=supplierTotalPrice&adminId="+adminId);
+			} else if (param == 2) {
+				rd = request.getRequestDispatcher("/FulfillmentService/control/adminServlet?action=supplierTotalPricet&page=1");
+				rd.forward(request, response);
+			}// 나중에 사용 시 param 2로 사용
+			break;
+
+		case "transportPay": // 지급(운송회사) 버튼 눌렀을 때 // ★지급
+			yDao = new PayDAO();
+			// 잔고 계산
+			transportSearchId = Integer.parseInt(request.getParameter("transportSearchId")); // rTransportId 운송회사 id 검색
+			totalTransportPay = yDao.totalTransportPay(transportSearchId); // 운송 비용 값.( 운송장 수 * 5000 )
+			bDao = new BankDAO();
+			bDto = bDao.getOneBankList(transportSearchId); // 검색한 운송사 id에 따른 정보 얻음
+			bDao.updateBank(bDto, totalTransportPay, "-");
+
+			// pay테이블 데이터 삽입
+			SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+			Date time = new Date();
+			String rPayTime = format.format(time);// 지급 시각
+			yDao = new PayDAO();
+			String rAccount = bDto.getbId();
+
+			yDto = new PayDTO(rAccount, transportSearchId, totalTransportPay, rPayTime, "지급");
+			yDao.addPayList(yDto);
+			break; 
+			
+		case "pay": // 지급(쇼핑몰 -> 창고) // ★ 지급
+			gAdminId = Integer.parseInt(request.getParameter("gAdminId"));
+			gTotalPrice = Integer.parseInt(request.getParameter("gTotalPrice"));
+			gDate = request.getParameter("gDate");
+
+			gDao = new ChargeDAO();
+			bDao = new BankDAO();
+			charge = gDao.getOneChargeList(gAdminId, gDate);
+
+			// 창고 잔고 증가
+			bank = bDao.getOneBankList(10001);
+			bDao.updateBank(bank, gTotalPrice, "+");
+
+			// 쇼핑몰 잔고 감소
+			bank = bDao.getOneBankList(gAdminId);
+			bDao.updateBank(bank, gTotalPrice, "-");
+
+			// 상태 업데이트(청구 -> 지급완료)
+			gDao.updateChargeState("지급완료", charge.getgId());
+			rd = request.getRequestDispatcher("/control/chargeServlet?action=payList&page=1");
+			rd.forward(request, response);
 			break;
 
 		default : break;

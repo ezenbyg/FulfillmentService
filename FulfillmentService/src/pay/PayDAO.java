@@ -14,7 +14,7 @@ import storage.StorageDTO;
 import util.DBManager;
 
 public class PayDAO {
-	
+
 	private static final Logger LOG = LoggerFactory.getLogger(PayDAO.class);
 	Connection conn;
 	PreparedStatement pstmt;
@@ -54,6 +54,88 @@ public class PayDAO {
 		return transportPayList;
 	}
 
+	//total 가격 메소드
+	public int calcuTotalPrice(ArrayList<PayDTO> payList) {
+		int totalPrice = 0;
+		for(PayDTO pay : payList) {
+			totalPrice += pay.getyPrice();
+		}
+		return totalPrice;
+	}
+	
+	// payList 구매처 운송회사 리스트 출력
+	public ArrayList<PayDTO> getPayList(int firstAdminId) {
+		conn = DBManager.getConnection();
+		String sql = "select pay.yId, pay.yBankId, pay.yAdminId, pay.yPrice, pay.yDate, pay.yState, admins.aName  " 
+				+ " from pay " 
+				+ " inner join admins " 
+				+ " on pay.yAdminId = admins.aId;";
+
+		LOG.debug("61-fristAdminId :" + firstAdminId);
+		ArrayList<PayDTO>  payList = new ArrayList<PayDTO>();
+		try {
+			pstmt = conn.prepareStatement(sql);
+			rs = pstmt.executeQuery();
+			if (firstAdminId == 3) {
+				while (rs.next()) {
+					yDto = new PayDTO();
+					yDto.setyId(rs.getInt(1));
+					yDto.setyBankId(rs.getString(2));
+					yDto.setyAdminId(rs.getInt(3));
+					yDto.setyPrice(rs.getInt(4));
+					yDto.setyDate(rs.getString(5));
+					yDto.setyState(rs.getString(6));
+					yDto.setaName(rs.getString(7));
+					
+					String id = String.valueOf(rs.getInt(3));
+					String firstAdminIdString = String.valueOf(firstAdminId);
+					LOG.debug("74- id.charAt(0):" + id.charAt(0) + " , " + firstAdminIdString);
+					if (!firstAdminIdString.equals(id.substring(0, 1))) {
+						LOG.debug("78- check");
+						continue; // firstAdminId랑 다른 값이 올 때 저장 아니면 다시 위로
+					} else {
+						LOG.debug("81- check");
+						payList.add(yDto);
+					}
+				}
+			} else if (firstAdminId == 4) {
+				while (rs.next()) {
+					yDto = new PayDTO();
+					yDto.setyId(rs.getInt(1));
+					yDto.setyBankId(rs.getString(2));
+					yDto.setyAdminId(rs.getInt(3));
+					yDto.setyPrice(rs.getInt(4));
+					yDto.setyDate(rs.getString(5));
+					yDto.setyState(rs.getString(6));
+					yDto.setaName(rs.getString(7));
+					
+					String id = String.valueOf(rs.getInt(3));
+					String firstAdminIdString = String.valueOf(firstAdminId);
+					LOG.debug("74- id.charAt(0):" + id.charAt(0) + " , " + firstAdminIdString);
+					if (!firstAdminIdString.equals(id.substring(0, 1))) {
+						LOG.debug("115- check");
+						continue; // firstAdminId랑 다른 값이 올 때 저장 아니면 다시 위로
+					} else {
+						LOG.debug("118- check");
+						payList.add(yDto);
+					}
+				}
+			}
+		} catch (Exception e) {
+			LOG.debug("에러!");
+			LOG.debug(e.getMessage());
+		} finally {
+			try {
+				pstmt.close();
+				conn.close();
+				rs.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+		return payList;
+	}
+
 	// 검색된 운송회사의 지급 총액
 	public int totalTransportPay(int rTransportId) {
 		conn = DBManager.getConnection();
@@ -85,15 +167,13 @@ public class PayDAO {
 	}
 
 	// 검색된 구매처의 지급 총액
-	public int totalPurchasingPay(String oTotalPrice, int oAdminId) {
+	public int totalSupplierPay(int yAdminId) {
 		conn = DBManager.getConnection();
-		String sql = "select sum(?) from p_order where oAdminId = ?";
-		pstmt = null;
+		String sql = "select sum(yPrice) from pay where yAdminId = ?";
 		int totalPrice = 0;
 		try {
 			pstmt = conn.prepareStatement(sql);
-			pstmt.setString(1, oTotalPrice);
-			pstmt.setInt(2, oAdminId);
+			pstmt.setInt(1, yAdminId);
 			rs = pstmt.executeQuery();
 			while (rs.next()) {
 				totalPrice = rs.getInt(1);
@@ -101,7 +181,7 @@ public class PayDAO {
 			rs.close();
 		} catch (SQLException e) {
 			e.printStackTrace();
-			LOG.info("totalPurchasingPay(): Error Code : {}", e.getErrorCode());
+			LOG.info("totalSupplierPay(): Error Code : {}", e.getErrorCode());
 		} finally {
 			try {
 				pstmt.close();
@@ -329,4 +409,37 @@ public class PayDAO {
 		}
 		return count;
 	}
-}
+	
+	public PayDTO getTotalPrice(int adminId) {
+		conn = DBManager.getConnection();
+		String sql = "select bank.bId, sum(invoice.vPrice) " + 
+				"from bank " + 
+				"inner join invoice " + 
+				"on bank.bAdminId=invoice.vAdminId " + 
+				"where bank.bAdminId = ?";
+		
+		try {
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setInt(1, adminId);
+			rs = pstmt.executeQuery();
+				while (rs.next()) {
+					PayDTO yDto = new PayDTO();
+					yDto.setyBankId(rs.getString(1));
+					yDto.setSum(rs.getInt(2));
+				}
+			} catch (SQLException e) {
+				e.printStackTrace();
+				LOG.info("getTotalPrice(): Error Code : {}", e.getErrorCode());
+				return null;
+			} finally {
+				try {
+					pstmt.close();
+					conn.close();
+					rs.close();
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+			}
+			return yDto;
+		}
+	}

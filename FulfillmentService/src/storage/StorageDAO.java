@@ -373,10 +373,12 @@ public class StorageDAO {
 	public ArrayList<StorageDTO> getSearchProduct(String word) {
 		ArrayList<StorageDTO> stockList = new ArrayList<StorageDTO>();
 		conn = DBManager.getConnection();
-		String sql = "select pId, pName, pPrice, pQuantity, pState from storage where pName like '%?%';";
+		
+		String sql = "select pId, pName, pPrice, pQuantity, pState from storage where pName like ?";
 		try {
 			pstmt = conn.prepareStatement(sql);
-			pstmt.setString(1, word);
+			LOG.debug("266-word: " +word);
+			pstmt.setString(1,"%"+ word +"%");
 			rs = pstmt.executeQuery();
 			while (rs.next()) {
 				StorageDTO pDto = new StorageDTO();
@@ -387,6 +389,11 @@ public class StorageDAO {
 				pDto.setpState(rs.getString(5));
 				LOG.trace(pDto.toString());
 				stockList.add(pDto);
+			}
+			for(StorageDTO test : stockList) {
+				String str = test.getpName();
+				LOG.debug(str);
+				
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -401,36 +408,5 @@ public class StorageDAO {
 			}
 		}
 		return stockList;
-	}
-	
-	// modal 세부사항 출력
-	public StorageDTO getModal(int pId) {
-		StorageDTO modalView = new StorageDTO();
-		conn = DBManager.getConnection();
-		String sql = "select pId, pName, pPrice, pQuantity from storage where pId=?;";
-		try {
-			pstmt = conn.prepareStatement(sql);
-			pstmt.setInt(1, pId);
-			rs = pstmt.executeQuery();
-			while (rs.next()) {
-				modalView.setpId(rs.getInt(1));
-				modalView.setpName(rs.getString(2));
-				modalView.setpPrice(rs.getInt(3));
-				modalView.setpQuantity(rs.getInt(4));
-				LOG.trace(modalView.toString());
-			}
-		} catch (SQLException e) {
-			e.printStackTrace();
-			LOG.info("getModal(): Error Code : {}", e.getErrorCode());
-		} finally {
-			try {
-				pstmt.close();
-				conn.close();
-				rs.close();
-			} catch (SQLException e) {
-				e.printStackTrace();
-			}
-		}
-		return modalView;
 	}
 }
