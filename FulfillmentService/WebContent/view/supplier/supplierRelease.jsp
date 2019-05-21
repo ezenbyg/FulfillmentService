@@ -16,7 +16,7 @@
 </head>
 <body>
 	<%@ include file="../common/_admin_top.jspf"%>
-	<%@ include file="../common/_storage_nav.jspf"%>
+	<%@ include file="../common/_supplier_nav.jspf"%>
 	<section id="main-content">
 		<section class="wrapper">
 			<h3>상품 출고</h3>
@@ -26,10 +26,15 @@
 						<h4>
 							<i class="fa fa-angle-right"></i> 납품
 						</h4>
-						<hr>
-						<div style="margin-left: 90%;">
-							<a class="btn btn-primary" href ="/FulfillmentService/control/adminServlet?action=download" role="button">납품</a>
+						<div class="col-md-offset-9" style="margin-bottom: -15px; margin-top: 10px;">
+							<a class="btn btn-primary btn-xs" href ="/FulfillmentService/control/supplierServlet?action=release" role="button">납품</a>
+							<form action="/FulfillmentService/control/supplierServlet?action=releasePage&page=1" class="form-horizontal" method="post">
+								<input type="date" name="dateRelease" id="datepicker1">&nbsp;
+								<input type="submit" class="btn btn-info btn-xs" value="조회">
+							</form>
 						</div>
+						<hr>
+						<c:set var="oList" value="${requestScope.oList}"/>
 						<table class="table table-striped">
 							<thead>
 								<tr>
@@ -44,20 +49,29 @@
 								</tr>
 							</thead>
 							<tbody>
+							<c:forEach var="oDto" items="${oList}">
 								<tr>
-									<th>?</th>
-									<th>?</th>
-									<th>?</th>
-									<th>?</th>
-									<th>?</th>
-									<th>?</th>
-									<th><a class="btn btn-primary" href ="/FulfillmentService/control/adminServlet?action=download" role="button">구매확인요청</a></th>
+									<th>${oDto.oId}</th>
+									<th>${oDto.oAdminName}</th>
+									<th>${oDto.oProductName}</th>
+									<th>${oDto.oQuantity}</th>
+									<th>${oDto.oDate}</th>
+									<th>${oDto.oState}</th>
+									<th><a class="btn btn-primary btn-xs"
+									 href ="/FulfillmentService/control/supplierServlet?action=requestConfirm&oState=${oDto.oState}&oId=${oDto.oId}&oDate=${oDto.oDate}" role="button">구매확인요청</a></th>
 								</tr>
+							</c:forEach>
 							</tbody>
 						</table>
 					</div>
 					<div class="col-md-3"></div>
 				</div>
+			</div>
+			<div>
+			<c:set var="pageList" value="${requestScope.supplierReleasePageList}" />
+			<c:forEach var="pageNo" items="${pageList}">
+				${pageNo}
+			</c:forEach>
 			</div>
 		</section>
 		<%@ include file="../common/_bottom.jspf"%>

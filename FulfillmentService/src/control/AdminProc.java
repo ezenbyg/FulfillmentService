@@ -27,6 +27,7 @@ import order.OrderDAO;
 import order.OrderDTO;
 import release.ReleaseDAO;
 import release.ReleaseDTO;
+import state.OrderState;
 import state.ReleaseState;
 import storage.SoldProductDAO;
 import storage.SoldProductDTO;
@@ -87,34 +88,32 @@ public class AdminProc extends HttpServlet {
 		String page = null;
 		String message = null;
 		String date = null;
+		String oState = null;
 		
 		int curPage = 1;
 		int categoryNum = 0;
 		int count = 0;
 		int pageNo = 0;
 		int pathNum = 0;
-		int vAdminId = 0;
 		int pId = 0;
 		int pSupplierId = 0;
 		int oQuantity = 0;
 		int pPrice = 0;
 		int oTotalPrice = 0;
+		int oId = 0;
+		int oProductId = 0;
 	
 		String rInvoiceId = null;
-		String rTransportName = null;
 		String rState = null;
 		String pState = null;
-		String rDate = null;
 		String vId = null;
 		String[] dateFormat = null;
 		String action = request.getParameter("action");
 		List<InvoiceDTO> vList = null;
-		List<InvoiceDTO> vDetailList = null;
-		List<OrderDTO> oList = null;
 		List<InvoiceProductDTO> ipList = null;
 		List<ReleaseDTO> rList = null;
 		List<StorageDTO> pList = null;
-		List<Integer> countList = null;
+		List<OrderDTO> oList = null;
 		ArrayList<String> pageList = new ArrayList<String>();
 		
 		switch (action) {
@@ -547,6 +546,89 @@ public class AdminProc extends HttpServlet {
 			rd = request.getRequestDispatcher("/view/storage/storageTransportHistory.jsp");
 	        rd.forward(request, response);
 			break; 
+			
+		case "orderHistory" : // 월 단위 발주 내역 조회
+			dc = new DateController();
+			
+			if (!request.getParameter("page").equals("")) {
+				curPage = Integer.parseInt(request.getParameter("page"));
+				LOG.debug("curPage : " + curPage);
+			}
+			
+			// 네비에서 타고올때는 초기값이 null
+			if(request.getParameter("monthOrder") != null) {
+				date = request.getParameter("monthOrder"); 
+				LOG.debug(String.valueOf(date.length()));
+				if(date.length() > 10) {
+					dateFormat = date.split(" ");
+					date = dateFormat[0];
+					LOG.debug(date);
+				}
+			} else date = dc.getToday();
+			
+			oDao = new OrderDAO();
+			LOG.debug("oDao.getCount() : " + oDao.getCount()); 
+			count = oDao.getCount();
+			if (count == 0)			// 데이터가 없을 때 대비
+				count = 1;
+			pageNo = (int)Math.ceil(count/10.0);
+			if (curPage > pageNo)	// 경계선에 걸렸을 때 대비
+				curPage--;
+			session.setAttribute("orderHistoryPageList", curPage);
+			// 리스트 페이지의 하단 페이지 데이터 만들어 주기
+			page = "<a href=#>&laquo;</a>&nbsp;";
+			pageList.add(page);
+			for (int i=1; i<=pageNo; i++) {
+				page = "&nbsp;<a href=/FulfillmentService/control/adminServlet?action=orderHistory&page=" + i + ">" + i + "</a>&nbsp;";
+				pageList.add(page);
+				LOG.trace("");
+			}
+			page = "&nbsp;<a href=#>&raquo;</a>";
+			pageList.add(page);
+			
+			oList = oDao.selectJoinAllbyId(curPage, date);
+			
+			for (OrderDTO oDto: oList)
+				LOG.debug("ODTO : " + oDto.toString());
+			
+			request.setAttribute("orderList", oList);
+			request.setAttribute("orderPageList", pageList);
+			rd = request.getRequestDispatcher("/view/storage/storageOrderHistory.jsp");
+	        rd.forward(request, response);
+			break; 
+			
+		case "purchaseConfirm" : 
+			oState = request.getParameter("oState");
+			oId = Integer.parseInt(request.getParameter("oId"));
+			oProductId = Integer.parseInt(request.getParameter("oProductId"));
+			o
+			
+			if(!(oState.equals(String.valueOf(OrderState.구매확인요청)))) {
+				message = "아직 구매확정을 누를 수 없습니다!!";
+				request.setAttribute("message", message);
+				request.setAttribute("url", "/FulfillmentService/control/adminServlet?action=orderHistory&page=1");
+				rd = request.getRequestDispatcher("../view/alertMsg.jsp");
+				rd.forward(request, response);
+				break;
+			}
+			
+			dc = new DateController();
+			oDao = new OrderDAO();
+			oDao.updateOrderState(String.valueOf(OrderState.구매확정), oId, dc.currentTime());
+			
+			// storage 테이블 업데이트(재고수량, 재고상태)
+			pDao = new StorageDAO();
+			product = new StorageDTO();
+			vList = Dao.getAllInvoiceListsById(rInvoiceId);
+			for(InvoiceDTO ivto : vList) {
+				soldProduct = new SoldProductDTO(rInvoiceId, ivto.getvAdminId(), ivto.getVlogisId(), 
+						ivto.getvProductId(), ivto.getvQuantity(), ivto.getvPrice(), dc.currentTime());
+				spDao.addSoldProducts(soldProduct);
+			}
+			
+			rd = request.getRequestDispatcher("/control/adminServlet?action=transportHistory&page=1");
+	        rd.forward(request, response);
+			break;
 
 		default : break;
 		}

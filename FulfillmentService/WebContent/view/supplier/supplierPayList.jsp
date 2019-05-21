@@ -14,7 +14,7 @@
 </head>
 <body>
 	<%@ include file="../common/_admin_top.jspf"%>
-	<%@ include file="../common/_storage_nav.jspf"%>
+	<%@ include file="../common/_supplier_nav.jspf"%>
 	<section id="main-content">
 		<section class="wrapper">
 			<h3>대금지급리스트</h3>

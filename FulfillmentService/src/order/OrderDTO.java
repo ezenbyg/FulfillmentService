@@ -9,6 +9,8 @@ public class OrderDTO {
 	private int oTotalPrice;
 	private String oDate;
 	private String oState;
+	private String oAdminName;
+	private String oProductName;
 	
 	public OrderDTO(int oAdminId, int oProductId, int oQuantity, int oTotalPrice, String oDate) {
 		super();
@@ -77,9 +79,26 @@ public class OrderDTO {
 		this.oState = oState;
 	}
 
+	public String getoAdminName() {
+		return oAdminName;
+	}
+
+	public void setoAdminName(String oAdminName) {
+		this.oAdminName = oAdminName;
+	}
+
+	public String getoProductName() {
+		return oProductName;
+	}
+
+	public void setoProductName(String oProductName) {
+		this.oProductName = oProductName;
+	}
+
 	@Override
 	public String toString() {
 		return "OrderDTO [oId=" + oId + ", oAdminId=" + oAdminId + ", oProductId=" + oProductId + ", oQuantity="
-				+ oQuantity + ", oTotalPrice=" + oTotalPrice + ", oDate=" + oDate + ", oState=" + oState + "]";
+				+ oQuantity + ", oTotalPrice=" + oTotalPrice + ", oDate=" + oDate + ", oState=" + oState
+				+ ", oAdminName=" + oAdminName + ", oProductName=" + oProductName + "]";
 	}
 }

@@ -6,7 +6,7 @@
 		<ul class="sidebar-menu" id="nav-accordion">
 			<li class="sub-menu"><a href="/FulfillmentService/view/supplier/supplierPayList.jsp"> <i class="fa fa-list"></i> <span>대금지급리스트</span></a>
 			<li class="sub-menu"><a href="/FulfillmentService/view/supplier/supplierOrderHistory.jsp"> <i class="fa fa-random"></i> <span>발주내역</span></a>
-			<li class="sub-menu"><a href="/FulfillmentService/view/supplier/supplierRelease.jsp"> <i class="fa fa-share"></i> <span>상품 출고</span></a>
+			<li class="sub-menu"><a href="/FulfillmentService/control/supplierServlet?action=releasePage&page=1"> <i class="fa fa-share"></i> <span>상품 출고</span></a>
 			</li>
 			<li class="sub-menu"><a href="javascript:;"> <i class="fa fa-cogs"></i> <span>관리자</span>&nbsp;&nbsp;<i class="fa fa-caret-down"></i></a>
 				<ul class="sub">

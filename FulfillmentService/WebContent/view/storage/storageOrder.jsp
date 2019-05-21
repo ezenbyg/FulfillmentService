@@ -44,7 +44,6 @@
 						</div>
 						<hr>
 						<c:set var="pList" value="${requestScope.pList}" />
-						<c:set var="cList" value="${requestScope.countList}" />
 						<table class="table table-striped">
 							<thead>
 								<tr>

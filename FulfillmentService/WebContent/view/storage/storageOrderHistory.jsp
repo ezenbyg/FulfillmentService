@@ -23,87 +23,78 @@
 						<h4>
 							<i class="fa fa-angle-right"></i> 창고 관리 (발주내역 조회)
 						</h4>
+						<div class="col-md-offset-9" style="margin-bottom: -15px; margin-top: 10px;">
+							<form action="/FulfillmentService/control/adminServlet?action=orderHistory&page=1" class="form-horizontal" method="post">
+							<div class="form-group">
+								<input type="month" name="monthOrder" id="monthpicker">&nbsp;&nbsp;
+								<input type="submit" class="btn btn-primary btn-xs" value="조회">
+							</div>
+							</form>
+						</div>
 						<hr>
-						<ul class="nav nav-tabs">
-							<li role="presentation"  class="active"><a href="#">발주 내역</a></li>
-							<li role="presentation"><a href="/FulfillmentService/view/storage/storagePayHistory.jsp">지급</a></li>
-						</ul>
+						<c:set var="oList" value="${requestScope.orderList}"/>
 						<table class="table table-striped">
 							<thead>
 								<tr>
 									<th>발주번호</th>
-									<th>제품코드</th>
+									<th>구매처</th>
 									<th>제품명</th>
-									<th>발주수량</th>
+									<th>수량</th>
 									<th>총 가격</th>
 									<th>날짜</th>
+									<th>발주상태</th>
+									<th></th>
 								</tr>
 							</thead>
 							<tbody>
+							<c:forEach var="oDto" items="${oList}">
 								<tr>
-									<th onclick="modal();">#</th>
-									<th>?</th>
-									<th>?</th>
-									<th>?</th>
-									<th>?</th>
-									<th>?</th>
+									<th>${oDto.oId}</th>
+									<th>${oDto.oAdminName}</th>
+									<th>${oDto.oProductName}</th>
+									<th>${oDto.oQuantity}</th>
+									<th>${oDto.oDate}</th>
+									<th>${oDto.oState}</th>
+									<th><a class="btn btn-primary btn-xs"
+									 href ="/FulfillmentService/control/adminServlet?action=purchaseConfirm&oState=${oDto.oState}&oId=${oDto.oId}&oDate=${oDto.oDate}&oProductId=${oDto.oProductId}&oQuantity=${oDto.oQuantity}" role="button">구매확정</a></th>
 								</tr>
+							</c:forEach>
 							</tbody>
 						</table>
 					</div>
 					<div class="col-md-3"></div>
 				</div>
 			</div>
-			<!-- 여기에 글 쓰씨면 됩니다. -->
-			<div class="row" id="dialog" style="display: none;">
-				<div class="col-md-12">
-					<table class="table table-bordered table-striped table-condensed">
-						<tr>
-							<td>구매처이름</td>
-							<td></td>
-						</tr>
-						<tr>
-							<td>제품코드</td>
-							<td></td>
-						</tr>
-						<tr>
-							<td>제품명</td>
-							<td></td>
-						</tr>
-						<tr>
-							<td>발주수량</td>
-							<td><input type="text"></td>
-						</tr>
-						<tr>
-							<td>물품가격</td>
-							<td></td>
-						</tr>
-						<tr>
-							<td>총가격</td>
-							<td></td>
-						</tr>
-						<tr>
-							<td colspan="2" align="center">
-								<button type="button1" class="btn btn-primary">구매확정</button>
-								<button type="button1" class="btn btn-primary">취소</button>
-							</td>
-						</tr>
-					</table>
-				</div>
+			<div>
+			<c:set var="pageList" value="${requestScope.supplierReleasePageList}" />
+			<c:forEach var="pageNo" items="${pageList}">
+				${pageNo}
+			</c:forEach>
 			</div>
 		</section>
 		<%@ include file="../common/_bottom.jspf"%>
 	</section>
 	<!-- ==================================================================== -->
-</body>
-
-<script>
-//데이터 가져올때 여기서 가져오세요
-// https://api.jqueryui.com/1.12/dialog/
-function modal(){
-	$("#dialog").dialog({
-		  dialogClass: "alert",
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+	<script src="../js/bootstrap.min.js"></script>
+	<script src="../js/jquery-ui.min.js"></script>
+	<script src="../js/jquery.mtz.monthpicker.js"></script>
+	<script>
+	    /* MonthPicker 옵션 */
+	    var currentYear = (new Date()).getFullYear();
+	    var startYear = currentYear-5;
+	    var options = {
+	            startYear: startYear,
+	            finalYear: currentYear,
+	            pattern: 'yyyy-mm',
+	            monthNames: ['1월','2월','3월','4월','5월','6월','7월','8월','9월','10월','11월','12월']
+	    };
+		/* MonthPicker Set */
+		$('#monthpicker').monthpicker(options);
+		/* 버튼 클릭시 MonthPicker Show */
+		$('#btn_monthpicker').bind('click', function () {
+			$('#monthpicker').monthpicker('show');
 		});
-}
-</script>
+	</script>
+</body>
 </html>

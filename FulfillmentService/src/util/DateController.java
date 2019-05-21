@@ -15,7 +15,7 @@ public class DateController {
 	public String beforeTime() {
 		LocalDateTime yTime = LocalDateTime.now();
 		yTime = yTime.minusDays(1);
-    	DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");	
+    	DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd");	
     	return yTime.format(dtf);
 	}
 	
@@ -53,9 +53,28 @@ public class DateController {
 		return cpDate;
 	}
 	
+	// 문자열을 날짜로 변환 yyyy-MM-dd
+	public Date transStringToDateNotHours(String date) {
+		LOG.debug(date);
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+		Date cpDate = null;
+		try {
+			cpDate = sdf.parse(date);
+			LOG.debug("cpDate : " + String.valueOf(cpDate));
+		} catch(Exception e) {}
+		return cpDate;
+	}
+	
 	// 날짜를 문자열로 변환
 	public String transDateToString(Date date) {
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+		String time = sdf.format(date);
+		return time;
+	}
+	
+	// 날짜를 문자열로 변환 yyyy-MM-dd
+	public String transDateToStringNotHours(Date date) {
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 		String time = sdf.format(date);
 		return time;
 	}
@@ -80,5 +99,15 @@ public class DateController {
 		if (amPm.equals("pm"))
 			timeStr = " 18:00:00";
 		return timeStr;
+	}
+	
+	// 납품 전용 시간 
+	public String getReleaseTime(String time) {
+		String releaseTime = null;
+		if(time.compareTo(beforeTime()) == 0) {
+			releaseTime = getToday() + " 10:00:00";
+			return releaseTime;
+		}
+		return null;
 	}
 }
