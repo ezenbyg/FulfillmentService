@@ -17,12 +17,19 @@
 			</li>
 
 			<li class="sub-menu"><a href="javascript:;"> <i
-					class="fa fa-won"></i> <span>청구/지급</span>&nbsp;<i class="fa fa-caret-down"></i></a>
+					class="fa fa-won"></i> <span>청구</span>&nbsp;<i class="fa fa-caret-down"></i></a>
 				<ul class="sub">
 					<li><a href="/FulfillmentService/control/adminServlet?action=chargePage&page=1"> 
 						대금 청구</a></li>
-					<li><a href="/FulfillmentService//control/adminServlet?action=payList&page=1&firstAdminId=3">
-						대금 지급</a></li>
+				</ul>
+			</li>
+			<li class="sub-menu"><a href="javascript:;"> <i
+					class="fa fa-won"></i> <span>지급</span>&nbsp;<i class="fa fa-caret-down"></i></a>
+				<ul class="sub">
+					<li><a href="/FulfillmentService/control/adminServlet?action=supplierPayPage&page=1"> 
+						구매처</a></li>
+					<li><a href="/FulfillmentService/view/storage/storagePay_T.jsp">
+						운송회사</a></li>
 				</ul>
 			</li>
 			<li class="sub-menu"><a href="javascript:;"> <i class="fa fa-retweet"></i>
@@ -45,15 +52,6 @@
 
 			<li class="sub-menu"><a href="/FulfillmentService/control/adminServlet?action=stockList&page=1&compareId=1">
 			<i class="fa fa-pencil-square-o"></i><span>재고조사</span></a></li>
-
-			<li class="sub-menu"><a href="javascript:;"> <i class="fa fa-cogs"></i>
-			<span>관리자</span>&nbsp;<i class="fa fa-caret-down"></i></a>
-				<ul class="sub">
-					<li><a href="/FulfillmentService/view/supplier/supplierPayList.jsp">구매처 관리자</a></li>
-					<li><a href="/FulfillmentService/view/transport/transportPayList.jsp">운송회사 관리자</a></li>
-					<li><a href="/FulfillmentService/view/shopping/shoppingChargeList.jsp">쇼핑몰 관리자</a></li>
-				</ul>
-			</li>
 		</ul>
 	</div>
 </aside>

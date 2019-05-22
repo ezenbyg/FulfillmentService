@@ -70,7 +70,6 @@
 				</div>
 			</div>
 		</section>
-	<%@ include file="../common/_bottom.jspf"%>
 	</section>
 		<script>
 		/* MonthPicker 옵션 */

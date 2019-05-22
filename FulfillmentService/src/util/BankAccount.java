@@ -36,6 +36,8 @@ public class BankAccount {
 			return "110-1953-1433-98";
 		case 영남물류 :
 			return "110-1954-1109-37";
+		case 서부물류 : 
+			return "110-1955-9839-83";
 		default : return null;
 		}
 	}

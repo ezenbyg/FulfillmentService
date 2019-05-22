@@ -44,9 +44,9 @@ public class PayDAO {
 			LOG.debug(e.getMessage());
 		} finally {
 			try {
-				pstmt.close();
-				conn.close();
-				rs.close();
+				if(pstmt != null) pstmt.close();
+				if(conn != null) conn.close();
+				if(rs != null) rs.close();
 			} catch (SQLException e) {
 				e.printStackTrace();
 			}
@@ -126,9 +126,9 @@ public class PayDAO {
 			LOG.debug(e.getMessage());
 		} finally {
 			try {
-				pstmt.close();
-				conn.close();
-				rs.close();
+				if(pstmt != null) pstmt.close();
+				if(conn != null) conn.close();
+				if(rs != null) rs.close();
 			} catch (SQLException e) {
 				e.printStackTrace();
 			}
@@ -184,9 +184,9 @@ public class PayDAO {
 			LOG.info("totalSupplierPay(): Error Code : {}", e.getErrorCode());
 		} finally {
 			try {
-				pstmt.close();
-				conn.close();
-				rs.close();
+				if(pstmt != null) pstmt.close();
+				if(conn != null) conn.close();
+				if(rs != null) rs.close();
 			} catch (SQLException e) {
 				e.printStackTrace();
 			}
@@ -219,9 +219,9 @@ public class PayDAO {
 			LOG.debug(e.getMessage());
 		} finally {
 			try {
-				pstmt.close();
-				conn.close();
-				rs.close();
+				if(pstmt != null) pstmt.close();
+				if(conn != null) conn.close();
+				if(rs != null) rs.close();
 			} catch (SQLException e) {
 				e.printStackTrace();
 			}
@@ -253,9 +253,9 @@ public class PayDAO {
 			LOG.debug(e.getMessage());
 		} finally {
 			try {
-				pstmt.close();
-				conn.close();
-				rs.close();
+				if(pstmt != null) pstmt.close();
+				if(conn != null) conn.close();
+				if(rs != null) rs.close();
 			} catch (SQLException e) {
 				e.printStackTrace();
 			}
@@ -282,9 +282,9 @@ public class PayDAO {
 			LOG.info("addPayList() Error Code : {}", e.getErrorCode());
 		} finally {
 			try {
-				pstmt.close();
-				conn.close();
-				rs.close();
+				if(pstmt != null) pstmt.close();
+				if(conn != null) conn.close();
+				if(rs != null) rs.close();
 			} catch (SQLException e) {
 				e.printStackTrace();
 			}
@@ -311,9 +311,9 @@ public class PayDAO {
 			return null;
 		} finally {
 			try {
-				pstmt.close();
-				conn.close();
-				rs.close();
+				if(pstmt != null) pstmt.close();
+				if(conn != null) conn.close();
+				if(rs != null) rs.close();
 			} catch (SQLException e) {
 				e.printStackTrace();
 			}
@@ -343,8 +343,8 @@ public class PayDAO {
 			LOG.info("updateBank() Error Code : {}", e.getErrorCode());
 		} finally {
 			try {
-				pstmt.close();
-				conn.close();
+				if(pstmt != null) pstmt.close();
+				if(conn != null) conn.close();
 			} catch (SQLException e) {
 				e.printStackTrace();
 			}
@@ -375,9 +375,9 @@ public class PayDAO {
 			return null;
 		} finally {
 			try {
-				pstmt.close();
-				conn.close();
-				rs.close();
+				if(pstmt != null) pstmt.close();
+				if(conn != null) conn.close();
+				if(rs != null) rs.close();
 			} catch (SQLException e) {
 				e.printStackTrace();
 			}
@@ -386,7 +386,7 @@ public class PayDAO {
 	}
 
 	public int getCount() {
-		String sql = "select count(*) from storage;";
+		String sql = "select count(*) from pay;";
 		conn = DBManager.getConnection();
 		int count = 0;
 		try {
@@ -401,8 +401,8 @@ public class PayDAO {
 			LOG.info("getCount(): Error Code : {}", e.getErrorCode());
 		} finally {
 			try {
-				pstmt.close();
-				conn.close();
+				if(pstmt != null) pstmt.close();
+				if(conn != null) conn.close();
 			} catch (SQLException e) {
 				e.printStackTrace();
 			}
@@ -433,9 +433,9 @@ public class PayDAO {
 				return null;
 			} finally {
 				try {
-					pstmt.close();
-					conn.close();
-					rs.close();
+					if(pstmt != null) pstmt.close();
+					if(conn != null) conn.close();
+					if(rs != null) rs.close();
 				} catch (SQLException e) {
 					e.printStackTrace();
 				}

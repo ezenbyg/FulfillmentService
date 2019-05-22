@@ -211,7 +211,7 @@ public class ReleaseDAO {
 		return rList;
 	}
 	
-	public ArrayList<ReleaseDTO> selectdailyToRelease(int page, String date) {
+	public ArrayList<ReleaseDTO> selectMonthlyToRelease(int page, String date) {
 		conn = DBManager.getConnection();
 		int offset = 0;
 		String sql = null;
@@ -220,7 +220,7 @@ public class ReleaseDAO {
 					+ "from p_release as r "
 					+ "inner join admins as a "
 					+ "on r.rTransportId=a.aId "
-					+ "where date_format(r.rDate, '%Y-%m-%d')=? "
+					+ "where date_format(r.rDate, '%Y-%m')=? "
 					+ "order by r.rDate desc;";
 			
 		} else {			// page가 0이 아니면 해당 페이지 데이터만 보냄
@@ -228,7 +228,7 @@ public class ReleaseDAO {
 					+ "from p_release as r "
 					+ "inner join admins as a "
 					+ "on r.rTransportId=a.aId "
-					+ "where date_format(r.rDate, '%Y-%m-%d')=? "
+					+ "where date_format(r.rDate, '%Y-%m')=? "
 					+ "order by r.rDate desc limit ?, 10;";
 			offset = (page - 1) * 10;
 		}

@@ -17,7 +17,7 @@
 	}
 </script>
 <!-- ==================================================================== -->
-<title>운송회사 지급</title>
+<title>구매처 지급</title>
 <jsp:include page="../common/resource.jspf"></jsp:include>
 </head>
 <body>
@@ -42,44 +42,32 @@
 							<input type="submit" class="btn btn-primary btn-xs" id="btn_monthpicker" value="조회" />
 						</form>
 						</div>
-						<c:set var="PayList" value="${requestScope.PayList}" />
+						<c:set var="oList" value="${requestScope.orderList}"/>
+						<c:set var="osList" value="${requestScope.osList}"/>
 						<table class="table">
 							<thead>
 								<tr>
-									<th>
-										<form name="move" method="post">
-											<select id="Payment" onChange="onloadPage(this.value);"
-												style="border: 5px;">
-												<option
-													value="/FulfillmentService/control/adminServlet?action=supplierCategory&adminId=30001&param=1">경기물류</option>
-												<option
-													value="/FulfillmentService/control/adminServlet?action=supplierCategory&adminId=30002&param=1">중부물류</option>
-												<option
-													value="/FulfillmentService/control/adminServlet?action=supplierCategory&adminId=30003&param=1">영남물류</option>
-												<option
-													value="/FulfillmentService/control/adminServlet?action=supplierCategory&adminId=30004&param=1">서부물류</option>
-											</select>
-										</form>
-									</th>
-									<th>지급번호</th>
-									<th>회사이름</th>
-									<th>가격</th>
+									<th>구매처</th>
+									<th>제품명</th>
+									<th>구매수량</th>
+									<th>총 가격</th>
 									<th>날짜</th>
+									<th>발주상태</th>
 									<th>지급상태</th>
 								</tr>
 							</thead>
 							<tbody>
-								<c:forEach var="yDto" items="${PayList}">
+								<c:forEach var="oDto" items="${oList}">
 									<tr>
-										<td></td>
-										<td onclick="modal();">${yDto.yId}</td>
-										<td>${yDto.aName}</td>
-										<td>${yDto.yPrice}</td>
-										<td>${yDto.yDate}</td>
-										<td>${yDto.yState}</td>
+										<td>${oDto.oAdminName}</td>
+										<td>${oDto.oProductName}</td>
+										<td>${oDto.oQuantity}</td>
+										<td>${oDto.oTotalPrice}</td>
+										<th>${oDto.oDate}</th>
+										<th>${oDto.oState}</th>
+										<th>${oDto.oPayState}</th>
 									</tr>
 								</c:forEach>
-								<!--  style="font-size: 14px"><input type="date" id="datepicker1">&nbsp;&nbsp; -->
 							</tbody>
 						</table>
 					</div>
@@ -97,19 +85,20 @@
 						<table class="table table-striped">
 							<thead>
 								<tr>
-								<td>업체명</td>
-								<td>계좌</td>
-								<td>지급금액</td>
-								<td></td>
+									<td>업체명</td>
+									<td>계좌</td>
+									<td>지급금액</td>
+									<td></td>
 								</tr>
 							</thead>
 							<tbody>
-							<c:forEach var="invDto" items="${invList}">
+							<c:forEach var="osDto" items="${osList}">
 								<tr>
-								<td>#</td>
-								<td>#</td>
-								<td>#</td>
-								<td><a class="btn btn-primary btn-xs" href ="/FulfillmentService/control/adminServlet?action=release" role="button">지급</a></td>
+									<td>${osDto.oAdminName}</td>
+									<td>${osDto.oBankId}</td>
+									<td>${osDto.total}</td>
+									<td><a class="btn btn-primary btn-xs" 
+									href ="/FulfillmentService/control/adminServlet?action=payForSupplier&oAdminName=${osDto.oAdminName}&oBankId=${osDto.oBankId}&total=${osDto.total}&oAdminId=${osDto.oAdminId}&oDate=${osDto.oDate}" role="button">지급</a></td>
 								</tr>
 							</c:forEach>
 							</tbody>

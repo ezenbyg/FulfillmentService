@@ -19,7 +19,7 @@ import storage.StorageDAO;
 import storage.StorageDTO;
 
 public class InvoiceController {
-	private static final Logger LOG = LoggerFactory.getLogger(InvoiceDAO.class);
+	private static final Logger LOG = LoggerFactory.getLogger(InvoiceController.class);
 	ArrayList<InvoiceDTO> invoiceList = new ArrayList<InvoiceDTO>();
 	ArrayList<InvoiceProductDTO> productList = new ArrayList<InvoiceProductDTO>();
 	ArrayList<String> fullFileName = new ArrayList<String>();

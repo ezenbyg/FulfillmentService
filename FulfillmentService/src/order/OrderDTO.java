@@ -9,8 +9,11 @@ public class OrderDTO {
 	private int oTotalPrice;
 	private String oDate;
 	private String oState;
+	private String oPayState;
 	private String oAdminName;
 	private String oProductName;
+	private String oBankId;
+	private int total;
 	
 	public OrderDTO(int oAdminId, int oProductId, int oQuantity, int oTotalPrice, String oDate) {
 		super();
@@ -95,10 +98,35 @@ public class OrderDTO {
 		this.oProductName = oProductName;
 	}
 
+	public String getoBankId() {
+		return oBankId;
+	}
+
+	public void setoBankId(String oBankId) {
+		this.oBankId = oBankId;
+	}
+
+	public int getTotal() {
+		return total;
+	}
+
+	public void setTotal(int total) {
+		this.total = total;
+	}
+
+	public String getoPayState() {
+		return oPayState;
+	}
+
+	public void setoPayState(String oPayState) {
+		this.oPayState = oPayState;
+	}
+
 	@Override
 	public String toString() {
 		return "OrderDTO [oId=" + oId + ", oAdminId=" + oAdminId + ", oProductId=" + oProductId + ", oQuantity="
 				+ oQuantity + ", oTotalPrice=" + oTotalPrice + ", oDate=" + oDate + ", oState=" + oState
-				+ ", oAdminName=" + oAdminName + ", oProductName=" + oProductName + "]";
+				+ ", oPayState=" + oPayState + ", oAdminName=" + oAdminName + ", oProductName=" + oProductName
+				+ ", oBankId=" + oBankId + ", total=" + total + "]";
 	}
 }

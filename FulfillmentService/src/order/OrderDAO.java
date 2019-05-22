@@ -287,7 +287,7 @@ public class OrderDAO {
 		return oList;
 	}
 	
-	public ArrayList<OrderDTO> selectJoinAllbyId(int page, String date) {
+	public ArrayList<OrderDTO> selectJoinAll(int page, String date) {
 		conn = DBManager.getConnection();
 		int offset = 0;
 		String sql = null;
@@ -338,7 +338,115 @@ public class OrderDAO {
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
-			LOG.info("selectJoinAllbyId(): Error Code : {}", e.getErrorCode());
+			LOG.info("selectJoinAll(): Error Code : {}", e.getErrorCode());
+			return null;
+		} finally {
+			try {
+				if(pstmt != null) pstmt.close();
+				if(conn != null) conn.close();
+				if(rs != null) rs.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+		return oList;
+	}
+	
+	public ArrayList<OrderDTO> selectJoinAllbyState(int page, String date) {
+		conn = DBManager.getConnection();
+		int offset = 0;
+		String sql = null;
+		if (page == 0) {	// page가 0이면 모든 데이터를 보냄
+			sql = "select o.oId, o.oAdminId, o.oProductId, o.oQuantity, o.oTotalPrice, o.oDate, o.oState, a.aName, p.pName, o.oPayState "
+					+ "from p_order as o "
+					+ "inner join admins as a "
+					+ "on o.oAdminId=a.aId "
+					+ "inner join storage as p "
+					+ "on o.oProductId=p.pId "
+					+ "where date_format(oDate, '%Y-%m')=? AND o.oState='구매확정' "
+					+ "order by o.oDate desc;"; 
+		} else {			// page가 0이 아니면 해당 페이지 데이터만 보냄
+			sql = "select o.oId, o.oAdminId, o.oProductId, o.oQuantity, o.oTotalPrice, o.oDate, o.oState, a.aName, p.pName, o.oPayState "
+					+ "from p_order as o "
+					+ "inner join admins as a "
+					+ "on o.oAdminId=a.aId "
+					+ "inner join storage as p "
+					+ "on o.oProductId=p.pId "
+					+ "where date_format(oDate, '%Y-%m')=? AND o.oState='구매확정' "
+					+ "order by o.oDate desc limit ?, 10;"; 
+			offset = (page - 1) * 10;
+		}
+		ArrayList<OrderDTO> oList = new ArrayList<OrderDTO>();
+		try {
+			pstmt = conn.prepareStatement(sql);
+			LOG.trace(sql);
+			if (page == 0) {
+				pstmt.setString(1, date);
+			} else if(page != 0) {
+				pstmt.setString(1, date);
+				pstmt.setInt(2, offset);
+			}
+			ResultSet rs = pstmt.executeQuery();
+			while (rs.next()) {	
+				OrderDTO oDto = new OrderDTO();
+				oDto.setoId(rs.getInt(1));
+				oDto.setoAdminId(rs.getInt(2));
+				oDto.setoProductId(rs.getInt(3));
+				oDto.setoQuantity(rs.getInt(4));
+				oDto.setoTotalPrice(rs.getInt(5));
+				oDto.setoDate(rs.getString(6));
+				oDto.setoState(rs.getString(7));
+				oDto.setoAdminName(rs.getString(8));
+				oDto.setoProductName(rs.getString(9));
+				oDto.setoPayState(rs.getString(10));
+				oList.add(oDto);
+				LOG.trace(sql);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+			LOG.info("selectJoinAllbyState(): Error Code : {}", e.getErrorCode());
+			return null;
+		} finally {
+			try {
+				if(pstmt != null) pstmt.close();
+				if(conn != null) conn.close();
+				if(rs != null) rs.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+		return oList;
+	}
+	
+	public ArrayList<OrderDTO> getPayForSupplier(String date) {
+		conn = DBManager.getConnection();
+		String sql = "select b.bId, sum(o.oTotalPrice), a.aName, o.oAdminId, o.oDate "
+					+ "from p_order as o "
+					+ "inner join admins as a "
+					+ "on o.oAdminId=a.aId "
+					+ "inner join bank as b "
+					+ "on o.oAdminId=b.bAdminId "
+					+ "where date_format(oDate, '%Y-%m')=? AND o.oState='구매확정' AND o.oPayState='미지급' "
+					+ "order by o.oDate desc;"; 
+		ArrayList<OrderDTO> oList = new ArrayList<OrderDTO>();
+		try {
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setString(1, date);
+			LOG.trace(sql);
+			ResultSet rs = pstmt.executeQuery();
+			while (rs.next()) {	
+				OrderDTO oDto = new OrderDTO();
+				oDto.setoBankId(rs.getString(1));
+				oDto.setTotal(rs.getInt(2));
+				oDto.setoAdminName(rs.getString(3));
+				oDto.setoAdminId(rs.getInt(4));
+				oDto.setoDate(rs.getString(5));
+				oList.add(oDto);
+				LOG.trace(sql);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+			LOG.info("getPayForSupplier(): Error Code : {}", e.getErrorCode());
 			return null;
 		} finally {
 			try {
@@ -366,6 +474,29 @@ public class OrderDAO {
 		} catch (SQLException e) {
 			e.printStackTrace();
 			LOG.info("updateOrderState() Error Code : {}", e.getErrorCode());
+		} finally {
+			try {
+				if(pstmt != null) pstmt.close();
+				if(conn != null) conn.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+	}
+	
+	public void updatePayState(String oPayState, String date) {
+		LOG.debug("");
+		conn = DBManager.getConnection();
+		String sql = "update p_order set oPayState=? where date_format(oDate, '%Y-%m')=? AND oState='구매확정';";
+		try {
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setString(1, oPayState);
+			pstmt.setString(2, date);
+			pstmt.executeUpdate();
+			LOG.trace(sql);
+		} catch (SQLException e) {
+			e.printStackTrace();
+			LOG.info("updatePayState() Error Code : {}", e.getErrorCode());
 		} finally {
 			try {
 				if(pstmt != null) pstmt.close();

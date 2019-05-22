@@ -62,16 +62,18 @@ public class ChargeController {
 	}
 	
 	// 청구요청처리
-	public void processRequestCharge(int soldShopId) {
+	public void processRequestCharge(int soldShopId, String soldDate) {
 		int total = 0;
 		boolean chargeFlag = false;
 		spList = spDao.selectAllListsByShopId(soldShopId);
 		// SoldProduct의 chargeState 변경 및 charge 테이블에 삽입
 		for(SoldProductDTO spDto : spList) {
 			if(isPossibleChargeByState(spDto.getChargeState())) {
-				spDao.updateSoldProductState(String.valueOf(ChargeState.청구요청), spDto.getSoldInvId());
-				total += spDto.getSoldTotalPrice()*1.1+10000;
-				chargeFlag = true;
+				if(isPossibleChargeByDate(soldDate)) {
+					spDao.updateSoldProductState(String.valueOf(ChargeState.청구요청), spDto.getSoldInvId());
+					total += spDto.getSoldTotalPrice()*1.1+10000;
+					chargeFlag = true;
+				} else chargeFlag = false;
 			} else chargeFlag = false;
 		}
 		if(chargeFlag == true) {

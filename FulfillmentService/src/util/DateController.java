@@ -135,4 +135,14 @@ public class DateController {
 		}
 		return null;
 	}
+	
+	// 지급 전용 시간
+	public String getPayTime(String time) {
+		String payTime = null;
+		if(time.equals(beforeMonth())) {
+			payTime = getCurrentMonth() + "-01";
+			return payTime;
+		}
+		return null;
+	}
 }

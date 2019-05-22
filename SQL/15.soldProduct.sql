@@ -8,7 +8,6 @@
 	soldTotalPrice int(10) unsigned NOT NULL,
 	soldDate datetime NOT NULL DEFAULT current_timestamp,
 	chargeState varchar(10) DEFAULT "미청구",
-	supplierState varchar(10) DEFAULT "미지급",
 	transportState varchar(10) DEFAULT "미지급",
   	PRIMARY KEY (serial),
 	FOREIGN KEY (soldId) REFERENCES storage(pId),

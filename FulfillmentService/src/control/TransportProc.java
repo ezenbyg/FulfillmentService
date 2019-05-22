@@ -67,8 +67,8 @@ public class TransportProc extends HttpServlet {
 			}
 			
 			// 네비에서 타고올때는 초기값이 null
-			if(request.getParameter("dateRelease") != null) {
-				date = request.getParameter("dateRelease"); 
+			if(request.getParameter("monthRelease") != null) {
+				date = request.getParameter("monthRelease"); 
 				LOG.debug(String.valueOf(date.length()));
 				if(date.length() > 10) {
 					dateFormat = date.split(" ");
@@ -97,7 +97,7 @@ public class TransportProc extends HttpServlet {
 			page = "&nbsp;<a href=#>&raquo;</a>";
 			pageList.add(page);
 			
-			rList = rDao.selectdailyToRelease(curPage, date);
+			rList = rDao.selectMonthlyToRelease(curPage, date);
 			for (ReleaseDTO rDto: rList)
 				LOG.debug("RDTO : " + rDto.toString());
 			
