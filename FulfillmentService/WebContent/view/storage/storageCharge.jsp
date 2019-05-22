@@ -21,7 +21,7 @@
 	<%@ include file="../common/_storage_nav.jspf"%>
 	<section id="main-content">
       <section class="wrapper">
-			<i class="fa fa-angle-right"></i><h3>청구 조회</h3>
+			<i class="fa fa-angle-right"></i><h3>대금 청구</h3>
 			 <div class="row">
           <div class="col-md-12">
             <div class="content-panel">

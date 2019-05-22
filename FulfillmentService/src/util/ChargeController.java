@@ -5,6 +5,8 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import bank.BankDAO;
+import bank.BankDTO;
 import charge.ChargeDAO;
 import charge.ChargeDTO;
 import state.AdminName;
@@ -18,8 +20,10 @@ public class ChargeController {
 	BankAccount account = new BankAccount();
 	SoldProductDAO spDao = new SoldProductDAO();
 	List<SoldProductDTO> spList = null;
-	ChargeDAO cDao = new ChargeDAO();
+	ChargeDAO gDao = new ChargeDAO();
 	ChargeDTO charge = new ChargeDTO();
+	BankDTO bank = new BankDTO();
+	BankDAO bDao = new BankDAO();
 	
 	// 청구 상태에 따른 청구 가능 여부 판단 메소드
 	public boolean isPossibleChargeByState(String spState) {
@@ -44,8 +48,17 @@ public class ChargeController {
 	}
 	
 	// 청구완료처리
-	public void processConfirmCharge(String date, int spAdminId, int bankId, int spTotalPrice) {
-		
+	public void processConfirmCharge(int gId, int gAdminId, String gBankId, int gTotalPrice, String gDate) {
+		gDao.updateChargeState(String.valueOf(ChargeState.청구완료), gId);
+		SoldProductDTO invoice = spDao.getOneInvoiceId(gAdminId, gDate);
+		LOG.debug(invoice.getSoldInvId());
+		spDao.updateSoldProductState(String.valueOf(ChargeState.청구완료), gAdminId, gDate);
+		// 실제로 적용해야 하는 코드
+		// spDao.updateSoldProductState(String.valueOf(ChargeState.청구완료), gAdminId, beforeMonth());
+		bank = bDao.getOneBankList(gBankId);
+		bDao.updateBank(bank, gTotalPrice, "+");
+		bank = bDao.getOneBankList(gAdminId);
+		bDao.updateBank(bank, gTotalPrice, "-");
 	}
 	
 	// 청구요청처리
@@ -63,7 +76,7 @@ public class ChargeController {
 		}
 		if(chargeFlag == true) {
 			charge = new ChargeDTO(soldShopId, account.getAccount(String.valueOf(AdminName.ezen)), total, dc.currentTime());
-			cDao.addChargeList(charge);
+			gDao.addChargeList(charge);
 		}
 	}
 }

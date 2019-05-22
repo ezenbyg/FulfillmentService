@@ -38,14 +38,43 @@ public class BankDAO {
 			return null;
 		} finally {
 			try {
-				pstmt.close();
-				conn.close();
-				rs.close();
+				if(pstmt != null) pstmt.close();
+				if(conn != null) conn.close();
+				if(rs != null) rs.close();
 			} catch (SQLException e) {
 				e.printStackTrace();
 			}
 		}
 		return bList; 
+	}
+	
+	public BankDTO getOneBankList(String bId) { 
+		BankDTO bDto = new BankDTO();
+		conn = DBManager.getConnection();
+		String sql = "select * from bank where bId=?;";
+		try {
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setString(1, bId);
+			rs = pstmt.executeQuery();
+			while(rs.next()) {
+				bDto.setbId(rs.getString(1));
+				bDto.setbAdminId(rs.getInt(2));
+				bDto.setbBalance(rs.getInt(3)); 
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+			LOG.info("getOneBankList(): Error Code : {}", e.getErrorCode());
+			return null;
+		} finally {
+			try {
+				if(pstmt != null) pstmt.close();
+				if(conn != null) conn.close();
+				if(rs != null) rs.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+		return bDto;
 	}
 	
 	public BankDTO getOneBankList(int bAdminId) { 
@@ -67,9 +96,9 @@ public class BankDAO {
 			return null;
 		} finally {
 			try {
-				pstmt.close();
-				conn.close();
-				rs.close();
+				if(pstmt != null) pstmt.close();
+				if(conn != null) conn.close();
+				if(rs != null) rs.close();
 			} catch (SQLException e) {
 				e.printStackTrace();
 			}
@@ -100,8 +129,8 @@ public class BankDAO {
 			LOG.info("updateBank() Error Code : {}", e.getErrorCode());
 		} finally {
 			try {
-				pstmt.close();
-				conn.close();
+				if(pstmt != null) pstmt.close();
+				if(conn != null) conn.close();
 			} catch (SQLException e) {
 				e.printStackTrace();
 			}

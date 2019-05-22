@@ -57,13 +57,13 @@
 												>식품</option>
 											<option
 												value="/FulfillmentService/control/adminServlet?action=stockList&&page=1&compareId=2&categoryNum=30003&name=supplier"
-												>스포츠</option>
+												>가전제품</option>
 											<option
 												value="/FulfillmentService/control/adminServlet?action=stockList&&page=1&compareId=2&categoryNum=30004&name=supplier"
-												>가구</option>
+												>스포츠</option>
 											<option
 												value="/FulfillmentService/control/adminServlet?action=stockList&page=1&compareId=2&categoryNum=30005&name=supplier"
-												>가전제품</option>
+												>가구</option>
 										</select>
 									</form>
 								</div>

@@ -18,11 +18,6 @@
 			<%
 									} else {
 								%>
-			<div class="top-menu">
-				<ul class="nav pull-right top-menu">
-					<li><a class="logout" href="/FulfillmentService/view/loginForm.jsp">로그인</a></li>
-				</ul>
-			</div> 
 			<%
 									}
 								%>

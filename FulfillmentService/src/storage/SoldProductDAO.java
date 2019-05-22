@@ -119,6 +119,40 @@ public class SoldProductDAO {
 		return sList;
 	}
 	
+	// 쇼핑몰 아이디와 청구 날짜에 해당하는 송장아이디 가져오기
+	public SoldProductDTO getOneInvoiceId(int soldShopId, String soldDate) {
+		conn = DBManager.getConnection();
+		String sql = null;
+		sql = "select distinct soldInvId "
+				+ "from soldproduct "
+				+ "where soldShopId=? AND soldDate=?;";
+		SoldProductDTO sDto = new SoldProductDTO();
+		try {
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setInt(1, soldShopId);
+			pstmt.setString(2, soldDate);
+			LOG.trace(sql);
+			ResultSet rs = pstmt.executeQuery();
+			while (rs.next()) {	
+				sDto.setSoldInvId(rs.getString(1));
+				LOG.trace(sql);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+			LOG.info("getOneInvoiceId(): Error Code : {}", e.getErrorCode());
+			return null;
+		} finally {
+			try {
+				if(pstmt != null) pstmt.close();
+				if(conn != null) conn.close();
+				if(rs != null) rs.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+		return sDto;
+	}
+	
 	// 전부다 가져오기
 	public ArrayList<SoldProductDTO> selectAllLists() {
 		conn = DBManager.getConnection();
@@ -255,6 +289,30 @@ public class SoldProductDAO {
 			pstmt = conn.prepareStatement(sql);
 			pstmt.setString(1, chargeState);
 			pstmt.setString(2, soldInvId);
+			pstmt.executeUpdate();
+			LOG.trace(sql);
+		} catch (SQLException e) {
+			e.printStackTrace();
+			LOG.info("updateSoldProductState() Error Code : {}", e.getErrorCode());
+		} finally {
+			try {
+				if(pstmt != null) pstmt.close();
+				if(conn != null) conn.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+	}
+	
+	public void updateSoldProductState(String chargeState, int soldShopId, String date) {
+		LOG.debug("");
+		conn = DBManager.getConnection();
+		String sql = "update soldproduct set chargeState=? where soldShopd=? AND date_format(soldDate, '%Y-%m')=?;";
+		try {
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setString(1, chargeState);
+			pstmt.setInt(2, soldShopId);
+			pstmt.setString(3, date);
 			pstmt.executeUpdate();
 			LOG.trace(sql);
 		} catch (SQLException e) {

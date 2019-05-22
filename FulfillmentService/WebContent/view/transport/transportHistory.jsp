@@ -13,7 +13,7 @@
 </head>
 <body>
 	<%@ include file="../common/_admin_top.jspf"%>
-	<%@ include file="../common/_storage_nav.jspf"%>
+	<%@ include file="../common/_transport_nav.jspf"%>
 
 	<section id="main-content">
 		<section class="wrapper">

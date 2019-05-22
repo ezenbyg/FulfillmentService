@@ -9,6 +9,7 @@ public class ChargeDTO {
 	private String gState;
 	private String gInvoiceId;
 	private String gShopName;
+	private String storageAdminName;
 	
 	public ChargeDTO() {}
 
@@ -93,10 +94,18 @@ public class ChargeDTO {
 		this.gShopName = gShopName;
 	}
 
+	public String getStorageAdminName() {
+		return storageAdminName;
+	}
+
+	public void setStorageAdminName(String storageAdminName) {
+		this.storageAdminName = storageAdminName;
+	}
+
 	@Override
 	public String toString() {
 		return "ChargeDTO [gId=" + gId + ", gAdminId=" + gAdminId + ", gBankId=" + gBankId + ", gTotalPrice="
 				+ gTotalPrice + ", gDate=" + gDate + ", gState=" + gState + ", gInvoiceId=" + gInvoiceId
-				+ ", gShopName=" + gShopName + "]";
+				+ ", gShopName=" + gShopName + ", storageAdminName=" + storageAdminName + "]";
 	}
 }
