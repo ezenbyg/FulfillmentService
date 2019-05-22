@@ -1,9 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
-<%
-	request.setCharacterEncoding("UTF-8");
-%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -11,7 +8,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <!-- ==================================================================== -->
-<title>창고 판매내역 조회</title>
+<title>청구 조회</title>
 <jsp:include page="../common/resource.jspf"></jsp:include>
 </head>
 <body>
@@ -20,49 +17,53 @@
 
 	<section id="main-content">
 		<section class="wrapper">
-			<h3>판매내역 조회</h3>
+			<h3>
+				<i class="fa fa-angle-right"></i>청구 조회
+			</h3>
 			<div class="row">
 				<div class="col-md-12">
 					<div class="content-panel">
 						<h4>
-							<i class="fa fa-angle-right"></i> 창고 관리 (판매내역 조회)
+							<i class="fa fa-angle-right"></i> 청구리스트
 						</h4>
 						<hr>
 						<div class="col-md-8"></div>
 						<div class="col-md-offset-7">
-						<form action="/FulfillmentService/control/adminServlet?action=monthSales&page=1" class="form-horizontal" method="post">
-							<input id="monthpicker" name="monthSoldSales" type="text" /> 
+						<form action="/FulfillmentService/control/adminServlet?action=chargeHistory&page=1" class="form-horizontal" method="post">
+							<input id="monthpicker" name="monthChargeList" type="text" /> 
 							<input type="submit" class="btn btn-primary btn-xs" id="btn_monthpicker" value="조회" />
 						</form>
 						</div>
-						<c:set var="spList" value="${requestScope.spList}" />
+						<c:set var="gList" value="${requestScope.gList}" />
 						<table class="table table-striped">
 							<thead>
 								<tr>
-									<th>제품명</th>
-									<th>수량</th>
-									<th>총가격</th>
+									<th>청구번호</th>
+									<th>계좌번호</th>
+									<th>지불가격</th>
 									<th>날짜</th>
+									<th>청구 상태</th>
+									<th></th>
 								</tr>
 							</thead>
 							<tbody>
-							<c:forEach var="spDto" items="${spList}">
+							<c:forEach var="gDto" items="${gList}">
 								<tr>
-									<th>${spDto.productName}</th>
-									<th>${spDto.soldQuantity}</th>
-									<th>${spDto.eachPrice * spDto.soldQuantity}</th>
-									<th>${spDto.soldDate}</th>
+									<th>${gDto.gId}</th>
+									<th>${gDto.gBankId}</th>
+									<th>${gDto.gTotalPrice}</th>
+									<th>${gDto.gDate}</th>
+									<th>${gDto.gState}</th>
 								</tr>
 							</c:forEach>
 							</tbody>
 						</table>
-						<div class="col-md-3"></div>
 					</div>
 				</div>
 			</div>
 		</section>
 	</section>
-		<script>
+	<script>
 		/* MonthPicker 옵션 */
 		options = {
 			pattern : 'yyyy-mm', // Default is 'mm/yyyy' and separator char is not mandatory

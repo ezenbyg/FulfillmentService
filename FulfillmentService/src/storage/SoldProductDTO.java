@@ -13,6 +13,8 @@ public class SoldProductDTO {
 	private String supplierState;
 	private String transportState;
 	private String soldShopName;
+	private String productName;
+	private int eachPrice;
 	
 	public SoldProductDTO() {}
 
@@ -116,12 +118,28 @@ public class SoldProductDTO {
 		this.soldShopName = soldShopName;
 	}
 
+	public String getProductName() {
+		return productName;
+	}
+
+	public void setProductName(String productName) {
+		this.productName = productName;
+	}
+
+	public int getEachPrice() {
+		return eachPrice;
+	}
+
+	public void setEachPrice(int eachPrice) {
+		this.eachPrice = eachPrice;
+	}
+
 	@Override
 	public String toString() {
 		return "SoldProductDTO [serial=" + serial + ", soldInvId=" + soldInvId + ", soldShopId=" + soldShopId
 				+ ", soldTransportId=" + soldTransportId + ", soldId=" + soldId + ", soldQuantity=" + soldQuantity
 				+ ", soldTotalPrice=" + soldTotalPrice + ", soldDate=" + soldDate + ", chargeState=" + chargeState
 				+ ", supplierState=" + supplierState + ", transportState=" + transportState + ", soldShopName="
-				+ soldShopName + "]";
+				+ soldShopName + ", productName=" + productName + ", eachPrice=" + eachPrice + "]";
 	}
 }

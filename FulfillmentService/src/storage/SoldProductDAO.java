@@ -254,6 +254,72 @@ public class SoldProductDAO {
 		return sList;
 	}
 	
+	// 청구 페이지에 출력하기 위한 메소드
+	public ArrayList<SoldProductDTO> selectAllSoldLists(int page, String date) {
+		conn = DBManager.getConnection();
+		int offset = 0;
+		String sql = null;
+		if (page == 0) {	// page가 0이면 모든 데이터를 보냄
+			sql = "select distinct s.soldInvId, s.soldShopId, v.vShopName, s.soldTotalPrice, s.soldDate, s.chargeState, p.pName, p.pPrice, s.soldQuantity "
+					+ "from soldproduct as s "
+					+ "inner join invoice as v "
+					+ "on s.soldInvId=v.vId "
+					+ "inner join storage p "
+					+ "on p.pId=s.soldId "
+					+ "where date_format(soldDate, '%Y-%m')=? "
+					+ "order by soldDate desc;"; 
+		} else {			// page가 0이 아니면 해당 페이지 데이터만 보냄
+			sql = "select distinct s.soldInvId, s.soldShopId, v.vShopName, s.soldTotalPrice, s.soldDate, s.chargeState, p.pName, p.pPrice, s.soldQuantity "
+					+ "from soldproduct as s "
+					+ "inner join invoice as v "
+					+ "on s.soldInvId=v.vId "
+					+ "inner join storage p "
+					+ "on p.pId=s.soldId "
+					+ "where date_format(soldDate, '%Y-%m')=? "
+					+ "order by soldDate desc limit ?, 10;"; 
+			offset = (page - 1) * 10;
+		}
+		ArrayList<SoldProductDTO> sList = new ArrayList<SoldProductDTO>();
+		try {
+			pstmt = conn.prepareStatement(sql);
+			LOG.trace(sql);
+			if (page == 0) {
+				pstmt.setString(1, date);
+			} else if(page != 0) {
+				pstmt.setString(1, date);
+				pstmt.setInt(2, offset);
+			}
+			ResultSet rs = pstmt.executeQuery();
+			while (rs.next()) {	
+				SoldProductDTO sDto = new SoldProductDTO();
+				sDto.setSoldInvId(rs.getString(1));
+				sDto.setSoldShopId(rs.getInt(2));
+				sDto.setSoldShopName(rs.getString(3));
+				sDto.setSoldTotalPrice(rs.getInt(4));
+				sDto.setSoldDate(rs.getString(5));
+				sDto.setChargeState(rs.getString(6));
+				sDto.setProductName(rs.getString(7));
+				sDto.setEachPrice(rs.getInt(8));
+				sDto.setSoldQuantity(rs.getInt(9));
+				sList.add(sDto);
+				LOG.trace(sql);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+			LOG.info("selectJoinAllForCharge(): Error Code : {}", e.getErrorCode());
+			return null;
+		} finally {
+			try {
+				if(pstmt != null) pstmt.close();
+				if(conn != null) conn.close();
+				if(rs != null) rs.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+		return sList;
+	}
+	
 	public int getCount() {
     	conn = DBManager.getConnection();
 		String sql = "select count(distinct soldInvId) from soldproduct;";

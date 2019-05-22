@@ -7,8 +7,9 @@
 		<ul class="sidebar-menu" id="nav-accordion">
 			<li class="sub-menu"><a href="javascript:;"><i class="fa fa-search"></i><span>조회</span>&nbsp;<i class="fa fa-caret-down"></i></a>
 				<ul class="sub">
-					<li><a href="/FulfillmentService/control/adminServlet?action=payList&firstAdminId=3">&nbsp;청구/지급 조회</a></li>
-					<li><a href="/FulfillmentService/view/storage/storageSalesHistory.jsp">&nbsp;판매내역 조회</a></li>
+					<li><a href="/FulfillmentService/control/adminServlet?action=chargeHistory&page=1">&nbsp;청구 조회</a></li>
+					<li><a href="/FulfillmentService/control/adminServlet?action=payList&firstAdminId=3">&nbsp;지급 조회</a></li>
+					<li><a href="/FulfillmentService/control/adminServlet?action=monthSales&page=1">&nbsp;판매내역 조회</a></li>
 					<li><a href="/FulfillmentService/view/storage/storageSalesProfit.jsp">&nbsp;매출 이익 조회 </a></li>
 					<li><a href="/FulfillmentService/control/adminServlet?action=orderHistory&page=1">&nbsp;발주내역 조회</a></li>
 					<li><a href="/FulfillmentService/control/adminServlet?action=transportHistory&page=1">&nbsp;운송내역 조회 </a></li>

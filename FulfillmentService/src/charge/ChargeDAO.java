@@ -116,6 +116,69 @@ public class ChargeDAO { // 송장에서 얻은 정보에 가격을 포함해서
 		return gList;
 	}
 	
+	public ArrayList<ChargeDTO> selectJoinAllLists(int page, String date) {
+		conn = DBManager.getConnection();
+		int offset = 0;
+		String sql = null;
+		if (page == 0) {	// page가 0이면 모든 데이터를 보냄
+			sql = "select g.gId, g.gAdminId, g.gBankId, g.gTotalPrice, g.gDate, g.gState, a.aName "
+					+ "from charge as g "
+					+ "inner join bank as b "
+					+ "on g.gBankId=b.bId "
+					+ "inner join admins as a "
+					+ "on a.aId=b.bAdminId "
+					+ "where date_format(g.gDate, '%Y-%m')=? "
+					+ "order by g.gDate desc;"; 
+		} else {			// page가 0이 아니면 해당 페이지 데이터만 보냄
+			sql = "select g.gId, g.gAdminId, g.gBankId, g.gTotalPrice, g.gDate, g.gState, a.aName "
+					+ "from charge as g "
+					+ "inner join bank as b "
+					+ "on g.gBankId=b.bId "
+					+ "inner join admins as a "
+					+ "on a.aId=b.bAdminId "
+					+ "where date_format(g.gDate, '%Y-%m')=? "
+					+ "order by g.gDate desc limit ?, 10;"; 
+			offset = (page - 1) * 10;
+		}
+		ArrayList<ChargeDTO> gList = new ArrayList<ChargeDTO>();
+		try {
+			pstmt = conn.prepareStatement(sql);
+			LOG.trace(sql);
+			if (page == 0) {
+				pstmt.setString(1, date);
+			} else if(page != 0) {
+				pstmt.setString(1, date);
+				pstmt.setInt(2, offset);
+			}
+			ResultSet rs = pstmt.executeQuery();
+			while (rs.next()) {	
+				ChargeDTO gDto = new ChargeDTO();
+				gDto.setgId(rs.getInt(1));
+				gDto.setgAdminId(rs.getInt(2));
+				gDto.setgBankId(rs.getString(3));
+				gDto.setgTotalPrice(rs.getInt(4));
+				gDto.setgDate(rs.getString(5));
+				gDto.setgState(rs.getString(6));
+				gDto.setStorageAdminName(rs.getString(7));
+				gList.add(gDto);
+				LOG.trace(sql);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+			LOG.info("selectJoinAllbyId(): Error Code : {}", e.getErrorCode());
+			return null;
+		} finally {
+			try {
+				if(pstmt != null) pstmt.close();
+				if(conn != null) conn.close();
+				if(rs != null) rs.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+		return gList;
+	}
+	
 	public void addChargeList(ChargeDTO gDto) {
 		LOG.trace("addChargeList(): " + gDto.toString());
 		conn = DBManager.getConnection();

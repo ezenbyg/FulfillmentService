@@ -134,7 +134,6 @@ public class AdminProc extends HttpServlet {
 		String action = request.getParameter("action");
 		List<ChargeDTO> gList = null;
 		List<InvoiceDTO> vList = null;
-		List<InvoiceProductDTO> ipList = null;
 		List<ReleaseDTO> rList = null;
 		List<StorageDTO> pList = null;
 		List<OrderDTO> oList = null;
@@ -355,8 +354,6 @@ public class AdminProc extends HttpServlet {
 			vList = vDao.selectJoinAll(curPage);
 			for (InvoiceDTO vDto: vList)
 				LOG.debug("IVTO : " + vDto.toString());
-			ipList = vDao.getProductByInvoiceId();
-			request.setAttribute("ipList", ipList);
 			request.setAttribute("invoiceList", vList);
 			request.setAttribute("invoicePageList", pageList);
 			rd = request.getRequestDispatcher("/view/storage/storageShipping.jsp");
@@ -941,6 +938,105 @@ public class AdminProc extends HttpServlet {
 				cc.processRequestCharge(spDto.getSoldShopId());
 			}
 			rd = request.getRequestDispatcher("/control/adminServlet?action=orderHistory&page=1");
+	        rd.forward(request, response);
+			break;
+			
+		case "monthSales" : // 월 단위 판매내역 조회
+			dc = new DateController();
+			
+			if (!request.getParameter("page").equals("")) {
+				curPage = Integer.parseInt(request.getParameter("page"));
+				LOG.debug("curPage : " + curPage);
+			}
+			
+			// 네비에서 타고올때는 초기값이 null
+			if(request.getParameter("monthSoldSales") != null) {
+				date = request.getParameter("monthSoldSales"); 
+				LOG.debug(String.valueOf(date.length()));
+				if(date.length() > 10) {
+					dateFormat = date.split(" ");
+					date = dateFormat[0];
+					LOG.debug(date);
+				}
+			} else date = dc.getToday();
+			
+			spDao = new SoldProductDAO();
+			LOG.debug("gDao.getCount() : " + spDao.getCount()); 
+			count = spDao.getCount();
+			if (count == 0)			// 데이터가 없을 때 대비
+				count = 1;
+			pageNo = (int)Math.ceil(count/10.0);
+			if (curPage > pageNo)	// 경계선에 걸렸을 때 대비
+				curPage--;
+			session.setAttribute("monthSalesList", curPage);
+			// 리스트 페이지의 하단 페이지 데이터 만들어 주기
+			page = "<a href=#>&laquo;</a>&nbsp;";
+			pageList.add(page);
+			for (int i=1; i<=pageNo; i++) {
+				page = "&nbsp;<a href=/FulfillmentService/control/adminServlet?action=monthSales&page=" + i + ">" + i + "</a>&nbsp;";
+				pageList.add(page);
+				LOG.trace("");
+			}
+			page = "&nbsp;<a href=#>&raquo;</a>";
+			pageList.add(page);
+			
+			spList = spDao.selectAllSoldLists(curPage, date);
+			
+			for (SoldProductDTO spDto: spList)
+				LOG.debug("SPDTO : " + spDto.toString());
+			
+			request.setAttribute("spList", spList);
+			request.setAttribute("monthSalesList", pageList);
+			rd = request.getRequestDispatcher("/view/storage/storageSalesHistory.jsp");
+	        rd.forward(request, response);
+			break; 
+			
+		case "chargeHistory" : // 월 단위 청구 내역 조회 
+			dc = new DateController();
+
+			if (!request.getParameter("page").equals("")) {
+				curPage = Integer.parseInt(request.getParameter("page"));
+				LOG.debug("curPage : " + curPage);
+			}
+			
+			// 네비에서 타고올때는 초기값이 null
+			if(request.getParameter("monthChargeList") != null) {
+				date = request.getParameter("monthChargeList"); 
+				LOG.debug(String.valueOf(date.length()));
+				if(date.length() > 10) {
+					dateFormat = date.split(" ");
+					date = dateFormat[0];
+					LOG.debug(date);
+				}
+			} else date = dc.getToday();
+			
+			gDao = new ChargeDAO();
+			LOG.debug("gDao.getCount() : " + gDao.getCount()); 
+			count = gDao.getCount();
+			if (count == 0)			// 데이터가 없을 때 대비
+				count = 1;
+			pageNo = (int)Math.ceil(count/10.0);
+			if (curPage > pageNo)	// 경계선에 걸렸을 때 대비
+				curPage--;
+			session.setAttribute("chargeHistoryPage", curPage);
+			// 리스트 페이지의 하단 페이지 데이터 만들어 주기
+			page = "<a href=#>&laquo;</a>&nbsp;";
+			pageList.add(page);
+			for (int i=1; i<=pageNo; i++) {
+				page = "&nbsp;<a href=/FulfillmentService/control/adminServlet?action=chargeHistory&page=" + i + ">" + i + "</a>&nbsp;";
+				pageList.add(page);
+				LOG.trace("");
+			}
+			page = "&nbsp;<a href=#>&raquo;</a>";
+			pageList.add(page);
+			
+			gList = gDao.selectJoinAllLists(curPage, date);
+			for (ChargeDTO gDto: gList)
+				LOG.debug("GDTO : " + gDto.toString());
+			
+			request.setAttribute("gList", gList);
+			request.setAttribute("chargeHistoryPageList", pageList);
+			rd = request.getRequestDispatcher("/view/storage/storageChargeHistory.jsp");
 	        rd.forward(request, response);
 			break;
 

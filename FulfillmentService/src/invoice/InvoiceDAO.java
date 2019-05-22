@@ -327,47 +327,6 @@ public class InvoiceDAO {
 		}
 	}
 	
-	// 송장에 해당하는 제품들 가져오기 
-	public ArrayList<InvoiceProductDTO> getProductByInvoiceId() {
-		ArrayList<InvoiceProductDTO> pList = new ArrayList<InvoiceProductDTO>();
-		conn = DBManager.getConnection();
-		String sql = null;
-		sql = "select p.pInvoiceId, p.ipQuantity, s.pName, s.pState "
-				+ "from invoiceproduct as p " 
-				+ "inner join storage as s "
-				+ "on p.ipProductId=s.pId "
-				+ "inner join invoice as v "
-				+ "on v.vId=p.pInvoiceId;";
-		try {
-			pstmt = conn.prepareStatement(sql);
-			//pstmt.setInt(1, vId);
-			LOG.trace(sql);
-			rs = pstmt.executeQuery();
-			while (rs.next()) {	
-				InvoiceProductDTO pDto = new InvoiceProductDTO();
-				pDto.setpInvoiceId(rs.getString(1));
-				pDto.setIpQuantity(rs.getInt(2));
-				pDto.setIpProductName(rs.getString(3));
-
-				pList.add(pDto);
-				LOG.debug(pDto.toString());
-			}
-		} catch (SQLException e) {
-			e.printStackTrace();
-			LOG.info("selectJoinAll(): Error Code : {}", e.getErrorCode());
-			return null; 
-		} finally { 
-			try {
-				if(pstmt != null) pstmt.close();
-				if(conn != null) conn.close();
-				if(rs != null) rs.close();
-			} catch (SQLException e) {
-				e.printStackTrace();
-			}
-		}
-		return pList;
-	}
-	
 	public ArrayList<InvoiceDTO> selectJoinAll(int page) {
 		ArrayList<InvoiceDTO> vList = new ArrayList<InvoiceDTO>();
 		conn = DBManager.getConnection();
@@ -392,6 +351,67 @@ public class InvoiceDAO {
 			LOG.trace(sql);
 			if (page != 0) {
 				pstmt.setInt(1, offset);
+			}
+			rs = pstmt.executeQuery();
+			while (rs.next()) {	
+				InvoiceDTO vDto = new InvoiceDTO();
+				vDto.setvId(rs.getString(1));
+				vDto.setvShopName(rs.getString(2));
+				vDto.setvName(rs.getString(3));
+				vDto.setvTel(rs.getString(4));
+				vDto.setvAddress(rs.getString(5));
+				vDto.setvDate(rs.getString(6));
+				vDto.setvState(rs.getString(7));
+				vList.add(vDto);
+				LOG.debug(vDto.toString());
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+			LOG.info("selectJoinAll(): Error Code : {}", e.getErrorCode());
+			return null; 
+		} finally { 
+			try {
+				if(pstmt != null) pstmt.close();
+				if(conn != null) conn.close();
+				if(rs != null) rs.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+		return vList;
+	}
+	
+	public ArrayList<InvoiceDTO> selectJoinAll(int page, int vAdminId, String date) {
+		ArrayList<InvoiceDTO> vList = new ArrayList<InvoiceDTO>();
+		conn = DBManager.getConnection();
+		int offset = 0;
+		String sql = null;
+		if (page == 0) {	// page가 0이면 모든 데이터를 보냄
+			sql = "select distinct v.vId, v.vShopName, v.vName, v.vTel, v.vAddress, v.vDate, v.vState "
+					+ "from invoice as v " 
+					+ "inner join invoiceproduct as p "
+					+ "on v.vId=p.pInvoiceId "
+					+ "where v.vAdminId=? AND date_format(v.vDate, '%Y-%m')=? "
+					+ "order by v.vDate desc;";
+		} else {			// page가 0이 아니면 해당 페이지 데이터만 보냄
+			sql = "select distinct v.vId, v.vShopName, v.vName, v.vTel, v.vAddress, v.vDate, v.vState "
+					+ "from invoice as v " 
+					+ "inner join invoiceproduct as p "
+					+ "on v.vId=p.pInvoiceId "
+					+ "where v.vAdminId=? AND date_format(v.vDate, '%Y-%m')=? "
+					+ "order by v.vDate desc limit ?, 10;";
+			offset = (page - 1) * 10;
+		}
+		try {
+			pstmt = conn.prepareStatement(sql);
+			LOG.trace(sql);
+			if (page == 0) {
+				pstmt.setInt(1, vAdminId);
+				pstmt.setString(2, date);
+			} else if(page != 0) {
+				pstmt.setInt(1, vAdminId);
+				pstmt.setString(2, date);
+				pstmt.setInt(3, offset);
 			}
 			rs = pstmt.executeQuery();
 			while (rs.next()) {	

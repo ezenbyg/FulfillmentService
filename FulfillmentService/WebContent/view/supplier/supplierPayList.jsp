@@ -46,7 +46,6 @@
 				</div>
 			</div>
 		</section>
-		<%@ include file="../common/_bottom.jspf"%>
 	</section>
 </body>
 </html>

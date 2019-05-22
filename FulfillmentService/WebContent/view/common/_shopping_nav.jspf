@@ -6,7 +6,7 @@
         <!-- sidebar menu start-->
         <ul class="sidebar-menu" id="nav-accordion">
             	<li class="menu"><a href="/FulfillmentService/control/shopServlet?action=chargeHistory&page=1"> <i class="fa fa-list-ul"></i> 청구리스트</a></li>
-				<li class="menu"><a href="/FulfillmentService/view/shopping/shoppingInvoiceDetail.jsp"> <i class="fa fa-search"></i> 송장내역 조회</a></li>
+				<li class="menu"><a href="/FulfillmentService/control/shopServlet?action=monthlyInvoiceList&page=1"> <i class="fa fa-search"></i> 송장 내역 조회</a></li>
 		</ul>
 	</div>
 </aside>

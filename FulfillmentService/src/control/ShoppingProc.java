@@ -17,8 +17,10 @@ import org.slf4j.LoggerFactory;
 
 import charge.ChargeDAO;
 import charge.ChargeDTO;
+import invoice.InvoiceDAO;
+import invoice.InvoiceDTO;
+import invoice.InvoiceProductDTO;
 import state.ChargeState;
-import state.ReleaseState;
 import util.ChargeController;
 import util.DateController;
 
@@ -53,14 +55,16 @@ public class ShoppingProc extends HttpServlet {
 		int count = 0;
 		int pageNo = 0;
 		int gAdminId = 0;
+		int vAdminId = 0;
 		int gId = 0;
 		int gTotalPrice = 0;
 		ChargeDAO gDao = null;
-		ChargeDTO charge = null;
+		InvoiceDAO vDao = null;
 		ChargeController cc = null;
 		DateController dc = null;
 		String action = request.getParameter("action");
 		List<ChargeDTO> gList = null;
+		List<InvoiceDTO> vList = null;
 		ArrayList<String> pageList = new ArrayList<String>();
 		
 		switch(action) {
@@ -135,6 +139,54 @@ public class ShoppingProc extends HttpServlet {
 			rd = request.getRequestDispatcher("/control/shopServlet?action=chargeHistory&page=1");
 	        rd.forward(request, response);
 			break;
+			
+		case "monthlyInvoiceList" : // 월 단위 송장 내역 조회
+			dc = new DateController();
+			vAdminId = (Integer)session.getAttribute("sessionAdminId");
+			LOG.debug("page : " + page);
+			if (!request.getParameter("page").equals("")) {
+				curPage = Integer.parseInt(request.getParameter("page"));
+			}
+			
+			// 네비에서 타고올때는 초기값이 null
+			if(request.getParameter("monthInvoice") != null) {
+				date = request.getParameter("monthInvoice"); 
+				LOG.debug(String.valueOf(date.length()));
+				if(date.length() > 10) {
+					dateFormat = date.split(" ");
+					date = dateFormat[0];
+					LOG.debug(date);
+				}
+			} else date = dc.getToday();
+			
+			vDao = new InvoiceDAO();
+			// LOG.debug("vDao.getCount() : " + vDao.getCount()); 
+			count = vDao.getCount();
+			if (count == 0)			// 데이터가 없을 때 대비
+				count = 1;
+			pageNo = (int)Math.ceil(count/10.0);
+			if (curPage > pageNo)	// 경계선에 걸렸을 때 대비
+				curPage--;
+			session.setAttribute("monthlyInvoicePage", curPage);
+			// 리스트 페이지의 하단 페이지 데이터 만들어 주기
+			page = "<a href=#>&laquo;</a>&nbsp;";
+			pageList.add(page);
+			for (int i=1; i<=pageNo; i++) {
+				page = "&nbsp;<a href=/FulfillmentService/control/adminServlet?action=monthlyInvoiceList&page=" + i + ">" + i + "</a>&nbsp;";
+				pageList.add(page);
+				LOG.trace("");
+			}
+			page = "&nbsp;<a href=#>&raquo;</a>";
+			pageList.add(page);
+			
+			vList = vDao.selectJoinAll(curPage, vAdminId, date);
+			for (InvoiceDTO vDto: vList)
+				LOG.debug("IVTO : " + vDto.toString());
+			request.setAttribute("invoiceList", vList);
+			request.setAttribute("invoicePageList", pageList);
+			rd = request.getRequestDispatcher("/view/shopping/shoppingInvoiceDetail.jsp");
+	        rd.forward(request, response);
+			break; 
 		}
 	}
 }

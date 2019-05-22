@@ -92,6 +92,5 @@
 					alert("선택하신 월은 : " + month + "월");
 				});
 	</script>
-	<%@ include file="../common/_bottom.jspf"%>
 </body>
 </html>
