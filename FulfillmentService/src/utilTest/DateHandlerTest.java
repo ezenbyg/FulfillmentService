@@ -11,15 +11,15 @@ import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import util.DateController;
+import util.DateHandler;
 
-public class DateControllerTest {
-	private static final Logger LOG = LoggerFactory.getLogger(DateControllerTest.class);
-	private DateController dc = null;
+public class DateHandlerTest {
+	private static final Logger LOG = LoggerFactory.getLogger(DateHandlerTest.class);
+	private DateHandler dc = null;
 	
 	@Before
 	public void beforeTest() {
-		dc = new DateController();
+		dc = new DateHandler();
 		LOG.debug("beforeTest()");
 	}
 	

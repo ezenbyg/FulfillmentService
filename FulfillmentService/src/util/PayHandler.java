@@ -12,9 +12,9 @@ import pay.PayDTO;
 import state.AdminName;
 import state.PayState;
 
-public class PayController {
-	private static final Logger LOG = LoggerFactory.getLogger(PayController.class);
-	DateController dc = new DateController();
+public class PayHandler {
+	private static final Logger LOG = LoggerFactory.getLogger(PayHandler.class);
+	DateHandler dc = new DateHandler();
 	PayDAO pDao = new PayDAO();
 	PayDTO pay = new PayDTO();
 	BankDTO bank = new BankDTO();

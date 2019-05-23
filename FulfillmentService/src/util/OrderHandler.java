@@ -10,9 +10,9 @@ import order.OrderDTO;
 import state.OrderState;
 import state.ProductState;
 
-public class OrderController {
-	private static final Logger LOG = LoggerFactory.getLogger(OrderController.class);
-	DateController dc = new DateController();
+public class OrderHandler {
+	private static final Logger LOG = LoggerFactory.getLogger(OrderHandler.class);
+	DateHandler dc = new DateHandler();
 	OrderDAO oDao = new OrderDAO();
 	OrderDTO order = new OrderDTO();
 	

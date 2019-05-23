@@ -7,16 +7,16 @@ import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import util.InvoiceController;
+import util.InvoiceHandler;
 
-public class InvoiceControllerTest {
-	private static final Logger LOG = LoggerFactory.getLogger(InvoiceControllerTest.class);
-	private InvoiceController ic = null;
+public class InvoiceHandlerTest {
+	private static final Logger LOG = LoggerFactory.getLogger(InvoiceHandlerTest.class);
+	private InvoiceHandler ic = null;
 	
 	@Before
 	public void beforeTest() {
 		LOG.debug("beforeTest()");
-		ic = new InvoiceController();
+		ic = new InvoiceHandler();
 	}
 	
 	@Test

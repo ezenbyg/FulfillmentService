@@ -14,9 +14,9 @@ import state.ChargeState;
 import storage.SoldProductDAO;
 import storage.SoldProductDTO;
 
-public class ChargeController {
-	private static final Logger LOG = LoggerFactory.getLogger(ChargeController.class);
-	DateController dc = new DateController();
+public class ChargeHandler {
+	private static final Logger LOG = LoggerFactory.getLogger(ChargeHandler.class);
+	DateHandler dc = new DateHandler();
 	BankAccount account = new BankAccount();
 	SoldProductDAO spDao = new SoldProductDAO();
 	List<SoldProductDTO> spList = null;

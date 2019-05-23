@@ -20,8 +20,8 @@ import order.OrderDTO;
 import release.ReleaseDAO;
 import release.ReleaseDTO;
 import state.OrderState;
-import util.DateController;
-import util.OrderController;
+import util.DateHandler;
+import util.OrderHandler;
 
 @WebServlet("/control/supplierServlet")
 public class SupplierProc extends HttpServlet {
@@ -61,8 +61,8 @@ public class SupplierProc extends HttpServlet {
 		int curPage = 1;
 		int oAdminId = 0;
 		
-		OrderController oc = null;
-		DateController dc = null;
+		OrderHandler oc = null;
+		DateHandler dc = null;
 		String action = request.getParameter("action");
 		ArrayList<String> pageList = new ArrayList<String>();
 		List<OrderDTO> oList = null;
@@ -71,7 +71,7 @@ public class SupplierProc extends HttpServlet {
 		case "releasePage" : // 구매처에서 납품을 위한 페이지
 			oAdminId = (Integer)session.getAttribute("sessionAdminId");
 			LOG.debug("session : " + String.valueOf(oAdminId));
-			dc = new DateController();
+			dc = new DateHandler();
 			
 			if (!request.getParameter("page").equals("")) {
 				curPage = Integer.parseInt(request.getParameter("page"));
@@ -121,7 +121,7 @@ public class SupplierProc extends HttpServlet {
 			break; 
 			
 		case "requestConfirm" : // 구매확인요청 버튼 클릭 시
-			dc = new DateController();
+			dc = new DateHandler();
 			oState = request.getParameter("oState");
 			oId = Integer.parseInt(request.getParameter("oId"));
 			oDate = request.getParameter("oDate").substring(0, 10);
@@ -141,8 +141,8 @@ public class SupplierProc extends HttpServlet {
 			break;
 			
 		case "release" : // 납품 버튼 클릭 시
-			dc = new DateController();
-			oc = new OrderController();
+			dc = new DateHandler();
+			oc = new OrderHandler();
 			oDao = new OrderDAO();
 			oAdminId = (Integer)session.getAttribute("sessionAdminId");
 			oDate = dc.yesterday();

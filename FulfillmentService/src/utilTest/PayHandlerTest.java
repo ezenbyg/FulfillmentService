@@ -7,16 +7,16 @@ import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import util.PayController;
+import util.PayHandler;
 
-public class PayControllerTest {
-	private static final Logger LOG = LoggerFactory.getLogger(PayControllerTest.class);
-	private PayController pc = null;
+public class PayHandlerTest {
+	private static final Logger LOG = LoggerFactory.getLogger(PayHandlerTest.class);
+	private PayHandler pc = null;
 	
 	@Before
 	public void beforeTest() {
 		LOG.debug("beforeTest()");
-		pc = new PayController();
+		pc = new PayHandler();
 	}
 	
 	@Test

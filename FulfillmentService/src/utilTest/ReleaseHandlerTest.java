@@ -9,16 +9,16 @@ import org.slf4j.LoggerFactory;
 
 import state.InvoiceState;
 import state.ProductState;
-import util.ReleaseController;
+import util.ReleaseHandler;
 
-public class ReleaseControllerTest {
-	private static final Logger LOG = LoggerFactory.getLogger(ReleaseControllerTest.class);
-	private ReleaseController rc = null;
+public class ReleaseHandlerTest {
+	private static final Logger LOG = LoggerFactory.getLogger(ReleaseHandlerTest.class);
+	private ReleaseHandler rc = null;
 	
 	@Before
 	public void beforeTest() {
 		LOG.debug("beforeTest()");
-		rc = new ReleaseController();
+		rc = new ReleaseHandler();
 	}
 	
 	@Test

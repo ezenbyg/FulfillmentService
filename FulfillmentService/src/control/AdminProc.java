@@ -42,12 +42,12 @@ import storage.SoldProductDAO;
 import storage.SoldProductDTO;
 import storage.StorageDAO;
 import storage.StorageDTO;
-import util.ChargeController;
-import util.DateController;
-import util.InvoiceController;
-import util.OrderController;
-import util.PayController;
-import util.ReleaseController;
+import util.ChargeHandler;
+import util.DateHandler;
+import util.InvoiceHandler;
+import util.OrderHandler;
+import util.PayHandler;
+import util.ReleaseHandler;
 
 /**
  * Servlet implementation class AdminProc
@@ -96,11 +96,11 @@ public class AdminProc extends HttpServlet {
 		SoldProductDTO soldProduct = null;
 		RequestDispatcher rd = null;
 		
-		DateController dc = null;
-		ReleaseController rc = null;
-		OrderController oc = null;
-		ChargeController cc = null;
-		PayController pc = null;
+		DateHandler dc = null;
+		ReleaseHandler rc = null;
+		OrderHandler oc = null;
+		ChargeHandler cc = null;
+		PayHandler pc = null;
 		
 		String name = null;
 		String title = null;
@@ -384,7 +384,7 @@ public class AdminProc extends HttpServlet {
 			break;
 			
 		case "download" : // CSV 파일 다운로드
-			InvoiceController ic = new InvoiceController();
+			InvoiceHandler ic = new InvoiceHandler();
 			ic.readCSV(); 
 			ic.moveFile();
 			response.sendRedirect("/FulfillmentService/control/adminServlet?action=invoiceList&page=1");
@@ -432,7 +432,7 @@ public class AdminProc extends HttpServlet {
 	        break;
 	        
 		case "order" : // 발주 버튼 클릭 시
-			oc = new OrderController();
+			oc = new OrderHandler();
 			vDao = new InvoiceDAO();
 			oQuantity = Integer.parseInt(request.getParameter("oQuantity"));
 			pId = Integer.parseInt(request.getParameter("pId"));
@@ -456,7 +456,7 @@ public class AdminProc extends HttpServlet {
 			
 		case "releasePage" : // 출고를 위한 페이지
 			vDao = new InvoiceDAO();
-			dc = new DateController();
+			dc = new DateHandler();
 			
 			// 네비에서 타고올때는 초기값이 null
 			if(request.getParameter("date") != null) {
@@ -492,7 +492,7 @@ public class AdminProc extends HttpServlet {
 		case "invoiceDaily" : // 출고 페이지에서 송장 내역을 일별로 정리
 			date = request.getParameter("dateInvoice");
 			if (date == null) {
-				dc = new DateController();
+				dc = new DateHandler();
 				date = dc.getToday();
 			}
 			rd = request.getRequestDispatcher("/control/adminServlet?action=releasePage&date="+date);
@@ -500,8 +500,8 @@ public class AdminProc extends HttpServlet {
 			break;
 			
 		case "release" : // 출고 버튼 클릭 시
-			dc = new DateController();
-			rc = new ReleaseController();
+			dc = new DateHandler();
+			rc = new ReleaseHandler();
 			rc.processRelease(dc.getToday());
 			rd = request.getRequestDispatcher("/control/adminServlet?action=releasePage&date="+dc.getToday());
 	        rd.forward(request, response);
@@ -519,7 +519,7 @@ public class AdminProc extends HttpServlet {
 				break;
 			}
 			
-			dc = new DateController();
+			dc = new DateHandler();
 			rDao = new ReleaseDAO();
 			rDao.updateReleaseState(String.valueOf(ReleaseState.배송확정), rInvoiceId);
 			
@@ -540,7 +540,7 @@ public class AdminProc extends HttpServlet {
 			break;
 			
 		case "transportHistory" : // 운송내역조회 페이지
-			dc = new DateController();
+			dc = new DateHandler();
 		
 			if (!request.getParameter("page").equals("")) {
 				curPage = Integer.parseInt(request.getParameter("page"));
@@ -589,7 +589,7 @@ public class AdminProc extends HttpServlet {
 			break; 
 			
 		case "orderHistory" : // 월 단위 발주 내역 조회
-			dc = new DateController();
+			dc = new DateHandler();
 			
 			if (!request.getParameter("page").equals("")) {
 				curPage = Integer.parseInt(request.getParameter("page"));
@@ -653,7 +653,7 @@ public class AdminProc extends HttpServlet {
 				break;
 			}
 			
-			dc = new DateController();
+			dc = new DateHandler();
 			oDao = new OrderDAO();
 			oDao.updateOrderState(String.valueOf(OrderState.구매확정), oId, dc.currentTime());
 			
@@ -702,7 +702,7 @@ public class AdminProc extends HttpServlet {
 			break;
 			
 		case "chargePage" : // 청구를 위한 페이지
-			dc = new DateController();
+			dc = new DateHandler();
 			
 			if (!request.getParameter("page").equals("")) {
 				curPage = Integer.parseInt(request.getParameter("page"));
@@ -753,7 +753,7 @@ public class AdminProc extends HttpServlet {
 			
 		case "charge" : // 청구 버튼 클릭 시
 			spDao = new SoldProductDAO();
-			cc = new ChargeController();
+			cc = new ChargeHandler();
 			spList = spDao.selectAllLists();
 			for(SoldProductDTO spDto : spList) {
 				cc.processRequestCharge(spDto.getSoldShopId(), spDto.getSoldDate());
@@ -763,7 +763,7 @@ public class AdminProc extends HttpServlet {
 			break;
 			
 		case "monthSales" : // 월 단위 판매내역 조회
-			dc = new DateController();
+			dc = new DateHandler();
 			
 			if (!request.getParameter("page").equals("")) {
 				curPage = Integer.parseInt(request.getParameter("page"));
@@ -813,7 +813,7 @@ public class AdminProc extends HttpServlet {
 			break; 
 			
 		case "chargeHistory" : // 월 단위 청구 내역 조회 
-			dc = new DateController();
+			dc = new DateHandler();
 
 			if (!request.getParameter("page").equals("")) {
 				curPage = Integer.parseInt(request.getParameter("page"));
@@ -862,7 +862,7 @@ public class AdminProc extends HttpServlet {
 			break;
 			
 		case "supplierPayPage" : // 구매처에게 지급을 하기 위한 페이지
-			dc = new DateController();
+			dc = new DateHandler();
 			
 			if (!request.getParameter("page").equals("")) {
 				curPage = Integer.parseInt(request.getParameter("page"));
@@ -914,7 +914,7 @@ public class AdminProc extends HttpServlet {
 			break; 
 			
 		case "payForSupplier" : // 구매처에서 지급 버튼 클릭 시
-			pc = new PayController();
+			pc = new PayHandler();
 			oAdminId = Integer.parseInt(request.getParameter("oAdminId"));
 			oBankId = request.getParameter("oBankId");
 			total = Integer.parseInt(request.getParameter("total"));

@@ -15,9 +15,9 @@ import state.ProductState;
 import storage.StorageDAO;
 import storage.StorageDTO;
 
-public class ReleaseController {
-	private static final Logger LOG = LoggerFactory.getLogger(ReleaseController.class);
-	DateController dc = new DateController();
+public class ReleaseHandler {
+	private static final Logger LOG = LoggerFactory.getLogger(ReleaseHandler.class);
+	DateHandler dc = new DateHandler();
 	InvoiceDAO vDao = new InvoiceDAO();
 	ReleaseDAO rDao = new ReleaseDAO();
 	ReleaseDTO release = null;

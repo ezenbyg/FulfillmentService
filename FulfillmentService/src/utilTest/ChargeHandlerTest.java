@@ -8,16 +8,16 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import state.ChargeState;
-import util.ChargeController;
+import util.ChargeHandler;
 
-public class ChargeControllerTest {
-	private static final Logger LOG = LoggerFactory.getLogger(ChargeControllerTest.class);
-	private ChargeController cc = null;
+public class ChargeHandlerTest {
+	private static final Logger LOG = LoggerFactory.getLogger(ChargeHandlerTest.class);
+	private ChargeHandler cc = null;
 	
 	@Before
 	public void beforeTest() {
 		LOG.debug("beforeTest()");
-		cc = new ChargeController();
+		cc = new ChargeHandler();
 	}
 	
 	@Test

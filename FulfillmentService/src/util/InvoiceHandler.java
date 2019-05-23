@@ -18,8 +18,8 @@ import invoice.InvoiceProductDTO;
 import storage.StorageDAO;
 import storage.StorageDTO;
 
-public class InvoiceController {
-	private static final Logger LOG = LoggerFactory.getLogger(InvoiceController.class);
+public class InvoiceHandler {
+	private static final Logger LOG = LoggerFactory.getLogger(InvoiceHandler.class);
 	ArrayList<InvoiceDTO> invoiceList = new ArrayList<InvoiceDTO>();
 	ArrayList<InvoiceProductDTO> productList = new ArrayList<InvoiceProductDTO>();
 	ArrayList<String> fullFileName = new ArrayList<String>();
@@ -111,6 +111,7 @@ public class InvoiceController {
 		}
 	}
 
+	// 읽은 파일을 BACKUP
 	public void moveFile() {
 		File original_dir = new File("C:\\Temp\\shop"); 
 		File move_dir = new File("C:\\Temp\\complete"); 

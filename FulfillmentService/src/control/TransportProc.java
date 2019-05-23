@@ -18,7 +18,7 @@ import org.slf4j.LoggerFactory;
 import release.ReleaseDAO;
 import release.ReleaseDTO;
 import state.ReleaseState;
-import util.DateController;
+import util.DateHandler;
 
 @WebServlet("/control/transportServlet")
 public class TransportProc extends HttpServlet {
@@ -52,14 +52,14 @@ public class TransportProc extends HttpServlet {
 		int curPage = 1;
 		
 		ReleaseDAO rDao = null;
-		DateController dc = null;
+		DateHandler dc = null;
 		String action = request.getParameter("action");
 		List<ReleaseDTO> rList = null;
 		ArrayList<String> pageList = new ArrayList<String>();
 		
 		switch(action) {
 		case "transportHistory" : // 운송내역조회 페이지
-			dc = new DateController();
+			dc = new DateHandler();
 		
 			if (!request.getParameter("page").equals("")) {
 				curPage = Integer.parseInt(request.getParameter("page"));

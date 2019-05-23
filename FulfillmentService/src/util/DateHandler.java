@@ -9,8 +9,8 @@ import java.util.Date;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class DateController {
-	private static final Logger LOG = LoggerFactory.getLogger(DateController.class);
+public class DateHandler {
+	private static final Logger LOG = LoggerFactory.getLogger(DateHandler.class);
 	// 어제 시간
 	public String beforeTime() {
 		LocalDateTime yTime = LocalDateTime.now();

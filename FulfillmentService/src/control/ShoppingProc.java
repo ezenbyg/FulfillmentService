@@ -21,8 +21,8 @@ import invoice.InvoiceDAO;
 import invoice.InvoiceDTO;
 import invoice.InvoiceProductDTO;
 import state.ChargeState;
-import util.ChargeController;
-import util.DateController;
+import util.ChargeHandler;
+import util.DateHandler;
 
 @WebServlet("/control/shopServlet")
 public class ShoppingProc extends HttpServlet {
@@ -60,8 +60,8 @@ public class ShoppingProc extends HttpServlet {
 		int gTotalPrice = 0;
 		ChargeDAO gDao = null;
 		InvoiceDAO vDao = null;
-		ChargeController cc = null;
-		DateController dc = null;
+		ChargeHandler cc = null;
+		DateHandler dc = null;
 		String action = request.getParameter("action");
 		List<ChargeDTO> gList = null;
 		List<InvoiceDTO> vList = null;
@@ -69,7 +69,7 @@ public class ShoppingProc extends HttpServlet {
 		
 		switch(action) {
 		case "chargeHistory" : // 청구요청 처리를 위한 페이지 
-			dc = new DateController();
+			dc = new DateHandler();
 			gAdminId = (Integer)session.getAttribute("sessionAdminId");
 			LOG.debug("session : " + String.valueOf(gAdminId));
 			
@@ -120,7 +120,7 @@ public class ShoppingProc extends HttpServlet {
 			break;
 			
 		case "pay" : // 청구완료 처리
-			cc = new ChargeController();
+			cc = new ChargeHandler();
 			gId = Integer.parseInt(request.getParameter("gId"));
 			gBankId = request.getParameter("gBankId");
 			gAdminId = Integer.parseInt(request.getParameter("gAdminId"));
@@ -141,7 +141,7 @@ public class ShoppingProc extends HttpServlet {
 			break;
 			
 		case "monthlyInvoiceList" : // 월 단위 송장 내역 조회
-			dc = new DateController();
+			dc = new DateHandler();
 			vAdminId = (Integer)session.getAttribute("sessionAdminId");
 			LOG.debug("page : " + page);
 			if (!request.getParameter("page").equals("")) {

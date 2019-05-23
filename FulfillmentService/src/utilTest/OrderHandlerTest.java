@@ -9,16 +9,16 @@ import org.slf4j.LoggerFactory;
 
 import state.OrderState;
 import state.ProductState;
-import util.OrderController;
+import util.OrderHandler;
 
-public class OrderControllerTest {
-	private static final Logger LOG = LoggerFactory.getLogger(OrderControllerTest.class);
-	private OrderController oc = null;
+public class OrderHandlerTest {
+	private static final Logger LOG = LoggerFactory.getLogger(OrderHandlerTest.class);
+	private OrderHandler oc = null;
 	
 	@Before
 	public void beforeTest() {
 		LOG.debug("beforeTest()");
-		oc = new OrderController();
+		oc = new OrderHandler();
 	}
 	
 	@Test
@@ -44,5 +44,4 @@ public class OrderControllerTest {
 		assertEquals(true, oc.isPossibleReleaseByDate("2019-05-22 17:30"));
 		assertEquals(false, oc.isPossibleReleaseByDate("2019-05-23 10:00"));
 	}
-	
 }
