@@ -19,6 +19,14 @@ public class DateController {
     	return yTime.format(dtf);
 	}
 	
+	// 어제 시간
+	public String beforeDay() {
+		LocalDateTime yDay = LocalDateTime.now();
+		yDay = yDay.minusDays(1);
+    	DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd");	
+    	return yDay.format(dtf);
+	}
+	
 	// 전 달
 	public String beforeMonth() {
 		LocalDateTime yMonth = LocalDateTime.now();
@@ -119,11 +127,11 @@ public class DateController {
 	// 납품 전용 시간 
 	public String getReleaseTime(String time) {
 		String releaseTime = null;
-		if(time.compareTo(beforeTime()) == 0) {
+		if(time.compareTo(beforeDay()) == 0) {
 			releaseTime = getToday() + " 10:00:00";
 			return releaseTime;
 		}
-		return null;
+		return time;
 	}
 	
 	// 청구 전용 시간
@@ -133,7 +141,7 @@ public class DateController {
 			chargeTime = getCurrentMonth() + "-01";
 			return chargeTime;
 		}
-		return null;
+		return time;
 	}
 	
 	// 지급 전용 시간
@@ -143,6 +151,6 @@ public class DateController {
 			payTime = getCurrentMonth() + "-01";
 			return payTime;
 		}
-		return null;
+		return time;
 	}
 }

@@ -10,7 +10,6 @@ import order.OrderDTO;
 import pay.PayDAO;
 import pay.PayDTO;
 import state.AdminName;
-import state.OrderState;
 import state.PayState;
 
 public class PayController {

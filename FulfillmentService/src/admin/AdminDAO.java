@@ -75,7 +75,7 @@ public class AdminDAO {
 	public String getLastId() {
 		String aUserId = null;
 		conn = DBManager.getConnection();
-		String sql = "select a_userId from admins order by aUserId desc limit 1;";
+		String sql = "select aUserId from admins order by aUserId desc limit 1;";
 		try {
 			pstmt = conn.prepareStatement(sql);
 			rs = pstmt.executeQuery();
@@ -88,9 +88,9 @@ public class AdminDAO {
 			return null;
 		} finally {
 			try {
-				pstmt.close();
-				conn.close();
-				rs.close();
+				if(pstmt != null) pstmt.close();
+				if(conn != null) conn.close();
+				if(rs != null) rs.close();
 			} catch (SQLException e) {
 				e.printStackTrace();
 			}
@@ -118,9 +118,9 @@ public class AdminDAO {
 			return null;
 		} finally {
 			try {
-				pstmt.close();
-				conn.close();
-				rs.close();
+				if(pstmt != null) pstmt.close();
+				if(conn != null) conn.close();
+				if(rs != null) rs.close();
 			} catch (SQLException e) {
 				e.printStackTrace();
 			}

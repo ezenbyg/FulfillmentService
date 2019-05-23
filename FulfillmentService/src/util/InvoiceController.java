@@ -169,7 +169,7 @@ public class InvoiceController {
 	}
     
     // 운송 회사 번호 얻기
-	int selectLogis(String addr) {
+	public int selectLogis(String addr) {
 		int logisId = 0;
 		char ad = addr.charAt(0);
 		
