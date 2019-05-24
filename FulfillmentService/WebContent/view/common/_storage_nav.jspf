@@ -28,7 +28,7 @@
 				<ul class="sub">
 					<li><a href="/FulfillmentService/control/adminServlet?action=supplierPayPage&page=1"> 
 						구매처</a></li>
-					<li><a href="/FulfillmentService/view/storage/storagePay_T.jsp">
+					<li><a href="/FulfillmentService/control/adminServlet?action=transportPayPage&page=1">
 						운송회사</a></li>
 				</ul>
 			</li>

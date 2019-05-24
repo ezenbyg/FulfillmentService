@@ -109,6 +109,9 @@ public class AdminProc extends HttpServlet {
 		String date = null;
 		String oState = null;
 		String oBankId = null;
+		String soldBankId = null;
+		String soldDate = null;
+		String soldInvId = null;
 		
 		int curPage = 1;
 		int categoryNum = 0;
@@ -128,6 +131,8 @@ public class AdminProc extends HttpServlet {
 		int total = 0;
 		int category = 0;
 		int gTotalPrice = 0;
+		int soldTransportId = 0;
+		
 		String shopName = null;
 		String account = null;
 		String gShopName = null;
@@ -146,6 +151,7 @@ public class AdminProc extends HttpServlet {
 		List<OrderDTO> oList = null;
 		List<OrderDTO> osList = null;
 		List<SoldProductDTO> spList = null;
+		List<SoldProductDTO> sList = null;
 		ArrayList<String> pageList = new ArrayList<String>();
 		
 		switch (action) {
@@ -740,7 +746,7 @@ public class AdminProc extends HttpServlet {
 			page = "&nbsp;<a href=#>&raquo;</a>";
 			pageList.add(page);
 			
-			spList = spDao.selectAllForCharge(curPage, date);
+			spList = spDao.selectAllForCharge(curPage, date.substring(0, 7));
 			
 			for (SoldProductDTO spDto: spList)
 				LOG.debug("SPDTO : " + spDto.toString());
@@ -801,7 +807,7 @@ public class AdminProc extends HttpServlet {
 			page = "&nbsp;<a href=#>&raquo;</a>";
 			pageList.add(page);
 			
-			spList = spDao.selectAllSoldLists(curPage, date);
+			spList = spDao.selectAllSoldLists(curPage, date.substring(0, 7));
 			
 			for (SoldProductDTO spDto: spList)
 				LOG.debug("SPDTO : " + spDto.toString());
@@ -900,8 +906,8 @@ public class AdminProc extends HttpServlet {
 			page = "&nbsp;<a href=#>&raquo;</a>";
 			pageList.add(page);
 			
-			oList = oDao.selectJoinAllbyState(curPage, date);
-			osList = oDao.getPayForSupplier(date);
+			oList = oDao.selectJoinAllbyState(curPage, date.substring(0, 7));
+			osList = oDao.getPayForSupplier(date.substring(0, 7));
 			
 			for (OrderDTO oDto: oList)
 				LOG.debug("ODTO : " + oDto.toString());
@@ -921,6 +927,69 @@ public class AdminProc extends HttpServlet {
 			oDate = request.getParameter("oDate");
 			pc.processPayForSupplier(oBankId, oAdminId, total, oDate);
 			rd = request.getRequestDispatcher("/control/adminServlet?action=supplierPayPage&page=1");
+	        rd.forward(request, response);
+			break;
+			
+		case "transportPayPage" : // 운송회사에게 지급을 하기 위한 페이지
+			dc = new DateHandler();
+			
+			if (!request.getParameter("page").equals("")) {
+				curPage = Integer.parseInt(request.getParameter("page"));
+				LOG.debug("curPage : " + curPage);
+			}
+			
+			// 네비에서 타고올때는 초기값이 null
+			if(request.getParameter("monthPayTransport") != null) {
+				date = request.getParameter("monthPayTransport"); 
+				LOG.debug(String.valueOf(date.length()));
+				if(date.length() > 10) {
+					dateFormat = date.split(" ");
+					date = dateFormat[0];
+					LOG.debug(date);
+				}
+			} else date = dc.getToday();
+			
+			spDao = new SoldProductDAO();
+			LOG.debug("oDao.getCount() : " + spDao.getCount()); 
+			count = spDao.getCount();
+			if (count == 0)			// 데이터가 없을 때 대비
+				count = 1;
+			pageNo = (int)Math.ceil(count/10.0);
+			if (curPage > pageNo)	// 경계선에 걸렸을 때 대비
+				curPage--;
+			session.setAttribute("transportPayPageList", curPage);
+			// 리스트 페이지의 하단 페이지 데이터 만들어 주기
+			page = "<a href=#>&laquo;</a>&nbsp;";
+			pageList.add(page);
+			for (int i=1; i<=pageNo; i++) {
+				page = "&nbsp;<a href=/FulfillmentService/control/adminServlet?action=transportPayPage&page=" + i + ">" + i + "</a>&nbsp;";
+				pageList.add(page);
+				LOG.trace("");
+			}
+			page = "&nbsp;<a href=#>&raquo;</a>";
+			pageList.add(page);
+			
+			spList = spDao.selectAllForPay(curPage, date.substring(0, 7));
+			sList = spDao.getPayForTransport(date.substring(0, 7));
+			for (SoldProductDTO spDto: spList)
+				LOG.debug("SPDTO : " + spDto.toString());
+			
+			request.setAttribute("spList", spList);
+			request.setAttribute("sList", sList);
+			request.setAttribute("transportPayPageList", pageList);
+			rd = request.getRequestDispatcher("/view/storage/storagePay_T.jsp");
+	        rd.forward(request, response);
+			break; 
+			
+		case "payForTransport" : // 운송회사에서 지급 버튼 클릭 시
+			pc = new PayHandler();
+			soldTransportId = Integer.parseInt(request.getParameter("soldTransportId"));
+			soldBankId = request.getParameter("soldBankId");
+			total = Integer.parseInt(request.getParameter("total"));
+			soldDate = request.getParameter("soldDate");
+			soldInvId = request.getParameter("soldInvId");
+			pc.processPayForTransport(soldBankId, soldTransportId, total, soldDate, soldInvId);
+			rd = request.getRequestDispatcher("/control/adminServlet?action=transportPayPage&page=1");
 	        rd.forward(request, response);
 			break;
 			

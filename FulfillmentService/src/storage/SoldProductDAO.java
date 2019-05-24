@@ -8,6 +8,7 @@ import java.util.ArrayList;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 import util.DBManager;
 
 public class SoldProductDAO {
@@ -320,6 +321,109 @@ public class SoldProductDAO {
 		return sList;
 	}
 	
+	// 운송회사에게 지급을 하기 위한 메소드
+	public ArrayList<SoldProductDTO> selectAllForPay(int page, String date) {
+		conn = DBManager.getConnection();
+		int offset = 0;
+		String sql = null;
+		if (page == 0) {	// page가 0이면 모든 데이터를 보냄
+			sql = "select distinct s.soldInvId, s.soldTransportId, s.soldDate, s.transportState, a.aName "
+					+ "from soldproduct as s "
+					+ "inner join admins as a "
+					+ "on s.soldTransportId=a.aId "
+					+ "where date_format(soldDate, '%Y-%m')=? "
+					+ "order by s.soldDate desc;"; 
+		} else {			// page가 0이 아니면 해당 페이지 데이터만 보냄
+			sql = "select distinct s.soldInvId, s.soldTransportId, s.soldDate, s.transportState, a.aName "
+					+ "from soldproduct as s "
+					+ "inner join admins as a "
+					+ "on s.soldTransportId=a.aId "
+					+ "where date_format(soldDate, '%Y-%m')=? "
+					+ "order by s.soldDate desc limit ?, 10;"; 
+			offset = (page - 1) * 10;
+		}
+		ArrayList<SoldProductDTO> sList = new ArrayList<SoldProductDTO>();
+		try {
+			pstmt = conn.prepareStatement(sql);
+			LOG.trace(sql);
+			if (page == 0) {
+				pstmt.setString(1, date);
+			} else if(page != 0) {
+				pstmt.setString(1, date);
+				pstmt.setInt(2, offset);
+			}
+			ResultSet rs = pstmt.executeQuery();
+			while (rs.next()) {	
+				SoldProductDTO sDto = new SoldProductDTO();
+				sDto.setSoldInvId(rs.getString(1));
+				sDto.setSoldTransportId(rs.getInt(2));
+				sDto.setDeliveryPrice(5000);
+				sDto.setSoldDate(rs.getString(3));
+				sDto.setTransportState(rs.getString(4));
+				sDto.setTransportName(rs.getString(5));
+				sList.add(sDto);
+				LOG.trace(sql);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+			LOG.info("selectAllForPay(): Error Code : {}", e.getErrorCode());
+			return null;
+		} finally {
+			try {
+				if(pstmt != null) pstmt.close();
+				if(conn != null) conn.close();
+				if(rs != null) rs.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+		return sList;
+	}
+	
+	public ArrayList<SoldProductDTO> getPayForTransport(String date) {
+		conn = DBManager.getConnection();
+		String sql = "select distinct a.aName, s.soldTransportId, b.bId, s.soldDate, s.transportState, s.soldInvId "
+					+ "from soldproduct as s "
+					+ "inner join admins as a "
+					+ "on s.soldTransportId=a.aId "
+					+ "inner join bank as b "
+					+ "on s.soldTransportId=b.bAdminId "
+					+ "where date_format(soldDate, '%Y-%m')=? AND s.transportState='미지급' "
+					+ "order by s.soldDate desc;"; 
+		ArrayList<SoldProductDTO> sList = new ArrayList<SoldProductDTO>();
+		try {
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setString(1, date);
+			LOG.trace(sql);
+			ResultSet rs = pstmt.executeQuery();
+			while (rs.next()) {	
+				SoldProductDTO sDto = new SoldProductDTO();
+				sDto.setTransportName(rs.getString(1));
+				sDto.setSoldTransportId(rs.getInt(2));
+				sDto.setDeliveryPrice(5000);
+				sDto.setSoldBankId(rs.getString(3));
+				sDto.setSoldDate(rs.getString(4));
+				sDto.setTransportState(rs.getString(5));
+				sDto.setSoldInvId(rs.getString(6));
+				sList.add(sDto);
+				LOG.trace(sql);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+			LOG.info("getPayForTransport(): Error Code : {}", e.getErrorCode());
+			return null;
+		} finally {
+			try {
+				if(pstmt != null) pstmt.close();
+				if(conn != null) conn.close();
+				if(rs != null) rs.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+		return sList;
+	}
+	
 	public int getCount() {
     	conn = DBManager.getConnection();
 		String sql = "select count(distinct soldInvId) from soldproduct;";
@@ -360,6 +464,29 @@ public class SoldProductDAO {
 		} catch (SQLException e) {
 			e.printStackTrace();
 			LOG.info("updateSoldProductState() Error Code : {}", e.getErrorCode());
+		} finally {
+			try {
+				if(pstmt != null) pstmt.close();
+				if(conn != null) conn.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+	}
+	
+	public void updateTransportState(String transportState, String soldInvId) {
+		LOG.debug("");
+		conn = DBManager.getConnection();
+		String sql = "update soldproduct set transportState=? where soldInvId=?;";
+		try {
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setString(1, transportState);
+			pstmt.setString(2, soldInvId);
+			pstmt.executeUpdate();
+			LOG.trace(sql);
+		} catch (SQLException e) {
+			e.printStackTrace();
+			LOG.info("updateTransportState() Error Code : {}", e.getErrorCode());
 		} finally {
 			try {
 				if(pstmt != null) pstmt.close();

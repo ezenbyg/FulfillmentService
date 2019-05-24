@@ -32,54 +32,37 @@
 				<div class="col-md-12">
 					<div class="content-panel">
 						<h4>
-							<i class="fa fa-angle-right"></i> 지급
+							<i class="fa fa-angle-right"></i> 운송회사 지급
 						</h4>
 						<hr>
 						<div class="col-md-8"></div>
 						<div class="col-md-offset-7">
-						<form action="/FulfillmentService/control/adminServlet?action=supplierPayPage&page=1" class="form-horizontal" method="post">
-							<input id="monthpicker" name="monthPaySupplier" type="text" /> 
+						<form action="/FulfillmentService/control/adminServlet?action=transportPayPage&page=1" class="form-horizontal" method="post">
+							<input id="monthpicker" name="monthPayTransport" type="text" /> 
 							<input type="submit" class="btn btn-primary btn-xs" id="btn_monthpicker" value="조회" />
 						</form>
 						</div>
-						<c:set var="PayList" value="${requestScope.PayList}" />
+						<c:set var="spList" value="${requestScope.spList}" />
 						<table class="table">
 							<thead>
 								<tr>
-									<th>
-										<form name="move" method="post">
-											<select id="Payment" onChange="onloadPage(this.value);"
-												style="border: 5px;">
-												<option
-													value="/FulfillmentService/control/adminServlet?action=supplierCategory&adminId=30001&param=1">경기물류</option>
-												<option
-													value="/FulfillmentService/control/adminServlet?action=supplierCategory&adminId=30002&param=1">중부물류</option>
-												<option
-													value="/FulfillmentService/control/adminServlet?action=supplierCategory&adminId=30003&param=1">영남물류</option>
-												<option
-													value="/FulfillmentService/control/adminServlet?action=supplierCategory&adminId=30004&param=1">서부물류</option>
-											</select>
-										</form>
-									</th>
-									<th>지급번호</th>
-									<th>회사이름</th>
-									<th>가격</th>
+									<th>운송회사</th>
+									<th>송장번호</th>
+									<th>배송비</th>
 									<th>날짜</th>
 									<th>지급상태</th>
 								</tr>
 							</thead>
 							<tbody>
-								<c:forEach var="yDto" items="${PayList}">
+								<c:forEach var="spDto" items="${spList}">
 									<tr>
-										<td></td>
-										<td onclick="modal();">${yDto.yId}</td>
-										<td>${yDto.aName}</td>
-										<td>${yDto.yPrice}</td>
-										<td>${yDto.yDate}</td>
-										<td>${yDto.yState}</td>
+										<td>${spDto.transportName}</td>
+										<td>${spDto.soldInvId}</td>
+										<td>${spDto.deliveryPrice}</td>
+										<td>${spDto.soldDate}</td>
+										<td>${spDto.transportState}</td>
 									</tr>
 								</c:forEach>
-								<!--  style="font-size: 14px"><input type="date" id="datepicker1">&nbsp;&nbsp; -->
 							</tbody>
 						</table>
 					</div>
@@ -93,7 +76,7 @@
 							<i class="fa fa-angle-right"></i> 계산서	
 						</h4>
 						<hr>
-						<c:set var="invList" value="${requestScope.invList}" />
+						<c:set var="sList" value="${requestScope.sList}" />
 						<table class="table table-striped">
 							<thead>
 								<tr>
@@ -104,12 +87,13 @@
 								</tr>
 							</thead>
 							<tbody>
-							<c:forEach var="invDto" items="${invList}">
+							<c:forEach var="sDto" items="${sList}">
 								<tr>
-								<td>#</td>
-								<td>#</td>
-								<td>#</td>
-								<td><a class="btn btn-primary btn-xs" href ="/FulfillmentService/control/adminServlet?action=release" role="button">지급</a></td>
+								<td>${sDto.transportName}</td>
+								<td>${sDto.soldBankId}</td>
+								<td>${sDto.deliveryPrice}</td>
+								<td><a class="btn btn-primary btn-xs" 
+									href ="/FulfillmentService/control/adminServlet?action=payForTransport&soldTransportId=${sDto.soldTransportId}&soldBankId=${sDto.soldBankId}&total=${sDto.deliveryPrice}&soldDate=${sDto.soldDate}&soldInvId=${sDto.soldInvId}" role="button">지급</a></td>
 								</tr>
 							</c:forEach>
 							</tbody>

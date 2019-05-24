@@ -32,7 +32,7 @@
 				<div class="col-md-12">
 					<div class="content-panel">
 						<h4>
-							<i class="fa fa-angle-right"></i> 지급
+							<i class="fa fa-angle-right"></i> 구매처 지급
 						</h4>
 						<hr>
 						<div class="col-md-8"></div>
