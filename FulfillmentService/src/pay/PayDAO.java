@@ -21,39 +21,6 @@ public class PayDAO {
 	ResultSet rs;
 	PayDTO yDto;
 
-	// 운송회사 출고List
-	public ArrayList<PayDTO> getTransportList() {
-		conn = DBManager.getConnection();
-		String sql = "select p_release.rTransportId, p_release.rDate, pay.yState " + "from p_release inner join pay "
-				+ "on p_release.rTransportId=pay.yAdminId order by rTransportId desc;";
-
-		pstmt = null;
-		ArrayList<PayDTO> transportPayList = new ArrayList<PayDTO>();
-		try {
-			pstmt = conn.prepareStatement(sql);
-			rs = pstmt.executeQuery();
-
-			while (rs.next()) {
-				yDto = new PayDTO();
-				yDto.setrTransportId(rs.getInt(1));
-				yDto.setyDate(rs.getString(2));
-				yDto.setyState(rs.getString(3));
-				transportPayList.add(yDto);
-			}
-		} catch (Exception e) {
-			LOG.debug(e.getMessage());
-		} finally {
-			try {
-				if(pstmt != null) pstmt.close();
-				if(conn != null) conn.close();
-				if(rs != null) rs.close();
-			} catch (SQLException e) {
-				e.printStackTrace();
-			}
-		}
-		return transportPayList;
-	}
-
 	//total 가격 메소드
 	public int calcuTotalPrice(ArrayList<PayDTO> payList) {
 		int totalPrice = 0;

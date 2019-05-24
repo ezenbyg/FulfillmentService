@@ -673,40 +673,6 @@ public class AdminProc extends HttpServlet {
 	        rd.forward(request, response);
 			break;
 			
-		case "transportList": // 운송회사 클릭 시 배송 내역 출력 // ★지급
-			if (!request.getParameter("page").equals("")) {
-				curPage = Integer.parseInt(request.getParameter("page"));
-				LOG.trace("");
-			}
-			yDao = new PayDAO();
-			count = yDao.getCount();
-			if (count == 0) // 데이터가 없을 때 대비
-				count = 1;
-			pageNo = (int) Math.ceil(count / 10.0);
-			if (curPage > pageNo) // 경계선에 걸렸을 때 대비
-				curPage--;
-			session.setAttribute("currentTransportPayPage", curPage);
-			// 리스트 페이지의 하단 페이지 데이터 만들어 주기
-
-			page = "<a href=#>&laquo;</a>&nbsp;";
-			pageList.add(page);
-			for (int i = 1; i <= pageNo; i++) {
-				if (curPage == i)
-					page = "&nbsp;" + i + "&nbsp;";
-				else
-					page = "&nbsp;<a href=/control/payServlet?action=transportList&page=" + i + ">" + i + "</a>&nbsp;";
-				pageList.add(page);
-			}
-			page = "&nbsp;<a href=#>&raquo;</a>";
-			pageList.add(page);
-
-			ArrayList<PayDTO> payList = yDao.getTransportList();
-			request.setAttribute("payList", payList);
-			request.setAttribute("pageList", pageList);
-			rd = request.getRequestDispatcher("/view/storage/storagePay.jsp");
-			rd.forward(request, response);
-			break;
-			
 		case "chargePage" : // 청구를 위한 페이지
 			dc = new DateHandler();
 			
